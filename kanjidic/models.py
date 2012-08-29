@@ -3,9 +3,11 @@ from django.db import models
 class Kanji(models.Model):
     character = models.CharField(max_length = 1)
     pronunciations = models.ManyToManyField('Pronunciation')
+    unicode_index = models.IntegerField()
+    kolivas_index = models.IntegerField(null=True)
 
     def __unicode__(self):
-        return self.character
+        return "%s (u:%d)" % (self.character, self.unicode_index)
 
 class Pronunciation(models.Model):
     PRONUNCIATION_TYPES = (

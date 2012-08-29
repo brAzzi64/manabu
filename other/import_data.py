@@ -9,6 +9,7 @@ setup_environ(settings)
 # real script
 import sys
 import string
+import import_kolivas
 
 from lxml import etree
 from kanjidic.models import Kanji, Pronunciation
@@ -21,10 +22,19 @@ nodes = tree.xpath(query)
 total_nodes = len(nodes)
 added_nodes = 0
 
+# get the kolivas indexes
+kolivas_mapping = import_kolivas.get_kolivas_mapping()
+
+def get_kolivas(k):
+    try:
+        return kolivas_mapping[k]
+    except KeyError:
+        return None
+
 with transaction.commit_on_success():
     for cnode in nodes:
         char = cnode.xpath(u"literal")[0].text
-        k = Kanji(character = char)
+        k = Kanji(character = char, unicode_index = ord(char), kolivas_index = get_kolivas(char))
         k.save()
 
         pnodes = cnode.xpath(u"reading_meaning/rmgroup/reading[@r_type='ja_on' or @r_type='ja_kun']")

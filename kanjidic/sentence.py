@@ -48,7 +48,7 @@ class SentenceGrabber:
             self.furi.feed(s)
             analyzed.append( self.furi.get_string() )
 
-        self.sentences += zip(new_sentences, analyzed)
+        self.sentences = zip(new_sentences, analyzed)
         self.page += 1
 
     def get_processed_page_count(self):
