@@ -2,10 +2,31 @@
 <html>
     <head>
         <title>文 - Practice Kanji by Sentencing</title>
-            <meta charset="utf-8">
+        <meta charset="utf-8">
+        <script src="/static/js/jquery-1.7.1.min.js"></script>
     </head>
     <body>
+        <script type="text/javascript">
+
+            $(document).ready(function() {
+                
+                requestSentence("私");
+            });
+
+            function requestSentence(kanji) {
+
+                // make the call
+                $.getJSON('get_sentence', { 'kanji' : kanji },
+                    function (data) {
+                        // add the received elements
+                        $('#sentence').html( data['texto'] );
+                    })
+                .error(function () { alert("Error: the call to 'get_sentence' failed."); });
+
+            }
+        </script>
         Hello!
+        <p id="sentence">Waiting for sentence...</p>
     </body>
 </html>
 

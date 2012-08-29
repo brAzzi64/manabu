@@ -7,7 +7,8 @@ from django.conf.urls.defaults import patterns, include, url
 urlpatterns = patterns('kanjidic.views',
 
     url(r'^$', 'index'),
-    url(r'^(?P<kanji>.)/$', 'kanji')
+    url(r'^(?P<kanji>.)/$', 'kanji'),
+    url(r'^get_sentence$', 'get_sentence')
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
