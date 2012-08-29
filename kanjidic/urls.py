@@ -4,11 +4,10 @@ from django.conf.urls.defaults import patterns, include, url
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('',
-    # Examples:
-    # url(r'^$', 'bun.views.home', name='home'),
-    # url(r'^bun/', include('bun.foo.urls')),
-    url(r'^kanjidic/', include('kanjidic.urls'))
+urlpatterns = patterns('kanjidic.views',
+
+    url(r'^$', 'index'),
+    url(r'^(?P<kanji>.)/$', 'kanji')
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
