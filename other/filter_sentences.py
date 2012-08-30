@@ -24,12 +24,11 @@ for k in first_kanjis:
     print "%s:" % k
     sentences = []
     sg = SentenceGrabber(k)
-    while len(sentences) < 3 and sg.get_processed_page_count() <= 5:
-        sg.get_next_page()
-        new_sentences = [a for (a, b) in sg.sentences]
-        for s in new_sentences:
-            if all_known_kanjis(s, first_kanjis) and s not in sentences:
-                sentences.append(s)
+    bun = sg.pop_next_sentence()
+    while bun != None and len(sentences) < 3:
+        if all_known_kanjis(bun, first_kanjis) and bun not in sentences:
+            sentences.append(bun)
+        bun = sg.pop_next_sentence()
     for s in sentences:
         print u"　　" + s
 

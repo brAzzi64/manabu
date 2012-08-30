@@ -2,7 +2,9 @@
 
 import urllib2
 import HTMLParser
-import furiganizer
+import thread
+import time
+
 
 class SentenceParser(HTMLParser.HTMLParser):
     def __init__(self):
@@ -10,7 +12,6 @@ class SentenceParser(HTMLParser.HTMLParser):
         self.phrases = []
 
     def feed(self, data):
-        self.phrases = []
         HTMLParser.HTMLParser.feed(self, data)
 
     def handle_starttag(self, tag, attributes):
@@ -22,35 +23,36 @@ class SentenceParser(HTMLParser.HTMLParser):
                     break
 
     def get_sentences(self):
-        return self.phrases
+        ret = self.phrases
+        self.phrases = []
+        return ret
 
 
 class SentenceGrabber:
     def __init__(self, kanji):
-        self.page = 1
         self.url = "http://jisho.org/sentences?jap=" + kanji.encode('utf-8') + "&page="
         self.parser = SentenceParser()
-        self.furi = furiganizer.Furiganizer()
         self.sentences = []
+        thread.start_new_thread(SentenceGrabber.start_getting_sentences, (self,))
 
-    def get_next_page(self):
-        url = self.url + str(self.page)
-        u = urllib2.urlopen(url)
-        encoding = u.headers.getparam('charset')
+    def pop_next_sentence(self,):
+        total_sleep = 0
+        while len(self.sentences) == 0 and total_sleep < 5:
+            time.sleep(0.2)
+            total_sleep += 0.2
+        return self.sentences.pop(0) if len(self.sentences) > 0 else None
 
-        # parse it
-        self.parser.feed( u.read().decode(encoding) )
-        new_sentences = self.parser.get_sentences()
+    def start_getting_sentences(self):
+        page = 1
+        while page < 5: # TODO: change the stopping condition
+            url = self.url + str(page)
+            u = urllib2.urlopen(url)
+            encoding = u.headers.getparam('charset')
+            # parse it
+            self.parser.feed( u.read().decode(encoding) )
+            self.sentences += self.parser.get_sentences()
+            page += 1
 
-        # analyze the sentences
-        analyzed = []
-        for s in new_sentences:
-            self.furi.feed(s)
-            analyzed.append( self.furi.get_string() )
-
-        self.sentences = zip(new_sentences, analyzed)
-        self.page += 1
-
-    def get_processed_page_count(self):
-        return self.page - 1
+    def remaining_sentences_count(self):
+        return len(self.sentences)
 

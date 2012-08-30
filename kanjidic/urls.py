@@ -8,7 +8,8 @@ urlpatterns = patterns('kanjidic.views',
 
     url(r'^$', 'index'),
     url(r'^(?P<kanji>.)/$', 'kanji'),
-    url(r'^get_sentence$', 'get_sentence')
+    url(r'^get_sentence_begin$', 'get_sentence_begin'),
+    url(r'^get_sentence_next$', 'get_sentence_next'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

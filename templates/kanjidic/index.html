@@ -4,29 +4,64 @@
         <title>文 - Practice Kanji by Sentencing</title>
         <meta charset="utf-8">
         <script src="/static/js/jquery-1.7.1.min.js"></script>
+		<style type="text/css">
+			body {
+				background-color: #f0f0f0;
+				overflow: hidden;
+                text-align: center;
+			}
+			
+			#sentence {
+                font-size: 5em;
+            }
+
+            .buttonHolder{ text-align: center; }
+            #btn-next { padding: 0.8em 1.2em; font-size: 1em; }
+		</style>
     </head>
     <body>
         <script type="text/javascript">
 
             $(document).ready(function() {
                 
-                requestSentence("私");
+				$("#btn-next").click(function(event) { issueGetSentenceNext() });
+                issueGetSentence("私");
             });
 
-            function requestSentence(kanji) {
+            function issueGetSentence(kanji) {
 
-                // make the call
-                $.getJSON('get_sentence', { 'kanji' : kanji },
-                    function (data) {
-                        // add the received elements
-                        $('#sentence').html( data['texto'] );
-                    })
-                .error(function () { alert("Error: the call to 'get_sentence' failed."); });
+                issueAjaxJSONCall('get_sentence_begin', { 'kanji' : kanji },
+                    function(data) { onGetSentence(data); });
+            }
 
+            function issueGetSentenceNext() {
+                
+                issueAjaxJSONCall('get_sentence_next', {},
+                    function(data) { onGetSentence(data); });
+            }
+
+            function onGetSentence(data) {
+
+                // add the received elements
+                if ( data['sentence'] ) {
+                    $('#sentence').html( data['sentence'] );
+                    if ( data['isLast'] )
+                        $('#btn-next').attr("disabled", true);
+                }
+                else { console.log("should not happen"); }
+            }
+
+            function issueAjaxJSONCall(name, params, callback) {
+
+                $.getJSON(name, params, callback).error(
+                    function () { alert("Error: the call to '" + name + "' failed."); });
             }
         </script>
-        Hello!
+        日本語　ー　文
         <p id="sentence">Waiting for sentence...</p>
+        <div class="button-holder">
+            <input value="Next Sentence" title="Next Sentence" type="submit" id="btn-next"> 
+        </div>
     </body>
 </html>
 

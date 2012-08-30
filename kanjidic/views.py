@@ -8,12 +8,41 @@ from kanjidic.models import Kanji
 from sentence import SentenceGrabber
 
 
-sg = SentenceGrabber(u"私")
+# global variable
+glb = { 'SentenceGrabber' : None }
+
+
+def ajax_error(message):
+    d = { 'error' : message }
+    return HttpResponse(simplejson.dumps(d), mimetype = "application/json")
+
 
 def index(request):
-    sg.get_next_page()
     return render_to_response('kanjidic/index.html')
 
+def get_sentence_begin(request):
+    k = request.GET.get('kanji', False)
+    if not k:
+        return ajax_error("GET paramater 'kanji' not found or invalid")
+    # create a new instance for kanji k
+    glb['SentenceGrabber'] = SentenceGrabber(k)
+    # wait for the first sentence
+    bun = glb['SentenceGrabber'].pop_next_sentence()
+    if bun == None:
+        return ajax_error("No sentences for this kanji")
+    response = { 'sentence' : bun.encode('utf-8') }
+    return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
+
+def get_sentence_next(request):
+    bun = glb['SentenceGrabber'].pop_next_sentence()
+    if bun == None:
+        return ajax_error("No more sentences left for this kanji")
+    is_last = glb['SentenceGrabber'].remaining_sentences_count() == 0;
+    response = { 'sentence' : bun.encode('utf-8'), 'isLast' : is_last }
+    return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
+
+
+# USELESS, JUST FOR THE RECORD
 def kanji(request, kanji):
     try:
         k = Kanji.objects.get(character = kanji)
@@ -23,9 +52,4 @@ def kanji(request, kanji):
     except Kanji.DoesNotExist:
         raise Http404
     return render_to_response('kanjidic/kanji.html', {'kanji' : data})
-
-def get_sentence(request):
-    k = request.GET.get('kanji', False)
-    d = { 'texto' : sg.sentences[0][0].encode('utf-8') }
-    return HttpResponse(simplejson.dumps(d), mimetype = "application/json")
 
