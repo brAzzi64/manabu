@@ -12,11 +12,21 @@
 			}
 			
 			#sentence {
-                font-size: 5em;
+                font-size: 4em;
+                margin-bottom: 0px;
+                margin-left: 1em;
+            }
+
+            #translation {
+                font-size: 2em;
             }
 
             .buttonHolder{ text-align: center; }
-            #btn-next { padding: 0.8em 1.2em; font-size: 1em; }
+            #btn-next {
+                padding: 0.8em 1.2em;
+                font-size: 1em;
+                margin-top: 3em;
+            }
 		</style>
     </head>
     <body>
@@ -45,6 +55,7 @@
                 // add the received elements
                 if ( data['sentence'] ) {
                     $('#sentence').html( data['sentence'] );
+                    $('#translation').html( data['translation'] );
                     if ( data['isLast'] )
                         $('#btn-next').attr("disabled", true);
                 }
@@ -59,6 +70,7 @@
         </script>
         日本語　ー　文
         <p id="sentence">Waiting for sentence...</p>
+        <p id="translation">...</p>
         <div class="button-holder">
             <input value="Next Sentence" title="Next Sentence" type="submit" id="btn-next"> 
         </div>
