@@ -30,15 +30,15 @@ def get_sentence_begin(request):
     bun = glb['SentenceGrabber'].pop_next_sentence()
     if bun == None:
         return ajax_error("No sentences for this kanji")
-    response = { 'sentence' : bun[0].encode('utf-8'), 'translation' : bun[1].encode('utf-8') }
+    response = { 'sentence' : bun['sentence'].encode('utf-8'), 'translations' : map( lambda e: e.encode('utf-8'), bun['translations'] ) }
     return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
 
 def get_sentence_next(request):
     bun = glb['SentenceGrabber'].pop_next_sentence()
     if bun == None:
         return ajax_error("No more sentences left for this kanji")
-    is_last = glb['SentenceGrabber'].remaining_sentences_count() == 0;
-    response = { 'sentence' : bun[0].encode('utf-8'), 'translation' : bun[1].encode('utf-8'), 'isLast' : is_last}
+    is_last = not glb['SentenceGrabber'].any_sentence_left();
+    response = { 'sentence' : bun['sentence'].encode('utf-8'), 'translations' : map( lambda e: e.encode('utf-8'), bun['translations'] ), 'isLast' : is_last}
     return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
 
 
