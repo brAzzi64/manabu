@@ -27,6 +27,16 @@
                 font-size: 1em;
                 margin-top: 3em;
             }
+            .word {
+                display: inline-block;
+                margin-left: 0.1em;
+                margin-right: 0.1em;
+            }
+            .furigana {
+                font-size: 0.3em;
+                margin-bottom: -0.1em;
+                color: #AAA;
+            }
 		</style>
     </head>
     <body>
@@ -54,7 +64,20 @@
 
                 // add the received elements
                 if ( data['sentence'] ) {
-                    $('#sentence').html( data['sentence'] );
+                    $('#sentence').empty();
+                    var chars = data['structure'].split(" ");
+                    for (i in chars) {
+                        var matchings = chars[i].match(/(.*)\[(.*)\]/);
+                        if (matchings == null) {
+                            $('#sentence').append("<div class='word'>" + chars[i] + "</div>"); 
+                        } else {
+                            var word = matchings[1];
+                            var reading = matchings[2];
+                            var bun = $('#sentence').append("<div class='word'></div>");
+                            bun.find(".word").last().append("<div class='furigana'>" + reading + "</div>"); 
+                            bun.find(".word").last().append("<div>" + word + "</div>");
+                        }
+                    }
                     $('#translation').html( data['translations'][0] );
                     if ( data['isLast'] )
                         $('#btn-next').attr("disabled", true);

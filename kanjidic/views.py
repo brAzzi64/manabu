@@ -16,6 +16,12 @@ def ajax_error(message):
     d = { 'error' : message }
     return HttpResponse(simplejson.dumps(d), mimetype = "application/json")
 
+def generate_sentence_response(bun):
+    return { 'sentence' : bun['sentence'].encode('utf-8'), \
+             'structure' : bun['structure'].encode('utf-8'), \
+             'translations' : map( lambda e: e.encode('utf-8'), bun['translations'] ), \
+             'isLast' : not glb['SentenceGrabber'].any_sentence_left() }
+
 
 def index(request):
     return render_to_response('kanjidic/index.html')
@@ -30,15 +36,14 @@ def get_sentence_begin(request):
     bun = glb['SentenceGrabber'].pop_next_sentence()
     if bun == None:
         return ajax_error("No sentences for this kanji")
-    response = { 'sentence' : bun['sentence'].encode('utf-8'), 'translations' : map( lambda e: e.encode('utf-8'), bun['translations'] ) }
+    response = generate_sentence_response(bun)
     return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
 
 def get_sentence_next(request):
     bun = glb['SentenceGrabber'].pop_next_sentence()
     if bun == None:
         return ajax_error("No more sentences left for this kanji")
-    is_last = not glb['SentenceGrabber'].any_sentence_left();
-    response = { 'sentence' : bun['sentence'].encode('utf-8'), 'translations' : map( lambda e: e.encode('utf-8'), bun['translations'] ), 'isLast' : is_last}
+    response = generate_sentence_response(bun)
     return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
 
 

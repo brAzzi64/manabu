@@ -33,7 +33,7 @@ class TatoebaParser():
         for s in sets:
             s = PyQuery(s)
             if s.find(".mainSentence .sentenceContent a").text().strip() == sentence:
-                structure = s.find(".romanization.furigana").text()
+                structure = s.find(".mainSentence .sentenceContent .romanization.furigana").text()
                 translations = s.find(".translations:first") \
                                 .find(".sentence > img[title='English']") \
                                 .parent().find(".sentenceContent > a") \
