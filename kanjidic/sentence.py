@@ -1,45 +1,13 @@
 # -*- coding: utf-8 -*-
-
 import urllib2
 import thread
 import time
 import string
-from pyquery import PyQuery
+import re
 
-
-class JishoParser():
-    def __init__(self):
-        self.phrases = []
-
-    def feed(self, data):
-        d = PyQuery(data)
-        for node in d("table > tr : not(.lower) .japanese"):
-            tr = PyQuery(node)
-            sentence = string.join( tr.text().split(' '), "" ).strip()
-            self.phrases.append(sentence)
-
-    def get_sentences(self):
-        ret = sorted(self.phrases, key = len)
-        self.phrases = []
-        return ret
-
-class TatoebaParser():
-    def __init__(self):
-        self.tuple = []
-
-    def feed(self, data, sentence):
-        d = PyQuery(data)
-        sets = d(".sentences_set")
-        for s in sets:
-            s = PyQuery(s)
-            if s.find(".mainSentence .sentenceContent a").text().strip() == sentence:
-                structure = s.find(".mainSentence .sentenceContent .romanization.furigana").text()
-                translations = s.find(".translations:first") \
-                                .find(".sentence > img[title='English']") \
-                                .parent().find(".sentenceContent > a") \
-                                .map(lambda i, o: o.text)
-                return (structure, translations)
-        return (None, None)
+from jishopar import JishoParser
+from tatopar import TatoebaParser
+from restructurer import Restructurer
 
 
 class SentenceGrabber:
@@ -48,6 +16,7 @@ class SentenceGrabber:
         self.t_url = "http://tatoeba.org/eng/sentences/search?query=%s&from=jpn&to=und"
         self.j_parser = JishoParser()
         self.t_parser = TatoebaParser()
+        self.restructurer = Restructurer()
         self.sentences = []
         self.finished = False
         # start grabbing sentences
@@ -74,11 +43,15 @@ class SentenceGrabber:
             jisho_sentences = self.j_parser.get_sentences()
             for i, bun in enumerate(jisho_sentences):
                 # TODO: filter by known kanjis
-                print "Downloading Tatoeba sentence #%d" % i
+                print "Downloading Tatoeba sentence #%d" % (i+1)
                 url = self.t_url % bun.encode('utf-8')
                 u = urllib2.urlopen(url)
                 # parse it
                 (structure, translations) = self.t_parser.feed( u.read().decode('utf-8'), bun )
+                # adjust the structure to our format
+                print u"B %s" % structure
+                structure = self.restructurer.feed(structure)
+                print u"A %s" % structure
                 # add it to the collection
                 self.sentences += [ { 'sentence' : bun, 'structure' : structure, 'translations' : translations } ]
             jisho_page += 1

@@ -17,6 +17,10 @@
                 margin-left: 1em;
             }
 
+            #original {
+                font-size: 2em;
+            }
+
             #translation {
                 font-size: 2em;
             }
@@ -45,7 +49,7 @@
             $(document).ready(function() {
                 
 				$("#btn-next").click(function(event) { issueGetSentenceNext() });
-                issueGetSentence("私");
+                issueGetSentence("異");
             });
 
             function issueGetSentence(kanji) {
@@ -78,6 +82,7 @@
                             bun.find(".word").last().append("<div>" + word + "</div>");
                         }
                     }
+                    $('#original').html( data['sentence'] );
                     $('#translation').html( data['translations'][0] );
                     if ( data['isLast'] )
                         $('#btn-next').attr("disabled", true);
@@ -93,6 +98,7 @@
         </script>
         日本語　ー　文
         <p id="sentence">Waiting for sentence...</p>
+        <p id="original">...</p>
         <p id="translation">...</p>
         <div class="button-holder">
             <input value="Next Sentence" title="Next Sentence" type="submit" id="btn-next"> 
