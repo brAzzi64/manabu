@@ -25,7 +25,7 @@
                 font-size: 2em;
             }
 
-            .buttonHolder{ text-align: center; }
+            .buttonHolder { text-align: center; }
 
             #btn-next {
                 padding: 0.8em 1.2em;
@@ -54,6 +54,8 @@
                 margin-bottom: -0.1em;
                 color: #AAA;
             }
+
+            .furigana::-moz-selection { background: transparent; }
 		</style>
     </head>
     <body>
@@ -162,13 +164,11 @@
             function clearSelection() {
 
                 if (window.getSelection) {
-                    if (window.getSelection().empty) {  // Chrome
+                    if (window.getSelection().empty) {  // webkit
                         window.getSelection().empty();
-                    } else if (window.getSelection().removeAllRanges) {  // Firefox
+                    } else if (window.getSelection().removeAllRanges) {  // mozilla
                         window.getSelection().removeAllRanges();
                     }
-                } else if (document.selection) {  // IE?
-                    document.selection.empty();
                 }
             }
 
