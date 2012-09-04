@@ -18,32 +18,33 @@ class Restructurer():
         output = u""
         kanji_list = list(x for x in word if self.is_kanji(x))
         if len(kanji_list) == 0:
-            raise Exception(u"No kanjis in %s[%s]" % (word, pronunciation))
-
-        # build regular expression
-        replace = lambda x: '(.*)' if self.is_kanji(x) else x
-        regexp_str = string.join( [replace(i) for i in word], "" )
-
-        # match pronunciation against it        
-        match = re.match(regexp_str, pronunciation)
-        if match != None:
-            groups = [g for g in match.groups() if g != ""]
-            g_index = 0
-            for i, l in enumerate(word):
-                if not self.is_kanji(l):
-                    output += l
-                else: # is kanji
-                    # if next char is also kanji, we know that both
-                    # are matched in the same group
-                    if len(word) > i + 1 and self.is_kanji( word[i+1] ):
-                        output += l
-                    else:
-                        output += u"%s[%s]" % (l, groups[g_index])
-                        g_index += 1
+            # it's ok. it can be something like %[ぱーせんと]
+            output += u"%s[%s]" % (word, pronunciation)
         else:
-            error = u"Word '%s' doesn't match pronunciation '%s' with '%s'" % (word, pronunciation, regexp_str)
-            print error
-            raise Exception(error)
+            # build regular expression
+            replace = lambda x: '(.*)' if self.is_kanji(x) else x
+            regexp_str = string.join( [replace(i) for i in word], "" )
+
+            # match pronunciation against it        
+            match = re.match(regexp_str, pronunciation)
+            if match != None:
+                groups = [g for g in match.groups() if g != ""]
+                g_index = 0
+                for i, l in enumerate(word):
+                    if not self.is_kanji(l):
+                        output += l
+                    else: # is kanji
+                        # if next char is also kanji, we know that both
+                        # are matched in the same group
+                        if len(word) > i + 1 and self.is_kanji( word[i+1] ):
+                            output += l
+                        else:
+                            output += u"%s[%s]" % (l, groups[g_index])
+                            g_index += 1
+            else:
+                error = u"Word '%s' doesn't match pronunciation '%s' with '%s'" % (word, pronunciation, regexp_str)
+                print error
+                raise Exception(error)
         return output
 
     def feed(self, struct):

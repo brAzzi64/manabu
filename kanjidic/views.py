@@ -17,9 +17,10 @@ def ajax_error(message):
     return HttpResponse(simplejson.dumps(d), mimetype = "application/json")
 
 def generate_sentence_response(bun):
-    return { 'sentence' : bun['sentence'].encode('utf-8'), \
-             'structure' : bun['structure'].encode('utf-8'), \
-             'translations' : map( lambda e: e.encode('utf-8'), bun['translations'] ), \
+    return { 'sentence' : bun['sentence'].encode('utf-8'),
+             'structure' : bun['structure'].encode('utf-8'),
+             'structure_orig' : bun['structure_orig'].encode('utf-8'),
+             'translations' : map( lambda e: e.encode('utf-8'), bun['translations'] ),
              'isLast' : not glb['SentenceGrabber'].any_sentence_left() }
 
 

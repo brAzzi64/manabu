@@ -47,13 +47,13 @@ class SentenceGrabber:
                 url = self.t_url % bun.encode('utf-8')
                 u = urllib2.urlopen(url)
                 # parse it
-                (structure, translations) = self.t_parser.feed( u.read().decode('utf-8'), bun )
+                (structure_orig, translations) = self.t_parser.feed( u.read().decode('utf-8'), bun )
                 # adjust the structure to our format
-                print u"B %s" % structure
-                structure = self.restructurer.feed(structure)
+                print u"B %s" % structure_orig
+                structure = self.restructurer.feed(structure_orig)
                 print u"A %s" % structure
                 # add it to the collection
-                self.sentences += [ { 'sentence' : bun, 'structure' : structure, 'translations' : translations } ]
+                self.sentences += [ { 'sentence' : bun, 'structure' : structure, 'structure_orig' : structure_orig, 'translations' : translations } ]
             jisho_page += 1
         self.finished = True
 

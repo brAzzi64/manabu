@@ -17,7 +17,7 @@
                 margin-left: 1em;
             }
 
-            #original {
+            #original #structure #structure-orig {
                 font-size: 2em;
             }
 
@@ -33,11 +33,14 @@
             }
             .word {
                 display: inline-block;
-                margin-left: 0.1em;
-                margin-right: 0.1em;
+                margin-left: 0.15em;
+                margin-right: 0.15em;
+            }
+            .sub-word {
+                display: block;
             }
             .furigana {
-                font-size: 0.3em;
+                font-size: 0.4em;
                 margin-bottom: -0.1em;
                 color: #AAA;
             }
@@ -49,7 +52,7 @@
             $(document).ready(function() {
                 
 				$("#btn-next").click(function(event) { issueGetSentenceNext() });
-                issueGetSentence("異");
+                issueGetSentence("語");
             });
 
             function issueGetSentence(kanji) {
@@ -64,6 +67,26 @@
                     function(data) { onGetSentence(data); });
             }
 
+            function disassembleWordStructure(wordStructure) {
+
+                var struct = [];
+                //console.log(wordStructure);
+                while (wordStructure != '') {
+                                                   // hira-kata* all-but-hira-kata+ [ pronunciation* ] rest*
+                    var match = wordStructure.match(/([\u3040-\u309F\u30A0-\u30FF]*)([^\u3040-\u309F\u30A0-\u30FF]+)\[(.*)\](.*)/);
+                    if (match == null) {
+                        struct.push([wordStructure]);
+                        break;
+                    } else {
+                        if ( match[1] != '' )
+                            struct.push([match[1]]);       // pre-word
+                        struct.push([match[2], match[3]]); // kanji + pronunciation
+                        wordStructure = match[4];          // rest of the string
+                    }
+                }
+                return struct;
+            }
+
             function onGetSentence(data) {
 
                 // add the received elements
@@ -71,18 +94,21 @@
                     $('#sentence').empty();
                     var chars = data['structure'].split(" ");
                     for (i in chars) {
-                        var matchings = chars[i].match(/(.*)\[(.*)\]/);
-                        if (matchings == null) {
-                            $('#sentence').append("<div class='word'>" + chars[i] + "</div>"); 
-                        } else {
-                            var word = matchings[1];
-                            var reading = matchings[2];
-                            var bun = $('#sentence').append("<div class='word'></div>");
-                            bun.find(".word").last().append("<div class='furigana'>" + reading + "</div>"); 
-                            bun.find(".word").last().append("<div>" + word + "</div>");
+                        //console.log(chars[i]);
+                        var structure = disassembleWordStructure(chars[i]);
+                        //console.log(structure);
+                        var bun = $('#sentence').append("<div class='word'></div>");
+                        for (j in structure) {
+                            var part = structure[j];
+                            var subun = bun.find(".word").last().append("<div class='sub-word'></div>");
+                            if ( part.length > 1 )
+                                subun.find(".sub-word").last().append("<div class='furigana'>" + part[1] + "</div>");
+                            subun.find(".sub-word").last().append("<div>" + part[0] + "</div>");
                         }
                     }
                     $('#original').html( data['sentence'] );
+                    //$('#structure-orig').html( data['structure_orig'] );
+                    //$('#structure').html( data['structure'] );
                     $('#translation').html( data['translations'][0] );
                     if ( data['isLast'] )
                         $('#btn-next').attr("disabled", true);
@@ -98,8 +124,8 @@
         </script>
         日本語　ー　文
         <p id="sentence">Waiting for sentence...</p>
-        <p id="original">...</p>
         <p id="translation">...</p>
+        <p id="original">...</p>
         <div class="button-holder">
             <input value="Next Sentence" title="Next Sentence" type="submit" id="btn-next"> 
         </div>
