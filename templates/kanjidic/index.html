@@ -26,19 +26,29 @@
             }
 
             .buttonHolder{ text-align: center; }
+
             #btn-next {
                 padding: 0.8em 1.2em;
                 font-size: 1em;
                 margin-top: 3em;
             }
+
+            #btn-join {
+                padding: 0.8em 0.6em;
+                font-size: 1em;
+                margin-top: 3em;
+            }
+
             .word {
                 display: inline-block;
                 margin-left: 0.15em;
                 margin-right: 0.15em;
             }
+
             .word .sub-word {
                 display: inline-block;
             }
+
             .furigana {
                 font-size: 0.4em;
                 margin-bottom: -0.1em;
@@ -52,6 +62,7 @@
             $(document).ready(function() {
                 
 				$("#btn-next").click(function(event) { issueGetSentenceNext() });
+                $("#btn-join").click(function(event) { joinSelectedWords(); });
                 issueGetSentence("語");
             });
 
@@ -116,6 +127,51 @@
                 else { console.log("should not happen"); }
             }
 
+            function joinSelectedWords() {
+
+                var sel = window.getSelection();
+                if (sel.rangeCount == 0)
+                    return; // no selection
+
+                var range = sel.getRangeAt(0);
+                var startWord = $(range.startContainer).parents(".word")[0]; 
+                var endWord = $(range.endContainer).parents(".word")[0];
+
+                // check if selection is under the handled area and is valid
+                if (startWord && endWord && startWord != endWord) {
+
+                    var iter = $(startWord).next()[0];
+                    while (true) {
+                        var childs = $(iter).children();
+                        $(startWord).append(childs);
+                        
+                        if (iter == endWord) {
+                            $(iter).remove();
+                            break;
+                        } else {
+                            var toDelete = iter;
+                            iter = $(iter).next()[0];
+                            $(toDelete).remove();
+                        }
+                    }
+                }
+
+                clearSelection();
+            }
+
+            function clearSelection() {
+
+                if (window.getSelection) {
+                    if (window.getSelection().empty) {  // Chrome
+                        window.getSelection().empty();
+                    } else if (window.getSelection().removeAllRanges) {  // Firefox
+                        window.getSelection().removeAllRanges();
+                    }
+                } else if (document.selection) {  // IE?
+                    document.selection.empty();
+                }
+            }
+
             function issueAjaxJSONCall(name, params, callback) {
 
                 $.getJSON(name, params, callback).error(
@@ -128,6 +184,7 @@
         <p id="original">...</p>
         <div class="button-holder">
             <input value="Next Sentence" title="Next Sentence" type="submit" id="btn-next"> 
+            <input value="J" title="J" type="submit" id="btn-join"> 
         </div>
     </body>
 </html>
