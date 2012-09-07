@@ -5,40 +5,34 @@
         <meta charset="utf-8">
         <script src="/static/js/jquery-1.7.1.min.js"></script>
         <script src="/static/bootstrap/js/bootstrap.js"></script>
-        <link rel='stylesheet' type='text/css' href="/static/bootstrap/css/bootstrap.css"/>
+        <link href="/static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
         <style type="text/css">
             body {
                 background-color: #f0f0f0;
-                overflow: hidden;
                 text-align: center;
             }
-            
-            #sentence {
-                font-size: 4em;
-                margin-bottom: 0px;
-                margin-left: 1em;
+           
+            a:focus {
+                outline: none !important;
             }
-
-            #original #structure #structure-orig {
-                font-size: 2em;
+           
+            #sentence {
+                font-size: 5em;
+                margin-top: 1.2em;
+                margin-bottom: 1em;
+                margin-left: 2.5em;
+                margin-right: 2em;
             }
 
             #translation {
+                font-size: 1.2em;
+                color: #222;
+                margin-bottom: 7em;
+            }
+
+            #translation p:first-child {
                 font-size: 2em;
-            }
-
-            .buttonHolder { text-align: center; }
-
-            #btn-next {
-                padding: 0.8em 1.2em;
-                font-size: 1em;
-                margin-top: 3em;
-            }
-
-            #btn-join {
-                padding: 0.8em 0.6em;
-                font-size: 1em;
-                margin-top: 3em;
+                color: black;
             }
 
             .word {
@@ -56,6 +50,8 @@
                 margin-bottom: -0.1em;
                 color: #AAA;
             }
+
+            .furigana::-moz-selection { background: transparent; }
 
             .kanji {
                 color: red;
@@ -112,7 +108,6 @@
                 font-weight: bold;
             }
 
-            .furigana::-moz-selection { background: transparent; }
         </style>
     </head>
     <body>
@@ -246,10 +241,13 @@
                             hovering = false;
                         });
 
-                    $('#original').html( data['sentence'] );
-                    //$('#structure-orig').html( data['structure_orig'] );
-                    //$('#structure').html( data['structure'] );
-                    $('#translation').html( data['translations'][0] );
+                    // Fill the translations
+                    $('#translation').empty();
+                    for (i in data['translations']) {
+                        var line = data['translations'][i];
+                        $('#translation').append("<p>" + line + "</p>");
+                    }
+                    
                     if ( data['isLast'] )
                         $('#btn-next').attr("disabled", true);
                 }
@@ -317,13 +315,18 @@
                     function () { alert("Error: the call to '" + name + "' failed."); });
             }
         </script>
-        日本語　ー　文
-        <p id="sentence">Waiting for sentence...</p>
-        <p id="translation">...</p>
-        <p id="original">...</p>
-        <div class="button-holder">
-            <input value="Next Sentence" title="Next Sentence" type="submit" id="btn-next"> 
-            <input value="J" title="J" type="submit" id="btn-join"> 
+        <div class='container'>
+            <h1>Sentence Grabber</h1>
+            <div style='margin-top: 2em;' class='container'>
+                <p>Click the <em>Next Sentence</em> button to get the next sentence availible for the Kanji.<br/>
+                Select separeted words and click <em>Join selected as word</em> to join them as one word.</p>
+            </div>
+            <div id="sentence"></div>
+            <div id="translation">Loading sentence...</div>
+            <div class="btn-group">
+                <a id="btn-next" class='btn btn-primary' href='#'>Next Sentence</a>
+                <a id="btn-join" class='btn btn' href='#'>Join selected as word</a>
+            </div>
         </div>
     </body>
 </html>

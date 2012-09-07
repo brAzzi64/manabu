@@ -67,12 +67,16 @@ class SentenceGrabber:
         for literal in kanjis:
             onyomis = []
             kunyomis = []
-            kanji = Kanji.objects.filter(character=literal)[0]
-            for p in kanji.pronunciations.all():
-                if p.ptype == 'ON':
-                    onyomis.append(p.text)
-                elif p.ptype == 'KN':
-                    kunyomis.append(p.text)
+            try:
+                kanji = Kanji.objects.filter(character=literal)[0]
+                for p in kanji.pronunciations.all():
+                    if p.ptype == 'ON':
+                        onyomis.append(p.text)
+                    elif p.ptype == 'KN':
+                        kunyomis.append(p.text)
+            except Exception as e:
+                print u"No information for Kanji: %s" % literal
+                print e
             mappings[literal] = { 'ON' : onyomis, 'KN' : kunyomis }
         return mappings
 
