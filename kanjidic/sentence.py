@@ -8,6 +8,7 @@ import re
 from jishopar import JishoParser
 from tatopar import TatoebaParser
 from restructurer import Restructurer
+from kanjidic.models import Kanji, Pronunciation
 
 
 class SentenceGrabber:
@@ -49,17 +50,31 @@ class SentenceGrabber:
                 # parse it
                 (structure_orig, translations) = self.t_parser.feed( u.read().decode('utf-8'), bun )
                 # adjust the structure to our format
-                print u"B %s" % structure_orig
                 structure = self.restructurer.feed(structure_orig)
-                print u"A %s" % structure
+                # get kanji pronunciations
+                pronunciations = self.get_pronunciations(bun)
                 # add it to the collection
-                self.sentences += [ { 'sentence' : bun, 'structure' : structure, 'structure_orig' : structure_orig, 'translations' : translations } ]
+                self.sentences += [ { 'sentence' : bun, 'structure' : structure, 'structure_orig' : structure_orig, 'translations' : translations, 'pronunciations' : pronunciations } ]
             jisho_page += 1
         self.finished = True
 
     def any_sentence_left(self):
         return len(self.sentences) > 0 or not self.finished
 
+    def get_pronunciations(self, sentence):
+        mappings = {}
+        kanjis = set(l for l in sentence if Restructurer.is_kanji(l))
+        for literal in kanjis:
+            onyomis = []
+            kunyomis = []
+            kanji = Kanji.objects.filter(character=literal)[0]
+            for p in kanji.pronunciations.all():
+                if p.ptype == 'ON':
+                    onyomis.append(p.text)
+                elif p.ptype == 'KN':
+                    kunyomis.append(p.text)
+            mappings[literal] = { 'ON' : onyomis, 'KN' : kunyomis }
+        return mappings
 
 if __name__ == '__main__':
     sg = SentenceGrabber('私')

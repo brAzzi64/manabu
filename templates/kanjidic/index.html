@@ -4,14 +4,16 @@
         <title>文 - Practice Kanji by Sentencing</title>
         <meta charset="utf-8">
         <script src="/static/js/jquery-1.7.1.min.js"></script>
-		<style type="text/css">
-			body {
-				background-color: #f0f0f0;
-				overflow: hidden;
+        <script src="/static/bootstrap/js/bootstrap.js"></script>
+        <link rel='stylesheet' type='text/css' href="/static/bootstrap/css/bootstrap.css"/>
+        <style type="text/css">
+            body {
+                background-color: #f0f0f0;
+                overflow: hidden;
                 text-align: center;
-			}
-			
-			#sentence {
+            }
+            
+            #sentence {
                 font-size: 4em;
                 margin-bottom: 0px;
                 margin-left: 1em;
@@ -55,15 +57,70 @@
                 color: #AAA;
             }
 
+            .kanji {
+                color: red;
+            }
+
+            .literal {
+                display: inline-block;
+            }
+
+            .kanji a {
+                text-decoration: none;
+                color: #440000;
+            }
+
+            .popover {
+                width: auto;
+                padding: 0px;
+            }
+
+            .popover-content {
+                padding: 0px;
+            }
+
+            .pronunciation-title {
+                font-size: 13px;
+                padding: 4px 10px;
+                background-color: #F6F6F6;
+                border-bottom: 1px solid #DDD;
+                border-top: 1px solid #DDD;
+            }
+
+            .pronunciation-title:first-child {
+                border-radius: 4px 4px 0 0;
+                border-top: none;
+            }
+
+            .popover-content > p {
+                margin-top: 0px;
+            }
+
+            .pro-option {
+                text-decoration: none;
+                display: block;
+                margin: 5px;
+                padding: 0px 4px;
+                color: black;
+            }
+
+            .pro-option:hover {
+                text-decoration: underline;
+            }
+
+            .pro-option.selected {
+                font-weight: bold;
+            }
+
             .furigana::-moz-selection { background: transparent; }
-		</style>
+        </style>
     </head>
     <body>
         <script type="text/javascript">
 
             $(document).ready(function() {
                 
-				$("#btn-next").click(function(event) { issueGetSentenceNext() });
+                $("#btn-next").click(function(event) { issueGetSentenceNext() });
                 $("#btn-join").click(function(event) { joinSelectedWords(); });
                 issueGetSentence("語");
             });
@@ -113,12 +170,82 @@
                         var bun = $('#sentence').append("<div class='word'></div>");
                         for (j in structure) {
                             var part = structure[j];
-                            var subun = bun.find(".word").last().append("<div class='sub-word'></div>");
+                            var word = bun.find(".word:last").append("<div class='sub-word'></div>");
+                            var subword = word.find(".sub-word:last");
                             if ( part.length > 1 )
-                                subun.find(".sub-word").last().append("<div class='furigana'>" + part[1] + "</div>");
-                            subun.find(".sub-word").last().append("<div>" + part[0] + "</div>");
+                                subword.append("<div class='furigana'>" + part[1] + "</div>");
+                            for ( k in part[0] ) {
+                                if ( is_kanji( part[0][k] ) ) {
+                                    var $wrapper = $("<div class='literal kanji'>");
+                                    var $anchor = $("<a rel='popover' data-title='MI' href='#'>")
+                                                    .data("onyomis", data['pronunciations'][ part[0][k] ].ON)
+                                                    .data("kunyomis", data['pronunciations'][ part[0][k] ].KN);
+                                    subword.append( $wrapper.append( $anchor.append( part[0][k] ) ) );
+                                } else {
+                                    subword.append("<div class='literal'>" + part[0][k] + "</div>");
+                                }
+                            }
                         }
                     }
+
+                    var hovering = false;
+
+                    // Initialize popovers
+                    $("[rel=popover]").hover(
+                        function() { // hover IN
+                            if (hovering)
+                                return;
+                            hovering = true;
+
+                            // generate the HTML content
+                            var $el = $(this);
+                            var $content = $("<div style='margin-top: 0px; margin-bottom: 0px;'>").wrap('<div>')
+                                .append("<div class='pronunciation-title'>on'yomi</div>").append("<div class='onyomi'>")
+                                .append("<div class='pronunciation-title'>kun'yomi</div>").append("<div class='kunyomi'>");
+                                //.append("<div style='clear: both'>");
+                            var $onyomi = $content.find(".onyomi");
+                            var $kunyomi = $content.find(".kunyomi");
+                            var $item = null;
+                            $.each($el.data('onyomis'), function(index, value) {
+                                $item = $("<a href='#' class='pro-option'>" + value + "</a>");
+                                $onyomi.append($item);
+                                $item = null;
+                            });
+                            $.each($el.data('kunyomis'), function(index, value) {
+                                $item = $("<a href='#' class='pro-option'>" + value + "</a>");
+                                $kunyomi.append($item);
+                                $item = null;
+                            });
+                            
+                            // close all other popovers:
+                            $('body .popover').remove();
+
+                            // show new
+                            $el.popover({ content: $content.parent().html(), trigger: 'manual', placement: 'bottom', html: true }).popover('show');
+
+                            // remove the header, we'll manage the whole area ourselves
+                            $('body .popover-inner > .popover-title').remove();
+                        },
+                        function() { // hover OUT
+                            var $el = $(this);
+                            var $popover = $('body .popover');
+                            var hideFn = function () {
+                                if (!hovering) {
+                                    $popover.fadeOut(100);
+                                    setTimeout( function() { $el.popover('hide'); }, 100 );
+                                }
+                            };
+                            $popover.hover(
+                                function() { hovering = true; },
+                                function() {
+                                    hovering = false;
+                                    setTimeout(hideFn, 400);
+                                } );
+                            setTimeout(hideFn, 400);
+
+                            hovering = false;
+                        });
+
                     $('#original').html( data['sentence'] );
                     //$('#structure-orig').html( data['structure_orig'] );
                     //$('#structure').html( data['structure'] );
@@ -127,6 +254,18 @@
                         $('#btn-next').attr("disabled", true);
                 }
                 else { console.log("should not happen"); }
+            }
+
+            function is_kanji(k) {
+
+                var charCode = k.charCodeAt(0);
+                return charCode >= 0x4E00 && charCode < 0x9FFF;
+            }
+
+            function generateHTMLForPronunciations(pronunciations) {
+
+                var html = $("<p>I'm HTML Code</p>").html();
+                return html;
             }
 
             function joinSelectedWords() {
