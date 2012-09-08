@@ -14,15 +14,24 @@ class Restructurer():
     def is_kanji(char):
         return ord(char) >= 0x4E00 and ord(char) < 0x9FFF
 
+    @staticmethod
+    def is_kanji_or_iteration(char):
+        return Restructurer.is_kanji(char) or char == u'々'
+
+    @staticmethod
+    def is_kana(char):
+        return ord(char) >= 0x3040 and ord(char) < 0x309F \
+            or ord(char) >= 0x30A0 and ord(char) < 0x30FF
+
     def build_new_struct(self, word, pronunciation):
         output = u""
-        kanji_list = list(x for x in word if self.is_kanji(x))
+        kanji_list = list(x for x in word if not self.is_kana(x))
         if len(kanji_list) == 0:
-            # it's ok. it can be something like %[ぱーせんと]
             output += u"%s[%s]" % (word, pronunciation)
+            print "WARNING: There should be at least a non-kana character"
         else:
             # build regular expression
-            replace = lambda x: '(.*)' if self.is_kanji(x) else x
+            replace = lambda x: '(.*)' if not self.is_kana(x) else x
             regexp_str = string.join( [replace(i) for i in word], "" )
 
             # match pronunciation against it        
@@ -31,12 +40,12 @@ class Restructurer():
                 groups = [g for g in match.groups() if g != ""]
                 g_index = 0
                 for i, l in enumerate(word):
-                    if not self.is_kanji(l):
+                    if self.is_kana(l):
                         output += l
                     else: # is kanji
                         # if next char is also kanji, we know that both
                         # are matched in the same group
-                        if len(word) > i + 1 and self.is_kanji( word[i+1] ):
+                        if len(word) > i + 1 and not self.is_kana( word[i+1] ):
                             output += l
                         else:
                             output += u"%s[%s]" % (l, groups[g_index])

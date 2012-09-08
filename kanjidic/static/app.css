@@ -1,0 +1,126 @@
+
+body {
+    background-color: #f0f0f0;
+    text-align: center;
+}
+
+a:focus {
+    outline: none !important;
+}
+
+#sentence {
+    font-size: 5em;
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+    margin-left: 1.2em;
+}
+
+#translation {
+    font-size: 1.2em;
+    color: #222;
+    margin-bottom: 7em;
+}
+
+#translation p:first-child {
+    font-size: 2em;
+    color: black;
+}
+
+.word {
+    display: inline-block;
+    margin-left: 0.15em;
+    margin-right: 0.15em;
+}
+
+.word .sub-word {
+    display: inline-block;
+}
+
+.furigana {
+    font-size: 0.4em;
+    margin-bottom: -0.1em;
+    color: #AAA;
+}
+
+.furigana::-moz-selection { background: transparent; }
+
+.furigana-edit {
+    display: block !important;
+    margin: 3px auto 0 auto !important;
+    text-align: center;
+    width: 90% !important;
+    font-size: 18px !important;
+}
+
+.kanji {
+    color: red;
+}
+
+.literal {
+    display: inline-block;
+}
+
+.kanji a {
+    text-decoration: none;
+    color: #440000;
+}
+
+.popover {
+    width: auto;
+    padding: 0px;
+}
+
+.popover-content {
+    padding: 0px;
+}
+
+.pronunciation-title {
+    font-size: 13px;
+    padding: 4px 10px;
+    background-color: #F6F6F6;
+    border-bottom: 1px solid #DDD;
+    border-top: 1px solid #DDD;
+}
+
+.pronunciation-title:first-child {
+    border-radius: 4px 4px 0 0;
+    border-top: none;
+}
+
+.popover-content > p {
+    margin-top: 0px;
+}
+
+.pro-option {
+    text-decoration: none;
+    display: block;
+    margin: 5px;
+    padding: 0px 4px;
+    color: black;
+}
+
+.pro-option:hover {
+    text-decoration: underline;
+}
+
+.pro-option.selected {
+    font-weight: bold;
+}
+
+.container-fluid.main {
+    padding-left: 0;
+    padding-right: 0;
+    margin-top: 2%;
+}
+
+#controls {
+    position: absolute;
+    width: 100%;
+    bottom: 10%;
+}
+
+#controls div {
+}
+
+
+
