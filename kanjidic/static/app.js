@@ -7,8 +7,7 @@ $(document).ready(function() {
     $("#btn-next").click(function(event) { issueGetSentenceNext() });
     $("#btn-join").click(function(event) { joinSelectedWords(); });
     $("#btn-reset").click(function(event) { resetSentence(); });
-    //issueGetSentence("野");
-    issueGetSentence("杯");
+    issueGetSentence("間");
 });
 
 function issueGetSentence(kanji) {
@@ -112,14 +111,23 @@ function loadSentence(data) {
 
         $('.furigana').dblclick(onFuriganaDblClick);
 
+        // Initialize kanji pronunciation selections
+        $.each(sentence['pronunciations'], function(index, value) {
+             sentence['pronunciations'][index].USED = false;
+        });
+
         // Initialize popovers
         var hovering = false;
+        var kanji;
 
         $("[rel=popover]").hover(
             function() { // hover IN
-                if (hovering)
-                    return;
                 hovering = true;
+                var currentKanji = $(this).html();
+                if (currentKanji == kanji) // if popup still didn't close...
+                    return;
+
+                kanji = currentKanji; 
 
                 // generate the HTML content
                 var $el = $(this);
@@ -139,7 +147,7 @@ function loadSentence(data) {
                     $kunyomi.append($item);
                     $item = null;
                 });
-                
+              
                 // close all other popovers:
                 $('body .popover').remove();
 
@@ -148,12 +156,31 @@ function loadSentence(data) {
 
                 // remove the header, we'll manage the whole area ourselves
                 $('body .popover-inner > .popover-title').remove();
+                
+                // reflect the state of the selections in the popover 
+                $('.pro-option').each(function(index, obj) {
+                    $(obj).toggleClass('selected', sentence['pronunciations'][kanji].USED == $(obj).text());
+                });
+                
+                // on click, select the pronunciation for the Kanji 
+                $('.pro-option').click(function(e) {
+
+                    if ( $(this).hasClass('selected') ) {
+                        $(this).removeClass('selected');
+                        sentence['pronunciations'][kanji].USED = null;
+                    } else {
+                        $('.pro-option').not(this).removeClass('selected');
+                        $(this).addClass('selected');
+                        sentence['pronunciations'][kanji].USED = $(this).text();
+                    }
+                });
             },
             function() { // hover OUT
                 var $el = $(this);
                 var $popover = $('body .popover');
                 var hideFn = function () {
                     if (!hovering) {
+                        kanji = null;
                         $popover.fadeOut(100);
                         setTimeout( function() { $el.popover('hide'); }, 100 );
                     }

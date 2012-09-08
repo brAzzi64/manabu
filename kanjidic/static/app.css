@@ -97,6 +97,7 @@ a:focus {
     margin: 5px;
     padding: 0px 4px;
     color: black;
+    height: 18px;
 }
 
 .pro-option:hover {
@@ -118,9 +119,5 @@ a:focus {
     width: 100%;
     bottom: 10%;
 }
-
-#controls div {
-}
-
 
 
