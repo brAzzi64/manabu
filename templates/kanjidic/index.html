@@ -113,23 +113,26 @@
     <body>
         <script type="text/javascript">
 
+            var sentence;
+
             $(document).ready(function() {
                 
                 $("#btn-next").click(function(event) { issueGetSentenceNext() });
                 $("#btn-join").click(function(event) { joinSelectedWords(); });
-                issueGetSentence("語");
+                $("#btn-reset").click(function(event) { resetSentence(); });
+                issueGetSentence("野");
             });
 
             function issueGetSentence(kanji) {
 
                 issueAjaxJSONCall('get_sentence_begin', { 'kanji' : kanji },
-                    function(data) { onGetSentence(data); });
+                    function(data) { onGetSentenceArrived(data); });
             }
 
             function issueGetSentenceNext() {
                 
                 issueAjaxJSONCall('get_sentence_next', {},
-                    function(data) { onGetSentence(data); });
+                    function(data) { onGetSentenceArrived(data); });
             }
 
             function disassembleWordStructure(wordStructure) {
@@ -152,7 +155,26 @@
                 return struct;
             }
 
-            function onGetSentence(data) {
+            function onGetSentenceArrived(data) {
+
+                sentence = data;
+
+                loadSentence(data);
+            }
+
+            function is_kanji(k) {
+
+                var charCode = k.charCodeAt(0);
+                return charCode >= 0x4E00 && charCode < 0x9FFF;
+            }
+
+            function generateHTMLForPronunciations(pronunciations) {
+
+                var html = $("<p>I'm HTML Code</p>").html();
+                return html;
+            }
+
+            function loadSentence(data) {
 
                 // add the received elements
                 if ( data['sentence'] ) {
@@ -197,7 +219,6 @@
                             var $content = $("<div style='margin-top: 0px; margin-bottom: 0px;'>").wrap('<div>')
                                 .append("<div class='pronunciation-title'>on'yomi</div>").append("<div class='onyomi'>")
                                 .append("<div class='pronunciation-title'>kun'yomi</div>").append("<div class='kunyomi'>");
-                                //.append("<div style='clear: both'>");
                             var $onyomi = $content.find(".onyomi");
                             var $kunyomi = $content.find(".kunyomi");
                             var $item = null;
@@ -254,16 +275,12 @@
                 else { console.log("should not happen"); }
             }
 
-            function is_kanji(k) {
+            function resetSentence() {
 
-                var charCode = k.charCodeAt(0);
-                return charCode >= 0x4E00 && charCode < 0x9FFF;
-            }
+                $('#sentence').empty();
+                $('#translation').empty();
 
-            function generateHTMLForPronunciations(pronunciations) {
-
-                var html = $("<p>I'm HTML Code</p>").html();
-                return html;
+                loadSentence(sentence);
             }
 
             function joinSelectedWords() {
@@ -325,7 +342,8 @@
             <div id="translation">Loading sentence...</div>
             <div class="btn-group">
                 <a id="btn-next" class='btn btn-primary' href='#'>Next Sentence</a>
-                <a id="btn-join" class='btn btn' href='#'>Join selected as word</a>
+                <a id="btn-join" class='btn' href='#'>Join selected as word</a>
+                <a id="btn-reset" class='btn' href='#'>Reset</a>
             </div>
         </div>
     </body>
