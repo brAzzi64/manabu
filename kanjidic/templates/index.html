@@ -3,9 +3,9 @@
     <head>
         <title>文 - Practice Kanji by Sentencing</title>
         <meta charset="utf-8">
-        <script src="/static/js/jquery-1.7.1.min.js"></script>
-        <script src="/static/bootstrap/js/bootstrap.js"></script>
-        <link href="/static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
+        <script src="static/js/jquery-1.7.1.min.js"></script>
+        <script src="static/bootstrap/js/bootstrap.js"></script>
+        <link href="static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
         <style type="text/css">
             body {
                 background-color: #f0f0f0;
@@ -125,13 +125,13 @@
 
             function issueGetSentence(kanji) {
 
-                issueAjaxJSONCall('get_sentence_begin', { 'kanji' : kanji },
+                issueAjaxJSONCall('api/get_sentence_begin', { 'kanji' : kanji },
                     function(data) { onGetSentenceArrived(data); });
             }
 
             function issueGetSentenceNext() {
                 
-                issueAjaxJSONCall('get_sentence_next', {},
+                issueAjaxJSONCall('api/get_sentence_next', {},
                     function(data) { onGetSentenceArrived(data); });
             }
 

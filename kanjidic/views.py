@@ -26,7 +26,7 @@ def generate_sentence_response(bun):
 
 
 def index(request):
-    return render_to_response('kanjidic/index.html')
+    return render_to_response('index.html')
 
 def get_sentence_begin(request):
     k = request.GET.get('kanji', False)
@@ -58,5 +58,5 @@ def kanji(request, kanji):
         data = {'character' : k.character, 'onyomis' : onyomis, 'kunyomis' : kunyomis}
     except Kanji.DoesNotExist:
         raise Http404
-    return render_to_response('kanjidic/kanji.html', {'kanji' : data})
+    return render_to_response('kanji.html', {'kanji' : data})
 
