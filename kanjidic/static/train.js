@@ -43,6 +43,21 @@ function disassembleWordStructure(wordStructure) {
     return struct;
 }
 
+function assembleWordStructureForCurrentSentence() {
+
+    var struct = "";
+    $('#sentence .word').each(function(i, word) {
+        $(word).find(".sub-word").each(function(j, subword) {
+            struct += $(subword).find(".literal").text();
+            var $furigana = $(subword).find(".furigana");
+            if ($furigana.length != 0)
+                struct += "[" + $furigana.html() + "]";
+        });
+        struct += " ";
+    });
+    return struct.trim();
+}
+
 function onGetSentenceArrived(data) {
 
     sentence = data;
