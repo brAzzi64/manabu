@@ -6,28 +6,33 @@
         <script src="static/js/jquery-1.7.1.min.js"></script>
         <script src="static/bootstrap/js/bootstrap.js"></script>
         <link href="static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
-        <link href="static/app.css" rel='stylesheet'/>
-        <script src="static/app.js"></script>
+        <link href="static/index.css" rel='stylesheet'/>
     </head>
     <body>
         <div class='container-fluid main'>
-            <h1>Sentence Grabber</h1>
+            <h1>Search</h1>
             <div style='margin-top: 2em;' class='container'>
-                <p>Click the <em>Next Sentence</em> button to get the next sentence availible for the Kanji.<br/>
-                Select separeted words and click <em>Join selected as word</em> to join them as one word.<br/>
-                Double click on a <em>furigana</em> reading to edit it, and press the Enter key when done.</p>
+                Search for a Kanji to train:
             </div>
-            <div id="sentence" class='container-fluid'></div>
-            <div id="translation">Loading sentence...</div>
-            <div id="controls">
-                <div class="btn-group">
-                    <a id="btn-next" class='btn btn-primary' href='#'>Next Sentence</a>
-                    <a id="btn-join" class='btn' href='#'>Join selected as word</a>
-                    <a id="btn-reset" class='btn' href='#'>Reset</a>
-                    <a id="btn-learn" class='btn btn-success' href='#'>Learn</a>
-                </div>
+            <div id='center' class='container'>
+                <form class="form-search">
+                    <div class="input-append">
+                        <input id='kanji-input' type="text" class="span2 search-query">
+                        <a id='btn-search' href="#" class="btn">Search</a>
+                    </div>
+                </form>
             </div>
         </div>
+        <script type="text/javascript">
+             $(document).ready(function() {
+        
+                 $("#btn-search").click(function(event) {
+                     
+                    var kanji = $('#kanji-input').val();
+                    window.location.href = 'train?kanji=' + kanji;
+                 });
+             });
+        </script>
     </body>
 </html>
 

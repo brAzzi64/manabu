@@ -12,9 +12,8 @@ APP_ROOT = os.path.dirname(os.path.realpath(__file__))
 urlpatterns = patterns('kanjidic.views',
 
     url(r'^$', 'index'),
-    #url(r'^(?P<kanji>.)/$', 'kanji'),
-    url(r'^api/get_sentence_begin$', 'get_sentence_begin'),
-    url(r'^api/get_sentence_next$', 'get_sentence_next'),
+    url(r'^train$', 'train'),
+    url(r'^api/get_next_sentence$', 'get_next_sentence'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

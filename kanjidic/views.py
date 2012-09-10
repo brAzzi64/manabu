@@ -6,6 +6,7 @@ from django.http import HttpResponse
 from kanjidic.models import Kanji
 
 from sentence import SentenceGrabber
+from restructurer import Restructurer
 
 
 # global variable
@@ -16,47 +17,26 @@ def ajax_error(message):
     d = { 'error' : message }
     return HttpResponse(simplejson.dumps(d), mimetype = "application/json")
 
-def generate_sentence_response(bun):
-    return { 'sentence' : bun['sentence'],
-             'structure' : bun['structure'],
-             'structure_orig' : bun['structure_orig'],
-             'translations' : bun['translations'],
-             'pronunciations' : bun['pronunciations'],
-             'isLast' : not glb['SentenceGrabber'].any_sentence_left() }
-
-
 def index(request):
     return render_to_response('index.html')
 
-def get_sentence_begin(request):
+# kanjidic/train?kanji=X
+def train(request):
     k = request.GET.get('kanji', False)
-    if not k:
+    if not k or len(k) != 1 or not Restructurer.is_kanji(k):
         return ajax_error("GET paramater 'kanji' not found or invalid")
     # create a new instance for kanji k
     glb['SentenceGrabber'] = SentenceGrabber(k)
-    # wait for the first sentence
-    bun = glb['SentenceGrabber'].pop_next_sentence()
-    if bun == None:
-        return ajax_error("No sentences for this kanji")
-    response = generate_sentence_response(bun)
-    return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
+    return render_to_response('train.html', { 'kanji' : k })
 
-def get_sentence_next(request):
-    bun = glb['SentenceGrabber'].pop_next_sentence()
+# API for kanjidic/train
+def get_next_sentence(request):
+    sg = glb['SentenceGrabber']
+    bun = sg.pop_next_sentence()
     if bun == None:
         return ajax_error("No more sentences left for this kanji")
-    response = generate_sentence_response(bun)
+    response = { 'sentence' : bun['sentence'], 'structure' : bun['structure'],
+                 'structure_orig' : bun['structure_orig'], 'translations' : bun['translations'],
+                 'pronunciations' : bun['pronunciations'], 'isLast' : not sg.any_sentence_left() }
     return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
-
-
-# USELESS, JUST FOR THE RECORD
-def kanji(request, kanji):
-    try:
-        k = Kanji.objects.get(character = kanji)
-        onyomis =  [p.text for p in k.pronunciations.all() if p.ptype == u'ON']
-        kunyomis = [p.text for p in k.pronunciations.all() if p.ptype == u'KN']
-        data = {'character' : k.character, 'onyomis' : onyomis, 'kunyomis' : kunyomis}
-    except Kanji.DoesNotExist:
-        raise Http404
-    return render_to_response('kanji.html', {'kanji' : data})
 

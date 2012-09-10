@@ -2,23 +2,24 @@
 
 var sentence;
 
-$(document).ready(function() {
-    
-    $("#btn-next").click(function(event) { issueGetSentenceNext() });
-    $("#btn-join").click(function(event) { joinSelectedWords(); });
-    $("#btn-reset").click(function(event) { resetSentence(); });
-    issueGetSentence("間");
-});
+function init() {
 
-function issueGetSentence(kanji) {
+    $(document).ready(function() {
+        
+        $("#btn-next").click(function(event) { issueGetNextSentence() });
+        $("#btn-join").click(function(event) { joinSelectedWords(); });
+        $("#btn-reset").click(function(event) { resetSentence(); });
 
-    issueAjaxJSONCall('api/get_sentence_begin', { 'kanji' : kanji },
-        function(data) { onGetSentenceArrived(data); });
+        issueGetNextSentence();
+
+        // the Kanji to look sentences for has already been
+        // set by the backend when returning the template.
+    });
 }
 
-function issueGetSentenceNext() {
+function issueGetNextSentence() {
     
-    issueAjaxJSONCall('api/get_sentence_next', {},
+    issueAjaxJSONCall('api/get_next_sentence', {},
         function(data) { onGetSentenceArrived(data); });
 }
 
@@ -265,3 +266,4 @@ function issueAjaxJSONCall(name, params, callback) {
     $.getJSON(name, params, callback).error(
         function () { alert("Error: the call to '" + name + "' failed."); });
 }
+
