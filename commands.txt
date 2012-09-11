@@ -1,0 +1,8 @@
+# make a dump of the local database to the hard drive:
+sudo -u postgres pg_dump -Fc --no-acl --no-owner manabu-data > data.dump
+
+# get DATABASE_URL from Heroku:
+heroku config
+
+# restore the database dump into Heroku DB:
+PGPASSWORD=DWB3_hV93r8gwS_sd4Ophswq_8 pg_restore --verbose --clean --no-acl --no-owner -h ec2-107-21-124-198.compute-1.amazonaws.com -U uuelzdkboklohv -d d14pfqfpep4g07 -p 5432 ./data.dump
