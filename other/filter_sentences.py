@@ -1,6 +1,6 @@
 # -*- coding: utf-8 -*-
 
-import sys; sys.path.append('../kanjidic')
+import sys; sys.path.append('../bun')
 from import_kolivas import get_kolivas_mapping
 from sentence import SentenceGrabber
 

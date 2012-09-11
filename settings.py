@@ -1,4 +1,4 @@
-# Django settings for bun project.
+# Django settings for manabu project.
 
 import os
 # calculated paths for django and the site
@@ -105,7 +105,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'bun.urls'
+ROOT_URLCONF = 'manabu.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -125,7 +125,7 @@ INSTALLED_APPS = (
     # 'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     # 'django.contrib.admindocs',
-    'kanjidic',
+    'bun',
 )
 
 # A sample logging configuration. The only tangible logging

@@ -12,7 +12,7 @@ import string
 import import_kolivas
 
 from lxml import etree
-from kanjidic.models import Kanji, Pronunciation
+from bun.models import Kanji, Pronunciation
 from django.db import transaction
 
 tree = etree.parse( open('kanjidic2.xml', 'r') )

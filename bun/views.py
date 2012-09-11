@@ -3,7 +3,7 @@
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.http import HttpResponse
-from kanjidic.models import Kanji
+from bun.models import Kanji
 
 from sentence import SentenceGrabber
 from restructurer import Restructurer
@@ -20,7 +20,7 @@ def ajax_error(message):
 def index(request):
     return render_to_response('index.html')
 
-# kanjidic/train?kanji=X
+# bun/train?kanji=X
 def train(request):
     k = request.GET.get('kanji', False)
     if not k or len(k) != 1 or not Restructurer.is_kanji(k):
@@ -29,7 +29,7 @@ def train(request):
     glb['SentenceGrabber'] = SentenceGrabber(k)
     return render_to_response('train.html', { 'kanji' : k })
 
-# API for kanjidic/train
+# API for bun/train
 def get_next_sentence(request):
     sg = glb['SentenceGrabber']
     bun = sg.pop_next_sentence()

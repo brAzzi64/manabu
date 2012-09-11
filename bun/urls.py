@@ -9,7 +9,7 @@ APP_ROOT = os.path.dirname(os.path.realpath(__file__))
 # from django.contrib import admin
 # admin.autodiscover()
 
-urlpatterns = patterns('kanjidic.views',
+urlpatterns = patterns('bun.views',
 
     url(r'^$', 'index'),
     url(r'^train$', 'train'),

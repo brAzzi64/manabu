@@ -8,7 +8,7 @@ import re
 from jishopar import JishoParser
 from tatopar import TatoebaParser
 from restructurer import Restructurer
-from kanjidic.models import Kanji, Pronunciation
+from bun.models import Kanji, Pronunciation
 
 
 class SentenceGrabber:
