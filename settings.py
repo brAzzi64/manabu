@@ -1,7 +1,6 @@
 # Django settings for manabu project.
 
 import os
-import dj_database_url
 
 # calculated paths for django and the site
 # used as starting points for various other paths
@@ -16,19 +15,23 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-# configuration for Heroku
-DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
-
-DATABASES_LOCAL = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'manabu-data',                              # Or path to database file if using sqlite3.
-        'USER': 'postgres',                                 # Not used with sqlite3.
-        'PASSWORD': 'postgres',                             # Not used with sqlite3.
-        'HOST': 'localhost',                                # Set to empty string for localhost. Not used with sqlite3.
-        'PORT': '',                                         # Set to empty string for default. Not used with sqlite3.
+# Database configuration
+if os.environ.get('PYTHONPATH') == '/app/':
+    # we're running on Heroku, use Heroku's DB
+    import dj_database_url
+    DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+else:
+    # use local DB
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+            'NAME': 'manabu-data',                              # Or path to database file if using sqlite3.
+            'USER': 'postgres',                                 # Not used with sqlite3.
+            'PASSWORD': 'postgres',                             # Not used with sqlite3.
+            'HOST': 'localhost',                                # Set to empty string for localhost. Not used with sqlite3.
+            'PORT': '',                                         # Set to empty string for default. Not used with sqlite3.
+        }
     }
-}
 
 # Local time zone for this installation. Choices can be found here:
 # http://en.wikipedia.org/wiki/List_of_tz_zones_by_name
