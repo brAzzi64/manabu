@@ -1,6 +1,8 @@
 # Django settings for manabu project.
 
 import os
+import dj_database_url
+
 # calculated paths for django and the site
 # used as starting points for various other paths
 SITE_ROOT = os.path.dirname(os.path.realpath(__file__))
@@ -14,7 +16,10 @@ ADMINS = (
 
 MANAGERS = ADMINS
 
-DATABASES = {
+# configuration for Heroku
+DATABASES = {'default': dj_database_url.config(default='postgres://localhost')}
+
+DATABASES_LOCAL = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
         'NAME': 'manabu-data',                              # Or path to database file if using sqlite3.
