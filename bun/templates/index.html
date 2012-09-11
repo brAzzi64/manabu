@@ -26,14 +26,16 @@
         <script type="text/javascript">
             $(document).ready(function() {
        
-                $("#btn-search").click(function(event) {
-                     
+                $("#btn-search").click(function(e) {
+                    
+                     e.preventDefault(); 
                      searchInputKanji();
                 });
 
                 $("#kanji-input").keypress(function(e) {
 
                     if (e.which == 13) {
+                        e.preventDefault();
                         searchInputKanji();
                     }
                 });
