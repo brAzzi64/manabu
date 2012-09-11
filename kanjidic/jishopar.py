@@ -7,7 +7,7 @@ class JishoParser():
 
     def feed(self, data):
         d = PyQuery(data)
-        for node in d("table > tr : not(.lower) .japanese"):
+        for node in d("table > tr:not(.lower) .japanese"):
             tr = PyQuery(node)
             sentence = string.join( tr.text().split(' '), "" ).strip()
             self.phrases.append(sentence)

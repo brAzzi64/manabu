@@ -221,6 +221,8 @@ function loadSentence(data) {
         
         if ( data['isLast'] )
             $('#btn-next').attr("disabled", true);
+
+        console.log( assembleWordStructureForCurrentSentence() );
     }
     else { console.log("should not happen"); }
 }
