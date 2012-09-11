@@ -24,14 +24,26 @@
             </div>
         </div>
         <script type="text/javascript">
-             $(document).ready(function() {
-        
-                 $("#btn-search").click(function(event) {
+            $(document).ready(function() {
+       
+                $("#btn-search").click(function(event) {
                      
-                    var kanji = $('#kanji-input').val();
-                    window.location.href = 'train?kanji=' + kanji;
-                 });
-             });
+                     searchInputKanji();
+                });
+
+                $("#kanji-input").keypress(function(e) {
+
+                    if (e.which == 13) {
+                        searchInputKanji();
+                    }
+                });
+            });
+
+            function searchInputKanji() {
+
+                var kanji = $('#kanji-input').val();
+                window.location.href = 'train?kanji=' + kanji;
+            }
         </script>
     </body>
 </html>

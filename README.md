@@ -1,5 +1,5 @@
-Bun
----
+manabu
+------
 
 A new approach for a Japanese language learning aid application.
 
