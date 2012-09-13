@@ -3,7 +3,6 @@
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.http import HttpResponse
-from bun.models import Kanji
 
 from sentence import SentenceGrabber
 from restructurer import Restructurer

@@ -7,8 +7,8 @@ import re
 
 from jishopar import JishoParser
 from tatopar import TatoebaParser
+from kanjidic import Kanji, KanjiDic
 from restructurer import Restructurer
-from bun.models import Kanji, Pronunciation
 
 
 class SentenceGrabber:
@@ -18,6 +18,7 @@ class SentenceGrabber:
         self.j_parser = JishoParser()
         self.t_parser = TatoebaParser()
         self.restructurer = Restructurer()
+        self.kc = KanjiDic()
         self.sentences = []
         self.finished = False
         # start grabbing sentences
@@ -68,12 +69,9 @@ class SentenceGrabber:
             onyomis = []
             kunyomis = []
             try:
-                kanji = Kanji.objects.filter(character=literal)[0]
-                for p in kanji.pronunciations.all():
-                    if p.ptype == 'ON':
-                        onyomis.append(p.text)
-                    elif p.ptype == 'KN':
-                        kunyomis.append(p.text)
+                kanji = self.kc[literal]
+                onyomis = list(kanji.onyomis)
+                kunyomis = list(kanji.kunyomis)
             except Exception as e:
                 print u"No information for Kanji: %s" % literal
                 print e
