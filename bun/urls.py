@@ -14,6 +14,7 @@ urlpatterns = patterns('bun.views',
     url(r'^$', 'index'),
     url(r'^train$', 'train'),
     url(r'^api/get_next_sentence$', 'get_next_sentence'),
+    url(r'^api/learn_sentence$', 'learn_sentence'),
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),

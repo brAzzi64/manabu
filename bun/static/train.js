@@ -9,6 +9,7 @@ function init() {
         $("#btn-next").click(function(event) { issueGetNextSentence() });
         $("#btn-join").click(function(event) { joinSelectedWords(); });
         $("#btn-reset").click(function(event) { resetSentence(); });
+        $("#btn-learn").click(function(event) { issueLearnSentence(); });
 
         issueGetNextSentence();
 
@@ -21,6 +22,32 @@ function issueGetNextSentence() {
     
     issueAjaxJSONCall('api/get_next_sentence', {},
         function(data) { onGetSentenceArrived(data); });
+}
+
+function issueLearnSentence() {
+
+    var st = assembleWordStructureForCurrentSentence();
+    var ps = {};
+
+    for (kanji in sentence['pronunciations']) {
+        var prs = sentence['pronunciations'][kanji];
+        if (!prs.USED) {
+            alert('No pronunciation selected for: ' + kanji);
+            return;
+        }
+        ps[kanji] = prs.USED;
+    }
+
+    // issue the call
+    $.post('api/learn_sentence',
+        {
+          text: sentence['sentence'],
+          structure: st,
+          pronunciations: ps
+        },
+        function(data) {
+            alert(data);
+        });
 }
 
 function disassembleWordStructure(wordStructure) {
@@ -104,6 +131,7 @@ function loadSentence(data) {
 
         // Initialize furigana editors
         var onFuriganaDblClick = function() {
+
             var $el = $(this);
 
             // current pronunciation
