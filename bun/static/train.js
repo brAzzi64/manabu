@@ -6,6 +6,8 @@ function init() {
 
     $(document).ready(function() {
         
+        setupCSRFTokenHook();
+
         $("#btn-next").click(function(event) { issueGetNextSentence() });
         $("#btn-join").click(function(event) { joinSelectedWords(); });
         $("#btn-reset").click(function(event) { resetSentence(); });
@@ -39,21 +41,21 @@ function issueLearnSentence() {
     }
 
     // issue the call
-    $.post('api/learn_sentence',
-        {
-          text: sentence['sentence'],
-          structure: st,
-          pronunciations: ps
-        },
-        function(data) {
-            alert(data);
-        });
+    $.ajax({
+        url: 'api/learn_sentence',
+        type: 'POST',
+        dataType: 'json',
+        contentType: 'application/json',
+        data: { text: sentence['sentence'], structure: st, pronunciations: JSON.stringify(ps) },
+        complete: function(jqXHR, textStatus) {
+            
+            alert(textStatus);
+        }});
 }
 
 function disassembleWordStructure(wordStructure) {
 
     var struct = [];
-    //console.log(wordStructure);
     while (wordStructure != '') {
                                        // hira-kata* all-but-hira-kata+ [ pronunciation* ] rest*
         var match = wordStructure.match(/([\u3040-\u309F\u30A0-\u30FF]*)([^\u3040-\u309F\u30A0-\u30FF]+)\[(.*?)\](.*)/);
@@ -105,9 +107,7 @@ function loadSentence(data) {
         $('#sentence').empty();
         var chars = data['structure'].split(" ");
         for (i in chars) {
-            //console.log(chars[i]);
             var structure = disassembleWordStructure(chars[i]);
-            //console.log(structure);
             var bun = $('#sentence').append("<div class='word'></div>");
             for (j in structure) {
                 var part = structure[j];
@@ -249,8 +249,6 @@ function loadSentence(data) {
         
         if ( data['isLast'] )
             $('#btn-next').attr("disabled", true);
-
-        console.log( assembleWordStructureForCurrentSentence() );
     }
     else { console.log("should not happen"); }
 }
@@ -310,5 +308,47 @@ function issueAjaxJSONCall(name, params, callback) {
 
     $.getJSON(name, params, callback).error(
         function () { alert("Error: the call to '" + name + "' failed."); });
+}
+
+
+// CSRF Token hook for POST requests handling
+function setupCSRFTokenHook() {
+
+    $(document).ajaxSend(function(event, xhr, settings) {
+        function getCookie(name) {
+            var cookieValue = null;
+            if (document.cookie && document.cookie != '') {
+                var cookies = document.cookie.split(';');
+                for (var i = 0; i < cookies.length; i++) {
+                    var cookie = jQuery.trim(cookies[i]);
+                    // Does this cookie string begin with the name we want?
+                    if (cookie.substring(0, name.length + 1) == (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        function sameOrigin(url) {
+            // url could be relative or scheme relative or absolute
+            var host = document.location.host; // host + port
+            var protocol = document.location.protocol;
+            var sr_origin = '//' + host;
+            var origin = protocol + sr_origin;
+            // Allow absolute or scheme relative URLs to same origin
+            return (url == origin || url.slice(0, origin.length + 1) == origin + '/') ||
+                (url == sr_origin || url.slice(0, sr_origin.length + 1) == sr_origin + '/') ||
+                // or any other URL that isn't scheme relative or absolute i.e relative.
+                !(/^(\/\/|http:|https:).*/.test(url));
+        }
+        function safeMethod(method) {
+            return (/^(GET|HEAD|OPTIONS|TRACE)$/.test(method));
+        }
+
+        if (!safeMethod(settings.type) && sameOrigin(settings.url)) {
+            xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
+        }
+    });
 }
 

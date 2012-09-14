@@ -1,9 +1,13 @@
 # -*- coding: utf-8 -*-
+import string
+import datetime
 
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.http import HttpResponse
+from django.template import RequestContext
 
+from bun.models import Sentence
 from sentence import SentenceGrabber
 from restructurer import Restructurer
 
@@ -26,7 +30,7 @@ def train(request):
         return ajax_error("GET paramater 'kanji' not found or invalid")
     # create a new instance for kanji k
     glb['SentenceGrabber'] = SentenceGrabber(k)
-    return render_to_response('train.html', { 'kanji' : k })
+    return render_to_response('train.html', { 'kanji' : k }, context_instance = RequestContext(request))
 
 #
 # API for bun/train
@@ -47,11 +51,14 @@ def learn_sentence(request):
     text = request.POST.get('text', False)
     structure = request.POST.get('structure', False)
     pronunciations = request.POST.get('pronunciations', False)
-    print(text)
-    print(structure)
-    print(pronunciations)
-    return HttpResponse("ARRIVED!")
 
+    # convert to the DB storing format
+    prs_dict = simplejson.loads(pronunciations)
+    prs_string = string.join((u"%s:%s" % (k,v) for (k,v) in prs_dict.items()), ",")
 
+    s = Sentence(text = text, structure = structure, learned_date = datetime.datetime.now(), kanji_pronunciations = prs_string)
+    s.save()
+
+    return HttpResponse(simplejson.dumps({ 'result' : 'ok' }), mimetype = "application/json")
 
 
