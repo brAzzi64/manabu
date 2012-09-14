@@ -5,7 +5,7 @@ import datetime
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.http import HttpResponse
-from django.template import RequestContext
+from django.template import RequestContext, Context, loader
 
 from bun.models import Sentence
 from sentence import SentenceGrabber
@@ -61,4 +61,11 @@ def learn_sentence(request):
 
     return HttpResponse(simplejson.dumps({ 'result' : 'ok' }), mimetype = "application/json")
 
+
+# GET | bun/review
+def review(request):
+    sentences = Sentence.objects.all()
+    t = loader.get_template('review.html')
+    c = Context({ 'sentences' : sentences })
+    return HttpResponse(t.render(c))
 
