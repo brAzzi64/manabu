@@ -34,23 +34,41 @@ function issueLearnSentence() {
     for (kanji in sentence['pronunciations']) {
         var prs = sentence['pronunciations'][kanji];
         if (!prs.USED) {
-            alert('No pronunciation selected for: ' + kanji);
+            bootbox.dialog('No pronunciation selected for: ' + kanji, { "label" : "OK", "class" : "btn-danger" });
             return;
         }
         ps[kanji] = prs.USED;
     }
 
-    // issue the call
-    $.ajax({
-        url: 'api/learn_sentence',
-        type: 'POST',
-        dataType: 'json',
-        contentType: 'application/json',
-        data: { text: sentence['sentence'], structure: st, pronunciations: JSON.stringify(ps) },
-        complete: function(jqXHR, textStatus) {
-            
-            alert(textStatus);
-        }});
+    bootbox.confirm(
+        'Are you sure you want to save the sentence?',
+        "Not really...", "Yes!",
+        function(result) {
+
+            if (result) {
+                // issue the call
+                $.ajax({
+                    url: 'api/learn_sentence',
+                    type: 'POST',
+                    dataType: 'json',
+                    contentType: 'application/json',
+                    data: { text: sentence['sentence'], structure: st, pronunciations: JSON.stringify(ps) },
+                    complete: function(jqXHR, textStatus) {
+                       
+                        if (textStatus == 'success') {
+                            bootbox.dialog("The sentence as been saved successfully.", {
+                                "label" : "Cool!",
+                                "class" : "btn-success"
+                            });
+                        } else {
+                            bootbox.dialog("There was a problem saving the sentence (" + textStatus + ").", {
+                                "label" : "Too bad",
+                                "class" : "btn-danger"
+                            });
+                        }
+                    }});
+            }
+        });
 }
 
 function disassembleWordStructure(wordStructure) {

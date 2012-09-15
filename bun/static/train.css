@@ -1,7 +1,6 @@
 
 body {
     background-color: #f0f0f0;
-    text-align: center;
 }
 
 a:focus {
@@ -112,6 +111,7 @@ a:focus {
     padding-left: 0;
     padding-right: 0;
     margin-top: 2%;
+    text-align: center;
 }
 
 #controls {
