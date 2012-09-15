@@ -34,7 +34,7 @@ class KanjiDic(object):
 
         print "Reading KANJIDIC...",
 
-        tree = etree.parse( open('other/kanjidic2.xml', 'r') )
+        tree = etree.parse('other/kanjidic2.xml.gz')
         query = u"/kanjidic2/character[misc/freq]" # characters with freq node
         nodes = tree.xpath(query)
         total_nodes = len(nodes)
