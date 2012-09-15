@@ -83,7 +83,7 @@ class KanjiDic(object):
         """
         mapping = {}
 
-        tree = etree.parse( open('other/kanji.html', 'r') )
+        tree = etree.parse('other/kanji.html.gz')
         nodes = tree.xpath("//span[@class='c1' and text()]")[:max_kanjis]
 
         for (i, node) in enumerate(nodes):
