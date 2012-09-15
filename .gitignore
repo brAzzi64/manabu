@@ -1,6 +1,4 @@
 *.pyc
 *.swp
 venv
-other/kanji.html
-other/kanjidic2.xml
 
