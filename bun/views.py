@@ -76,7 +76,7 @@ def learn_sentence(request):
 
 # GET | bun/review
 def review(request):
-    sentences = Sentence.objects.all()
+    sentences = Sentence.objects.order_by('-learned_date')
     t = loader.get_template('review.html')
     c = Context({ 'sentences' : sentences })
     return HttpResponse(t.render(c))

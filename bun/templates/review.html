@@ -11,15 +11,21 @@
     </head>
     <body>
         <div class='container-fluid main'>
-            <h1>Learned sentences:</h1>
+            <h1>Learned sentences</h1>
             <div style='margin-top: 2em;' class='container'>
-                <p>This are the sentences that have been learned up to the moment.</p>
+                <p>These are the sentences learned up to the moment:</p>
             </div>
-            <ul id="sentences">
+            <div id="sentences" class="container">
             {% for s in sentences %}
-                <li>{{ s.text }}</li>
+                <div>
+                    <div class="date">
+                        <div>{{ s.learned_date|date:"d M" }}</div>
+                        <div>{{ s.learned_date|date:"Y" }}</div>
+                    </div>
+                    <span class="bun">{{ s.text }}</span>
+                </div>
             {% endfor %} 
-            </ul>
+            </div>
         </div>
         <script type="text/javascript">
         </script>

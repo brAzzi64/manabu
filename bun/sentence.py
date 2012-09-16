@@ -22,6 +22,7 @@ class SentenceGrabber:
         self.sentences = []
         self.finished = False
         # start grabbing sentences
+        # TODO: handle the thread termination when when object is destroyed
         thread.start_new_thread(SentenceGrabber.start_getting_sentences, (self,))
 
     def pop_next_sentence(self):
