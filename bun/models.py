@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import string
 from django.db import models
 
 class Sentence(models.Model):
@@ -15,6 +16,19 @@ class Sentence(models.Model):
 
     def __unicode__(self):
         return "%s" % (self.text)
+
+
+class KnownKanji(models.Model):
+    """ Temporary entity to store the known Kanji for a user.
+
+    """
+    user = models.CharField(max_length = 64)
+      # username of the user the array registers the known kanji for (tmp).
+    array = models.CharField(max_length = 2136)
+      # array with the Jouyou Kanji that are known by the user
+
+    def __unicode__(self):
+        return u"for '%s'" % self.user
 
 
 def get_sentences_with_kanji(kanji):

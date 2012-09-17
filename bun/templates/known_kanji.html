@@ -5,9 +5,10 @@
         <meta charset="utf-8">
         <script src="static/js/jquery-1.7.1.min.js"></script>
         <script src="static/bootstrap/js/bootstrap.js"></script>
+        <script src="static/js/bootbox.js"></script>
         <link href="static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
         <link href="static/known_kanji.css" rel='stylesheet'/>
-        <script src="static/review.js"></script>
+        <script src="static/crsf.js"></script>
     </head>
     <body>
         <div class='container-fluid main'>
@@ -15,9 +16,16 @@
             <div style='margin-top: 2em;' class='container'>
                 <p>These are all of the Jouyou Kanji:</p>
             </div>
+
+            <div id="controls" class="container">
+                <div class="btn-group">
+                    <a id="btn-update" class='btn btn-primary' href='#'>Update</a>
+                </div>
+            </div>
+
             <div id="kanji-list" class="container">
             {% for k in kanjis %}
-                <a class="kanji" href="#">{{ k }}</a>
+                <a class="kanji{{ k.known|yesno:' known,' }}" href="#">{{ k.literal }}</a>
             {% endfor %} 
             </div>
         </div>
@@ -25,10 +33,46 @@
             
             $(document).ready(function() {
                 
+                setupCSRFTokenHook();
+
                 $(".kanji").click(function(event) { 
 
                     event.preventDefault();
-                    $(this).toggleClass("known");                    
+                    $(this).toggleClass("known").addClass("updated");                    
+                });
+
+                $("#btn-update").click(function(event) {
+
+                    var updated_kanjis = {};
+                    $("#kanji-list a.updated").each(function(i, e) {
+
+                        updated_kanjis[ $(this).text() ] = $(this).hasClass("known");
+                    });
+
+                    // issue the call
+                    $.ajax({
+                        url: 'api/update_known_kanji',
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: { updates: JSON.stringify(updated_kanjis) },
+                        complete: function(jqXHR, textStatus) {
+                           
+                            if (textStatus == 'success') {
+                                bootbox.dialog("The known kanji have been updated successfully.", {
+                                    "label" : "Awesome!",
+                                    "class" : "btn-success"
+                                });
+
+                                // reset the updated indicator
+                                $('.kanji.updated').removeClass('updated');
+                            } else {
+                                bootbox.dialog("There was a problem updating the known kanji (" + textStatus + ").", {
+                                    "label" : "Crap!",
+                                    "class" : "btn-danger"
+                                });
+                            }
+                        }});
                 });
             });
 

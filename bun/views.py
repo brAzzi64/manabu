@@ -1,13 +1,16 @@
 # -*- coding: utf-8 -*-
 import string
 import datetime
+import re
+from functools import wraps
 
 from django.shortcuts import render_to_response
 from django.utils import simplejson
 from django.http import HttpResponse
 from django.template import RequestContext, Context, loader
+from django.utils.decorators import available_attrs
 
-from bun.models import Sentence
+from bun.models import Sentence, KnownKanji
 from sentence import SentenceGrabber
 from restructurer import Restructurer
 from kanjidic import Kanji, KanjiDic
@@ -84,10 +87,40 @@ def review(request):
 
 
 # GET | bun/known_kanji
+@csrf_ensure_cookie
 def known_kanji(request):
     kd = KanjiDic()
+    d = []
+    known_kanji = KnownKanji.objects.get(user = 'brazzi').array
+    for k in kd.keys():
+        idx_unicode = kd[k].idx_unicode
+        idx_unisort = kd[k].idx_unisort
+        # all of the Kanji in kd are Jouyou right no
+        known = k in known_kanji
+        entry = { 'literal': k, 'known': known }
+        d.append(entry)
+
+    # return them ordered by unisort index
+    d = sorted(d, key = lambda x: kd[ x['literal'] ].idx_kolivas)
+
     t = loader.get_template('known_kanji.html')
-    c = Context({ 'kanjis' : kd.keys() })
+    c = Context({ 'kanjis' : d })
     return HttpResponse(t.render(c))
 
+# POST | params: updates
+def update_known_kanji(request):
+    updates = request.POST.get('updates', False)
+    result = 'error'
+    if updates != None:
+        kd = KanjiDic()
+        d = simplejson.loads(updates)
+        kk = KnownKanji.objects.get(user = 'brazzi')
+        learned = string.join((k for k in d if d[k]), u"")
+        unlearned = string.join((k for k in d if not d[k]), u"")
+        # we put the random symbol 'k' to avoid changes
+        # in the logic when we have no unlearned kanji
+        kk.array = re.sub(u'[k%s]' % unlearned, '', kk.array) + learned
+        kk.save()
+        result = 'ok'
+    return HttpResponse(simplejson.dumps({ 'result' : 'ok' }), mimetype = "application/json")
 

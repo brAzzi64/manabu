@@ -35,5 +35,7 @@ a.known {
     color: #000;
 }
 
-
+a.updated {
+    background-color: #CCC;
+}
 

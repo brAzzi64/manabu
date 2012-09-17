@@ -16,6 +16,7 @@ class Kanji(object):
         self.literal = literal
         self.idx_unicode = unicode_index
         self.idx_kolivas = kolivas_index
+        self.idx_unisort = -1
         self.onyomis = onyomis
         self.kunyomis = kunyomis
 
@@ -46,32 +47,41 @@ class KanjiDic(object):
         """
         self.kanjis = {}
 
-        print "Reading KANJIDIC...",
+        print "Loading KANJIDIC...",
+        sys.stdout.flush()
 
         tree = etree.parse('other/kanjidic2.xml.gz')
-        query = u"/kanjidic2/character[misc/freq]" # characters with freq node
+        query = u"/kanjidic2/character"
         nodes = tree.xpath(query)
-        total_nodes = len(nodes)
 
         # get the kolivas indexes
-        kolivas_mapping = self.get_kolivas_mapping(total_nodes)
+        kolivas_mapping = self.get_kolivas_mapping()
 
         for cnode in nodes:
             char = cnode.xpath(u"literal")[0].text
             onyomis = []
             kunyomis = []
             pnodes = cnode.xpath(u"reading_meaning/rmgroup/reading[@r_type='ja_on' or @r_type='ja_kun']")
+            kolivas_idx = kolivas_mapping.get(char)
 
-            for pnode in pnodes:
-                if pnode.attrib['r_type'] == u'ja_on':
-                    onyomis.append( pnode.text )
-                elif pnode.attrib['r_type'] == u'ja_kun':
-                    kunyomis.append( pnode.text )
+            # add only Jouyou Kanji, the
+            # ones present in Kolivas indexing
+            if kolivas_idx != None:
+                for pnode in pnodes:
+                    if pnode.attrib['r_type'] == u'ja_on':
+                        onyomis.append( pnode.text )
+                    elif pnode.attrib['r_type'] == u'ja_kun':
+                        kunyomis.append( pnode.text )
 
-            # add the kanji to the dictionary
-            self.kanjis[char] = Kanji(char, ord(char), kolivas_mapping.get(char), onyomis, kunyomis)
+                # add the kanji to the dictionary
+                self.kanjis[char] = Kanji(char, ord(char), kolivas_mapping.get(char), onyomis, kunyomis)
 
-        print "Done (%d read)." % total_nodes
+        # set the unisort indexes (index in an the array of Jouyou sorted by idx_unicode)
+        sorted_kanji = sorted(self.kanjis.keys(), key = lambda x: self.kanjis[x].idx_unicode)
+        for i, sk in enumerate(sorted_kanji):
+            self.kanjis[sk].idx_unisort = i
+
+        print "Done (%d loaded)." % len(self.kanjis)
 
     def __getitem__(self, literal):
         """
@@ -90,7 +100,7 @@ class KanjiDic(object):
         """
         return self.kanjis.keys()
 
-    def get_kolivas_mapping(self, max_kanjis):
+    def get_kolivas_mapping(self):
         """
         Returns the mapping of each Kanji to its Kolivas index.
 
@@ -98,7 +108,7 @@ class KanjiDic(object):
         mapping = {}
 
         tree = etree.parse('other/kanji.html.gz')
-        nodes = tree.xpath("//span[@class='c1' and text()]")[:max_kanjis]
+        nodes = tree.xpath("//span[@class='c1' and text()]")
 
         for (i, node) in enumerate(nodes):
             mapping[node.text.strip()] = i + 1
