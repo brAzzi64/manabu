@@ -1,0 +1,39 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
+<html>
+    <head>
+        <title>文 - Practice Kanji by Sentencing</title>
+        <meta charset="utf-8">
+        <script src="static/js/jquery-1.7.1.min.js"></script>
+        <script src="static/bootstrap/js/bootstrap.js"></script>
+        <link href="static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
+        <link href="static/known_kanji.css" rel='stylesheet'/>
+        <script src="static/review.js"></script>
+    </head>
+    <body>
+        <div class='container-fluid main'>
+            <h1>Known Kanji</h1>
+            <div style='margin-top: 2em;' class='container'>
+                <p>These are all of the Jouyou Kanji:</p>
+            </div>
+            <div id="kanji-list" class="container">
+            {% for k in kanjis %}
+                <a class="kanji" href="#">{{ k }}</a>
+            {% endfor %} 
+            </div>
+        </div>
+        <script type="text/javascript">
+            
+            $(document).ready(function() {
+                
+                $(".kanji").click(function(event) { 
+
+                    event.preventDefault();
+                    $(this).toggleClass("known");                    
+                });
+            });
+
+        </script>
+    </body>
+</html>
+
+

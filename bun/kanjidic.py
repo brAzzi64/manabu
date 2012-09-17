@@ -23,7 +23,21 @@ class Kanji(object):
         return u"<Kanji: %s (u:%d,k:%d)>" % (self.literal, self.idx_unicode, self.idx_kolivas)
 
 
+# metaclass to implement Singleton Pattern
+class Singleton(type):
+    def __init__(cls, name, bases, dict):
+        super(Singleton, cls).__init__(name, bases, dict)
+        cls.instance = None
+
+    def __call__(cls,*args,**kw):
+        if cls.instance is None:
+            cls.instance = super(Singleton, cls).__call__(*args, **kw)
+        return cls.instance
+
+
+
 class KanjiDic(object):
+    __metaclass__ = Singleton
 
     def __init__(self):
         """

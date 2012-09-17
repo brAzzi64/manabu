@@ -10,6 +10,7 @@ from django.template import RequestContext, Context, loader
 from bun.models import Sentence
 from sentence import SentenceGrabber
 from restructurer import Restructurer
+from kanjidic import Kanji, KanjiDic
 
 
 # global variable
@@ -80,4 +81,13 @@ def review(request):
     t = loader.get_template('review.html')
     c = Context({ 'sentences' : sentences })
     return HttpResponse(t.render(c))
+
+
+# GET | bun/known_kanji
+def known_kanji(request):
+    kd = KanjiDic()
+    t = loader.get_template('known_kanji.html')
+    c = Context({ 'kanjis' : kd.keys() })
+    return HttpResponse(t.render(c))
+
 
