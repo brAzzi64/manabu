@@ -2,6 +2,7 @@
 import string
 from django.db import models
 
+
 class Sentence(models.Model):
     """ Represents a sentence stored in the DB.
 
@@ -29,6 +30,18 @@ class KnownKanji(models.Model):
 
     def __unicode__(self):
         return u"for '%s'" % self.user
+
+    # TODO: we won't need this in this way when
+    # we handle multiple users in a different way
+    @staticmethod
+    def get_or_create(username):
+        kk = None
+        try:
+            kk = KnownKanji.objects.get(user = username)
+        except KnownKanji.DoesNotExist:
+            kk = KnownKanji(user = username)
+            kk.save()
+        return kk
 
 
 def get_sentences_with_kanji(kanji):

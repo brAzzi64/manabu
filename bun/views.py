@@ -17,7 +17,9 @@ from kanjidic import Kanji, KanjiDic
 
 
 # global variable
-glb = { 'SentenceGrabber' : None }
+glb = { 'SentenceGrabber' : None, 'KnownKanji' : None }
+# get or initialize the KnownKanji object
+glb['KnownKanji'] = KnownKanji.get_or_create('brazzi')
 
 
 # the following decorator is present on Django 1.3 but not in 1.4
@@ -45,7 +47,7 @@ def train(request):
     if not k or len(k) != 1 or not Restructurer.is_kanji(k):
         return ajax_error("GET paramater 'kanji' not found or invalid")
     # create a new instance for kanji k
-    glb['SentenceGrabber'] = SentenceGrabber(k)
+    glb['SentenceGrabber'] = SentenceGrabber(k, glb['KnownKanji'].array)
     return render_to_response('train.html', { 'kanji' : k }, context_instance = RequestContext(request))
 
 #
@@ -91,7 +93,8 @@ def review(request):
 def known_kanji(request):
     kd = KanjiDic()
     d = []
-    known_kanji = KnownKanji.objects.get(user = 'brazzi').array
+    kk = glb['KnownKanji']
+    known_kanji = kk.array
     for k in kd.keys():
         idx_unicode = kd[k].idx_unicode
         idx_unisort = kd[k].idx_unisort
@@ -113,8 +116,8 @@ def update_known_kanji(request):
     result = 'error'
     if updates != None:
         kd = KanjiDic()
+        kk = glb['KnownKanji']
         d = simplejson.loads(updates)
-        kk = KnownKanji.objects.get(user = 'brazzi')
         learned = string.join((k for k in d if d[k]), u"")
         unlearned = string.join((k for k in d if not d[k]), u"")
         # we put the random symbol 'k' to avoid changes
@@ -123,4 +126,6 @@ def update_known_kanji(request):
         kk.save()
         result = 'ok'
     return HttpResponse(simplejson.dumps({ 'result' : 'ok' }), mimetype = "application/json")
+
+
 

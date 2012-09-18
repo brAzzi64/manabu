@@ -12,7 +12,8 @@ from restructurer import Restructurer
 
 
 class SentenceGrabber:
-    def __init__(self, kanji):
+    def __init__(self, kanji, known_kanji):
+        self.allowed_kanji = known_kanji + kanji
         self.j_url = "http://jisho.org/sentences?jap=" + kanji.encode('utf-8') + "&page="
         self.t_url = "http://tatoeba.org/eng/sentences/search?query=%s&from=jpn&to=und"
         self.j_parser = JishoParser()
@@ -36,7 +37,7 @@ class SentenceGrabber:
 
     def start_getting_sentences(self):
         jisho_page = 1
-        while jisho_page < 5: # TODO: change the stopping condition
+        while jisho_page < 20: # TODO: change the stopping condition
             print "Downloading Jisho page #%d" % jisho_page
             url = self.j_url + str(jisho_page)
             u = urllib2.urlopen(url)
@@ -45,6 +46,9 @@ class SentenceGrabber:
             self.j_parser.feed( u.read().decode(encoding) )
             jisho_sentences = self.j_parser.get_sentences()
             for i, bun in enumerate(jisho_sentences):
+                if self.filtered_out(bun):
+                    print u"FILTERING OUT: %s" % bun
+                    continue
                 # TODO: filter by known kanjis
                 print "Downloading Tatoeba sentence #%d" % (i+1)
                 url = self.t_url % bun.encode('utf-8')
@@ -59,6 +63,11 @@ class SentenceGrabber:
                 self.sentences += [ { 'sentence' : bun, 'structure' : structure, 'structure_orig' : structure_orig, 'translations' : translations, 'pronunciations' : pronunciations } ]
             jisho_page += 1
         self.finished = True
+
+    def filtered_out(self, bun):
+        allowed_literal = lambda x: not Restructurer.is_kanji(x) or x in self.allowed_kanji
+        result = any( not allowed_literal(l) for l in bun )
+        return result
 
     def any_sentence_left(self):
         return len(self.sentences) > 0 or not self.finished
