@@ -37,8 +37,8 @@ def ajax_error(message):
     d = { 'error' : message }
     return HttpResponse(simplejson.dumps(d), mimetype = "application/json")
 
-def index(request):
-    return render_to_response('index.html', { 'section_name': 'Index' })
+def search(request):
+    return render_to_response('search.html', { 'section_name': 'Search' })
 
 # GET | bun/train?kanji=X
 def train(request):

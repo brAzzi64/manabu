@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
     <head>
         <title>文 - {{ section_name }}</title>
         <meta charset="utf-8">
@@ -17,6 +17,18 @@
         {% endblock %}
     </head>
     <body>
+        <div class='container'>
+            <div class='navbar navbar-fixed-top'>
+                <div class="navbar-inner">
+                    <a class="brand" href="#">文</a>
+                    <ul class="nav">
+                        <li class="{% if section_name == 'Train' or section_name == 'Search' %}active{% endif %}"><a href="search">Train</a></li>
+                        <li class="{% if section_name == 'Known Kanji' %}active{% endif %}"><a href="known_kanji">Known Kanji</a></li>
+                        <li class="{% if section_name == 'Review' %}active{% endif %}"><a href="review">Review</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
         <div class='container-fluid main'>
         {% block content %}{% endblock %}
         </div>

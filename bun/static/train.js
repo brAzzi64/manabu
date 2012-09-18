@@ -324,8 +324,11 @@ function clearSelection() {
 
 function issueAjaxJSONCall(name, params, callback) {
 
-    $.getJSON(name, params, callback).error(
-        function () { alert("Error: the call to '" + name + "' failed."); });
+    $.getJSON(name, params, callback).error(function () {
+    
+        //alert("Error: the call to '" + name + "' failed.");
+        console.log("Error: the call to '" + name + "' failed.");
+    });
 }
 
 
