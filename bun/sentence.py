@@ -47,7 +47,7 @@ class SentenceGrabber:
             jisho_sentences = self.j_parser.get_sentences()
             for i, bun in enumerate(jisho_sentences):
                 if self.filtered_out(bun):
-                    print u"FILTERING OUT: %s" % bun
+                    #print u"FILTERING OUT: %s" % bun
                     continue
                 # TODO: filter by known kanjis
                 print "Downloading Tatoeba sentence #%d" % (i+1)
