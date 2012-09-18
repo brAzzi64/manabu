@@ -1,35 +1,20 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-    <head>
-        <title>文 - Practice Kanji by Sentencing</title>
-        <meta charset="utf-8">
-        <script src="static/js/jquery-1.7.1.min.js"></script>
-        <script src="static/bootstrap/js/bootstrap.js"></script>
-        <link href="static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
-        <link href="static/review.css" rel='stylesheet'/>
-        <script src="static/review.js"></script>
-    </head>
-    <body>
-        <div class='container-fluid main'>
-            <h1>Learned sentences</h1>
-            <div style='margin-top: 2em;' class='container'>
-                <p>These are the sentences learned up to the moment:</p>
-            </div>
-            <div id="sentences" class="container">
-            {% for s in sentences %}
-                <div>
-                    <div class="date">
-                        <div>{{ s.learned_date|date:"d M" }}</div>
-                        <div>{{ s.learned_date|date:"Y" }}</div>
-                    </div>
-                    <span class="bun">{{ s.text }}</span>
-                </div>
-            {% endfor %} 
-            </div>
-        </div>
-        <script type="text/javascript">
-        </script>
-    </body>
-</html>
+{% extends "base.html" %}
 
+{% block content %}
+<h1>Learned sentences</h1>
+<div style='margin-top: 2em;' class='container'>
+    <p>These are the sentences learned up to the moment:</p>
+</div>
+<div id="sentences" class="container">
+    {% for s in sentences %}
+    <div>
+        <div class="date">
+            <div>{{ s.learned_date|date:"d M" }}</div>
+            <div>{{ s.learned_date|date:"Y" }}</div>
+        </div>
+        <span class="bun">{{ s.text }}</span>
+    </div>
+    {% endfor %} 
+</div>
+{% endblock %}
 

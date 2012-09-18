@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>文 - {{ section_name }}</title>
+        <meta charset="utf-8">
+        <link href="static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
+        <link href="static/common.css" rel='stylesheet'/>
+        {% block css_includes %}
+        <link href="static/{{ section_name|lower }}.css" rel='stylesheet'/>
+        {% endblock %}
+        <script src="static/js/jquery-1.7.1.min.js"></script>
+        <script src="static/bootstrap/js/bootstrap.js"></script>
+        <script src="static/js/bootbox.js"></script>
+        <script src="static/common.js"></script>
+        {% block js_includes %}
+        <script src="static/{{ section_name|lower }}.js"></script>
+        {% endblock %}
+    </head>
+    <body>
+        <div class='container-fluid main'>
+        {% block content %}{% endblock %}
+        </div>
+    </body>
+</html>
+

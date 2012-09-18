@@ -1,59 +1,17 @@
-<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01//EN" "http://www.w3.org/TR/html4/strict.dtd">
-<html>
-    <head>
-        <title>文 - Practice Kanji by Sentencing</title>
-        <meta charset="utf-8">
-        <script src="static/js/jquery-1.7.1.min.js"></script>
-        <script src="static/bootstrap/js/bootstrap.js"></script>
-        <script src="static/js/bootbox.js"></script>
-        <link href="static/bootstrap/css/bootstrap.css" rel='stylesheet'/>
-        <link href="static/index.css" rel='stylesheet'/>
-    </head>
-    <body>
-        <div class='container-fluid main'>
-            <h1>Search</h1>
-            <div style='margin-top: 2em;' class='container'>
-                Search for a Kanji to train:
-            </div>
-            <div id='center' class='container'>
-                <form class="form-search">
-                    <div class="input-append">
-                        <input id='kanji-input' type="text" class="span2 search-query">
-                        <a id='btn-search' href="#" class="btn">Search</a>
-                    </div>
-                </form>
-            </div>
+{% extends "base.html" %}
+
+{% block content %}
+<h1>Search</h1>
+<div style='margin-top: 2em;' class='container'>
+    Search for a Kanji to train:
+</div>
+<div id='center' class='container'>
+    <form class="form-search">
+        <div class="input-append">
+            <input id='kanji-input' type="text" class="span2 search-query">
+            <a id='btn-search' href="#" class="btn">Search</a>
         </div>
-        <script type="text/javascript">
-            $(document).ready(function() {
-       
-                $("#btn-search").click(function(e) {
-                    
-                     e.preventDefault(); 
-                     searchInputKanji();
-                });
-
-                $("#kanji-input").keypress(function(e) {
-
-                    if (e.which == 13) {
-                        e.preventDefault();
-                        searchInputKanji();
-                    }
-                });
-            });
-
-            function searchInputKanji() {
-
-                var kanji = $('#kanji-input').val();
-                if (kanji == null || kanji == '') {
-                    bootbox.alert("You must enter a Kanji to search sentences.");
-                    return;
-                }
-
-                window.location.href = 'train?kanji=' + kanji;
-            }
-        </script>
-    </body>
-</html>
-
+    </form>
+</div>
+{% endblock %}
 

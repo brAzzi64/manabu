@@ -1,3 +1,8 @@
+// common initialization         
+$(document).ready(function() {
+    
+    setupCSRFTokenHook();
+});
 
 // CSRF Token hook for POST requests handling
 function setupCSRFTokenHook() {

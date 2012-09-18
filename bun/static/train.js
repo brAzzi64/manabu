@@ -1,6 +1,6 @@
-
-
 var sentence;
+
+init();
 
 function init() {
 

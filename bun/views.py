@@ -38,7 +38,7 @@ def ajax_error(message):
     return HttpResponse(simplejson.dumps(d), mimetype = "application/json")
 
 def index(request):
-    return render_to_response('index.html')
+    return render_to_response('index.html', { 'section_name': 'Index' })
 
 # GET | bun/train?kanji=X
 def train(request):
@@ -48,7 +48,7 @@ def train(request):
         return ajax_error("GET paramater 'kanji' not found or invalid")
     # create a new instance for kanji k
     glb['SentenceGrabber'] = SentenceGrabber(k, glb['KnownKanji'].array)
-    return render_to_response('train.html', { 'kanji' : k }, context_instance = RequestContext(request))
+    return render_to_response('train.html', { 'section_name': 'Train', 'kanji': k }, context_instance = RequestContext(request))
 
 #
 # API for bun/train
@@ -84,7 +84,7 @@ def learn_sentence(request):
 def review(request):
     sentences = Sentence.objects.order_by('-learned_date')
     t = loader.get_template('review.html')
-    c = Context({ 'sentences' : sentences })
+    c = Context({ 'section_name': 'Review', 'sentences': sentences })
     return HttpResponse(t.render(c))
 
 
@@ -107,7 +107,7 @@ def known_kanji(request):
     d = sorted(d, key = lambda x: kd[ x['literal'] ].idx_kolivas)
 
     t = loader.get_template('known_kanji.html')
-    c = Context({ 'kanjis' : d })
+    c = Context({ 'section_name': 'Known Kanji', 'kanjis': d })
     return HttpResponse(t.render(c))
 
 # POST | params: updates
