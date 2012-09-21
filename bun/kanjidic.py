@@ -40,17 +40,18 @@ class Singleton(type):
 class KanjiDic(object):
     __metaclass__ = Singleton
 
-    def __init__(self):
+    def __init__(self, datadir = 'other'):
         """
         Constructs the Kanji Dictionary from the XML file.
 
         """
         self.kanjis = {}
+        self.datadir = datadir[:-1] if datadir[-1] == "/" else datadir
 
         print "Loading KANJIDIC...",
         sys.stdout.flush()
 
-        tree = etree.parse('other/kanjidic2.xml.gz')
+        tree = etree.parse(self.datadir + '/kanjidic2.xml.gz')
         query = u"/kanjidic2/character"
         nodes = tree.xpath(query)
 
@@ -107,7 +108,7 @@ class KanjiDic(object):
         """
         mapping = {}
 
-        tree = etree.parse('other/kanji.html.gz')
+        tree = etree.parse(self.datadir + '/kanji.html.gz')
         nodes = tree.xpath("//span[@class='c1' and text()]")
 
         for (i, node) in enumerate(nodes):
