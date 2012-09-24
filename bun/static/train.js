@@ -22,7 +22,7 @@ function init() {
 
 function issueGetNextSentence() {
     
-    issueAjaxJSONCall('api/get_next_sentence', {},
+    issueAjaxJSONCall('train/api/get_next_sentence', {},
         function(data) { onGetSentenceArrived(data); });
 }
 
@@ -48,7 +48,7 @@ function issueLearnSentence() {
             if (result) {
                 // issue the call
                 $.ajax({
-                    url: 'api/learn_sentence',
+                    url: 'train/api/learn_sentence',
                     type: 'POST',
                     dataType: 'json',
                     contentType: 'application/json',

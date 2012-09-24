@@ -22,7 +22,7 @@ function init() {
 
             // issue the call
             $.ajax({
-                url: 'api/update_known_kanji',
+                url: 'known_kanji/api/update_known_kanji',
                 type: 'POST',
                 dataType: 'json',
                 contentType: 'application/json',
