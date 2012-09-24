@@ -44,6 +44,23 @@ class KnownKanji(models.Model):
         return kk
 
 
+class ScrapedSentence(models.Model):
+    """ Represents a scraped sentence stored in the DB.
+
+    """
+    text = models.CharField(max_length = 4096)
+      # the actual sentence
+    structure = models.CharField(max_length = 4096)
+      # structure, i.e.: 私[わたし] は 忙[いそが]しい 。
+    orig_structure = models.CharField(max_length = 4096)
+      # structure, as it comes from the source.
+    translations = models.CharField(max_length = 4094)
+      # a field in the form: t1|t1|t3...
+
+    def __unicode__(self):
+        return "%s" % (self.text)
+
+
 def get_sentences_with_kanji(kanji):
     return Sentence.objects.get(text__contains = kanji)
 
