@@ -4,6 +4,7 @@ import sys
 import string
 
 from lxml import etree
+from common import Singleton
 
 
 class Kanji(object):
@@ -24,33 +25,21 @@ class Kanji(object):
         return u"<Kanji: %s (u:%d,k:%d)>" % (self.literal, self.idx_unicode, self.idx_kolivas)
 
 
-# metaclass to implement Singleton Pattern
-class Singleton(type):
-    def __init__(cls, name, bases, dict):
-        super(Singleton, cls).__init__(name, bases, dict)
-        cls.instance = None
-
-    def __call__(cls,*args,**kw):
-        if cls.instance is None:
-            cls.instance = super(Singleton, cls).__call__(*args, **kw)
-        return cls.instance
-
-
-
 class KanjiDic(object):
     __metaclass__ = Singleton
 
-    def __init__(self):
+    def __init__(self, datadir = 'other'):
         """
         Constructs the Kanji Dictionary from the XML file.
 
         """
         self.kanjis = {}
+        self.datadir = datadir[:-1] if datadir[-1] == "/" else datadir
 
         print "Loading KANJIDIC...",
         sys.stdout.flush()
 
-        tree = etree.parse('other/kanjidic2.xml.gz')
+        tree = etree.parse(self.datadir + '/kanjidic2.xml.gz')
         query = u"/kanjidic2/character"
         nodes = tree.xpath(query)
 
@@ -107,7 +96,7 @@ class KanjiDic(object):
         """
         mapping = {}
 
-        tree = etree.parse('other/kanji.html.gz')
+        tree = etree.parse(self.datadir + '/kanji.html.gz')
         nodes = tree.xpath("//span[@class='c1' and text()]")
 
         for (i, node) in enumerate(nodes):
