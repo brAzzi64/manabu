@@ -9,7 +9,7 @@ urlpatterns = patterns('bun.views.train',
 
     url(r'^$', 'train'),
     url(r'^train$', 'train'),
-    url(r'^train/api/get_next_sentence$', 'get_next_sentence'),
+    url(r'^train/api/get_sentences$', 'get_sentences'),
     url(r'^train/api/learn_sentence$', 'learn_sentence'),
 )
 

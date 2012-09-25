@@ -1,28 +1,29 @@
 var sentence;
 
-init();
-
-function init() {
+function init(kanji) {
 
     $(document).ready(function() {
         
         setupCSRFTokenHook();
 
-        $("#btn-next").click(function(event) { issueGetNextSentence() });
+        // initial page
+        var page = 0;
+
+        $("#btn-next").click(function(event) { page++; issueGetNextSentence(kanji, page); });
         $("#btn-join").click(function(event) { joinSelectedWords(); });
         $("#btn-reset").click(function(event) { resetSentence(); });
         $("#btn-learn").click(function(event) { issueLearnSentence(); });
 
-        issueGetNextSentence();
+        issueGetNextSentence(kanji, page);
 
         // the Kanji to look sentences for has already been
         // set by the backend when returning the template.
     });
 }
 
-function issueGetNextSentence() {
+function issueGetNextSentence(kanji, page) {
     
-    issueAjaxJSONCall('train/api/get_next_sentence', {},
+    issueAjaxJSONCall('train/api/get_sentences', { 'kanji': kanji, 'page': page },
         function(data) { onGetSentenceArrived(data); });
 }
 
@@ -106,10 +107,11 @@ function assembleWordStructureForCurrentSentence() {
 }
 
 function onGetSentenceArrived(data) {
+    
+    // obtaining first element while items_per_page is hardcoded to 1 in backend
+    sentence = data[0];
 
-    sentence = data;
-
-    loadSentence(data);
+    loadSentence(sentence);
 }
 
 function is_kanji(k) {

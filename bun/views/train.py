@@ -11,16 +11,15 @@ from django.template import RequestContext, Context, loader
 
 from bun.models import Sentence, KnownKanji
 from bun.views.common import csrf_ensure_cookie
-from bun.sentence import SentenceGrabber
 from bun.restructurer import Restructurer
+from bun.kanjidic import Kanji, KanjiDic
+from bun.sentenceprovider import FileSentenceProvider
 
 
-# global variable
-glb = { 'SentenceGrabber' : None, 'KnownKanji' : None }
 # get or initialize the KnownKanji object
+glb = {}
 glb['KnownKanji'] = KnownKanji.get_or_create('brazzi')
 
-# TODO: RESTful API
 
 # URL: train?kanji=X
 @csrf_ensure_cookie
@@ -34,24 +33,52 @@ def train(request):
     if len(kanji) != 1 or not Restructurer.is_kanji(kanji):
         return HttpResponseBadRequest("Paramater 'kanji' is invalid")
 
-    # create a new instance for kanji k
-    glb['SentenceGrabber'] = SentenceGrabber(kanji, glb['KnownKanji'].array)
     return render_to_response('train.html', { 'section_name': 'Train', 'kanji': kanji }, context_instance = RequestContext(request))
 
 
-# URL: train/api/get_next_sentence
+# URL: train/api/get_sentences?kanji=X&page=Y
 @require_GET
-def get_next_sentence(request):
-    sg = glb['SentenceGrabber']
-    bun = sg.pop_next_sentence()
-    if bun == None:
-        return HTTPResponseBadRequest("No more sentences left for this kanji")
+def get_sentences(request):
+    kanji = request.GET.get('kanji', False)
+    if not kanji or len(kanji) != 1 or not Restructurer.is_kanji(kanji):
+        return HttpResponseBadRequest("Paramater 'kanji' is invalid")
+    try:
+        page = int( request.GET.get('page', '') )
+        if page < 0: raise ValueError
+    except ValueError:
+        return HttpResponseBadRequest("Paramater 'page' is invalid")
 
-    response = { 'sentence' : bun['sentence'], 'structure' : bun['structure'],
-                 'structure_orig' : bun['structure_orig'], 'translations' : bun['translations'],
-                 'pronunciations' : bun['pronunciations'], 'isLast' : not sg.any_sentence_left() }
+    sp = FileSentenceProvider()
+    ss = sp.get_sentences(kanji, 1, page) # hardcoding items_per_page to 1 for now
+    if not ss:
+        return HTTPResponseBadRequest("No sentences left for kanji '%s' in page %d" % (kanji, page))
 
-    return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
+    sentences = []
+    for bun in ss:
+        sentences.append( { 'sentence' : bun[0],
+                            'structure' : bun[1],
+                            'translations' : bun[2],
+                            'pronunciations' : get_pronunciations( bun[0] ) } )
+
+    return HttpResponse(simplejson.dumps(sentences), mimetype = "application/json")
+
+
+def get_pronunciations(sentence):
+    kc = KanjiDic()
+    mappings = {}
+    kanjis = set(l for l in sentence if Restructurer.is_kanji(l))
+    for literal in kanjis:
+        onyomis = []
+        kunyomis = []
+        try:
+            kanji = kc[literal]
+            onyomis = list(kanji.onyomis)
+            kunyomis = list(kanji.kunyomis)
+        except Exception as e:
+            print u"No information for Kanji: %s" % literal
+            print e
+        mappings[literal] = { 'ON' : onyomis, 'KN' : kunyomis }
+    return mappings
 
 
 # URL: train/api/learn_sentence
