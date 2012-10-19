@@ -24,6 +24,12 @@ urlpatterns += patterns('bun.views.review',
     url(r'^review$', 'review'),
 )
 
+urlpatterns += patterns('bun.views.authentication',
+
+    url(r'^login$', 'login'),
+    url(r'^logout$', 'logout'),
+)
+
 urlpatterns += patterns('',
 
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.join(APP_ROOT, 'static')}),

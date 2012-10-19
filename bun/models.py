@@ -1,6 +1,25 @@
 # -*- coding: utf-8 -*-
 import string
 from django.db import models
+from django.contrib.auth.models import User
+from django.db.models.signals import post_save
+
+
+class UserProfile(models.Model):
+    """ Asociate basic data to a User.
+
+    """
+    user = models.OneToOneField(User)
+
+    # actual fields
+    known_kanji = models.CharField(max_length = 2136)
+    # array with the Jouyou Kanji that are known by the user
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(user = instance)
+
+post_save.connect(create_user_profile, sender = User)
 
 
 class Sentence(models.Model):

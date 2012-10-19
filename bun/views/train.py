@@ -28,7 +28,7 @@ def train(request):
     kanji = request.GET.get('kanji', False)
     # if no parameters, return search page
     if not kanji:
-        return render_to_response('search.html', { 'section_name': 'Search' })
+        return render_to_response('search.html', { 'section_name': 'Search' }, context_instance = RequestContext(request))
 
     if len(kanji) != 1 or not Restructurer.is_kanji(kanji):
         return HttpResponseBadRequest("Paramater 'kanji' is invalid")
