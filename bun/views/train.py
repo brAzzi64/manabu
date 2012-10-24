@@ -9,16 +9,11 @@ from django.shortcuts import render_to_response
 from django.views.decorators.http import require_GET, require_POST
 from django.template import RequestContext, Context, loader
 
-from bun.models import Sentence, KnownKanji
+from bun.models import Sentence
 from bun.views.common import csrf_ensure_cookie
 from bun.restructurer import Restructurer
 from bun.kanjidic import Kanji, KanjiDic
 from bun.sentenceprovider import FileSentenceProvider
-
-
-# get or initialize the KnownKanji object
-glb = {}
-glb['KnownKanji'] = KnownKanji.get_or_create('brazzi')
 
 
 # URL: train?kanji=X
@@ -48,10 +43,11 @@ def get_sentences(request):
     except ValueError:
         return HttpResponseBadRequest("Paramater 'page' is invalid")
 
+    up = request.user.get_profile()
     sp = FileSentenceProvider()
-    ss = sp.get_sentences(kanji, 1, page) # hardcoding items_per_page to 1 for now
+    ss = sp.get_sentences(kanji, 1, page, up.known_kanji) # hardcoding items_per_page to 1 for now
     if not ss:
-        return HTTPResponseBadRequest("No sentences left for kanji '%s' in page %d" % (kanji, page))
+        return HttpResponseBadRequest("No sentences left for kanji '%s' in page %d" % (kanji, page))
 
     sentences = []
     for bun in ss:
@@ -95,7 +91,7 @@ def learn_sentence(request):
     prs_dict = simplejson.loads(pronunciations)
     prs_string = string.join((u"%s:%s" % (k,v) for (k,v) in prs_dict.items()), ",")
 
-    s = Sentence(text = text, structure = structure, learned_date = datetime.datetime.now(), kanji_pronunciations = prs_string)
+    s = Sentence(user = request.user, text = text, structure = structure, learned_date = datetime.datetime.now(), kanji_pronunciations = prs_string)
     s.save()
 
     return HttpResponse()

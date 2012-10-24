@@ -1,0 +1,7 @@
+sudo -u postgres dropdb manabu-data
+sudo -u postgres createdb manabu-data
+
+# to create users
+from django.contrib.auth.models import User
+u = User.objects.create_user('brAzzi64', 'brazzinnari@gmail.com', 'Passw0rd')
+u = User.objects.create_user('testuser', 'testuser@testmail.com', 'testpassword')

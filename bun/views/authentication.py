@@ -3,13 +3,9 @@ import string
 import datetime
 import re
 
-from django.http import HttpResponse, HttpResponseBadRequest
+from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedirect
 from django.views.decorators.http import require_GET, require_POST
 import django.contrib.auth as django_auth
-
-# To create a user:
-# from django.contrib.auth.models import User
-# u = User.objects.create_user('brAzzi64', 'brazzinnari@gmail.com', 'Passw0rd')
 
 
 # URL: login?user=X&pass=Y
@@ -26,7 +22,8 @@ def login(request):
         user = django_auth.authenticate(username = usr, password = pwd)
         if user is not None:
             django_auth.login(request, user)
-            return HttpResponse("User '%s' logged in successfully" % usr)
+            # user logged in successfully
+            return HttpResponseRedirect('/bun')
         else:
             return HttpResponseBadRequest("Invalid login")
     else:
