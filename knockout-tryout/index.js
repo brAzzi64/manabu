@@ -2,19 +2,18 @@
 function init() {
 
     var BlueTryoutViewModel = function() {
-        this.theParagraph = ko.observable(0);
+        this.theParagraph = ko.observable('the blue text');
     };
 
     var RedTryoutViewModel = function() {
-        this.theText = ko.observable(0);
+        this.theText = ko.observable('the red text');
     };
 
-    var vm = new BlueTryoutViewModel();
-    ko.applyBindings(vm, $('#blue-tryout')[0]);
-    vm.theParagraph('the text');
+    var mainViewModel = {
+        blueTryout: new BlueTryoutViewModel(),
+        redTryout: new RedTryoutViewModel()
+    };
 
-    var vm = new RedTryoutViewModel();
-    ko.applyBindings(vm, $('#red-tryout')[0]);
-    vm.theText('the other text');
+    ko.applyBindings(mainViewModel);
 }
 

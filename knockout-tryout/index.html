@@ -10,13 +10,17 @@
     </head>
     <body>
 
-        <p id="blue-tryout" style='background: blue;' data-bind='text: theParagraph'>
-            blue value
-        </p>
+        <div data-bind='with: blueTryout'>
+            <p style='background: blue;' data-bind='text: theParagraph'>
+                blue value
+            </p>
+        </div>
 
-        <p id="red-tryout" style='background: red;' data-bind='text: theText'>
-            red template
-        </p>
+        <div data-bind='with: redTryout'>
+            <p style='background: red;' data-bind='text: theText'>
+                red template
+            </p>
+        </div>
     </body>
     <script>
         init();
