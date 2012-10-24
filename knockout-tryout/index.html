@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <title>Knockout Test</title>
+        <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+        <link href="index.css" rel='stylesheet'/>
+        <script src="../bun/static/js/jquery-1.7.1.min.js"></script>
+        <script src="../bun/static/js/knockout-2.1.0.debug.js"></script>
+        <script src="index.js"></script>
+    </head>
+    <body>
+
+        <p id="blue-tryout" style='background: blue;' data-bind='text: theParagraph'>
+            blue value
+        </p>
+
+        <p id="red-tryout" style='background: red;' data-bind='text: theText'>
+            red template
+        </p>
+    </body>
+    <script>
+        init();
+    </script>
+</html>
