@@ -10,17 +10,24 @@
     </head>
     <body>
 
-        <div data-bind='with: blueTryout'>
-            <p style='background: blue;' data-bind='text: theParagraph'>
-                blue value
+        <div data-bind="with: sentenceVM">
+            <div class="sentence" class="container-fluid" data-bind="foreach: sentenceStruct">
+                <div class="word" data-bind="foreach: $data, css: { collapsed: !$parent.spaceWords() }" >
+                    <div class="sub-word">
+                        <div class="furigana" data-bind="text: pron, css: { hidden: !$parents[1].showFurigana() }"></div>
+                        <!-- ko foreach: chars -->
+                            <div class="literal" data-bind="css: { kanji: isKanji($data) }">
+                                <a data-bind="text: $data"></a>
+                            </div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </div>
+            <p class="translation" data-bind="text: translation">
+                TRANSLATION
             </p>
         </div>
-
-        <div data-bind='with: redTryout'>
-            <p style='background: red;' data-bind='text: theText'>
-                red template
-            </p>
-        </div>
+        <button data-bind="click: toggleReadingAid">Toggle Reading Aid</button>
 
     </body>
     <script>

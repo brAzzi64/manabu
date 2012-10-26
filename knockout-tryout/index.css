@@ -1,0 +1,65 @@
+
+body {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    text-align: center;
+}
+
+.sentence {
+    /* set to 0 to avoid the spaces inserted
+    between inline-block elements when two tags
+    are printed in different lines by Knockout */
+    font-size: 0;
+}
+
+.literal {
+    font-size: 16px;
+}
+
+.word, .sub-word, .literal {
+    display: inline-block;
+}
+
+.word {
+    margin-left: 3px;
+    margin-right: 3px;
+}
+
+.word.collapsed {
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.literal a {
+    text-decoration: none;
+    color: black;
+}
+
+.kanji a {
+    text-decoration: none;
+    color: #440000;
+}
+
+.furigana {
+    font-size: 7px;
+    margin-bottom: -1px;
+    color: #AAA;
+}
+
+.furigana.hidden {
+    opacity: 0;
+}
+
+.furigana::-moz-selection { background: transparent; }
+
+.furigana-edit {
+    display: block !important;
+    margin: 3px auto 0 auto !important;
+    text-align: center;
+    width: 90% !important;
+    font-size: 18px !important;
+}
+
+.translation {
+    font-size: 12px;
+}
+
