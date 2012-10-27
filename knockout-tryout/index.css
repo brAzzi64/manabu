@@ -12,7 +12,7 @@ body {
 }
 
 .literal {
-    font-size: 16px;
+    font-size: 26px;
 }
 
 .word, .sub-word, .literal {
@@ -20,11 +20,17 @@ body {
 }
 
 .word {
-    margin-left: 3px;
-    margin-right: 3px;
+    transition-property: margin-left, margin-right;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    margin-left: 4px;
+    margin-right: 4px;
 }
 
-.word.collapsed {
+.word.reading-aid {
+    transition-property: margin-left, margin-right;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
     margin-left: 0;
     margin-right: 0;
 }
@@ -40,26 +46,24 @@ body {
 }
 
 .furigana {
-    font-size: 7px;
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    font-size: 12px;
     margin-bottom: -1px;
     color: #AAA;
 }
 
-.furigana.hidden {
+.furigana.reading-aid {
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
     opacity: 0;
 }
 
 .furigana::-moz-selection { background: transparent; }
 
-.furigana-edit {
-    display: block !important;
-    margin: 3px auto 0 auto !important;
-    text-align: center;
-    width: 90% !important;
-    font-size: 18px !important;
-}
-
 .translation {
-    font-size: 12px;
+    font-size: 16px;
 }
 

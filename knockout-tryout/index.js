@@ -13,8 +13,7 @@ var SentenceViewModel = function(sentence, structure, translation) {
     this.translation = translation;
     this.sentenceStruct = this.parseStructure(structure);
 
-    this.showFurigana = ko.observable(true);
-    this.spaceWords = ko.observable(true);
+    this.readingAidEnabled = ko.observable(true);
 };
 
 SentenceViewModel.prototype.parseStructure = function(struct) {
@@ -61,16 +60,15 @@ function init() {
     var translation = 'This is the meaning of the text in English.';
 
     var mainViewModel = {
-        sentenceVM: new SentenceViewModel(sentence, struct, translation),
+        sentence: new SentenceViewModel(sentence, struct, translation),
         toggleReadingAid: function () {
 
-            var showing = this.sentenceVM.showFurigana();
-            this.sentenceVM.showFurigana(!showing);
-            this.sentenceVM.spaceWords(!showing);
+            var enabled = this.sentence.readingAidEnabled();
+            this.sentence.readingAidEnabled(!enabled);
         },
     };
 
     ko.applyBindings(mainViewModel);
-    console.log(mainViewModel.sentenceVM.sentence);
+    console.log(mainViewModel.sentence.sentence);
 }
 

@@ -10,11 +10,11 @@
     </head>
     <body>
 
-        <div data-bind="with: sentenceVM">
+        <div data-bind="with: sentence">
             <div class="sentence" class="container-fluid" data-bind="foreach: sentenceStruct">
-                <div class="word" data-bind="foreach: $data, css: { collapsed: !$parent.spaceWords() }" >
+                <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }" >
                     <div class="sub-word">
-                        <div class="furigana" data-bind="text: pron, css: { hidden: !$parents[1].showFurigana() }"></div>
+                        <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
                         <!-- ko foreach: chars -->
                             <div class="literal" data-bind="css: { kanji: isKanji($data) }">
                                 <a data-bind="text: $data"></a>
@@ -32,5 +32,6 @@
     </body>
     <script>
         init();
+
     </script>
 </html>
