@@ -1,0 +1,13 @@
+<div class="sentence" class="container-fluid" data-bind="foreach: sentenceStruct, event: { mouseover: $data.toggleReadingAid, mouseout: $data.toggleReadingAid }">
+    <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }" >
+        <div class="sub-word">
+            <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
+            <!-- ko foreach: chars -->
+                <div class="literal" data-bind="css: { kanji: isKanji($data) }">
+                    <a data-bind="text: $data"></a>
+                </div>
+            <!-- /ko -->
+        </div>
+    </div>
+</div>
+
