@@ -11,8 +11,9 @@ a.kanji {
     font-size: 3em;
     text-decoration: none;
     color: #AAA;
-    margin: 4px;
-    padding: 2px;
+    margin: 0px;
+    padding: 0px 5px;
+    border: 1px solid black;
 }
 
 a.known {
@@ -21,5 +22,6 @@ a.known {
 
 a.updated {
     background-color: #CCC;
+    border-radius: 5px;
 }
 
