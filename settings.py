@@ -108,7 +108,7 @@ TEMPLATE_LOADERS = (
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'bun.context_processors.default',
-    'django.core.context_processors.auth'
+    'django.contrib.auth.context_processors.auth'
 )
 
 MIDDLEWARE_CLASSES = (

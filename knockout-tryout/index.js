@@ -55,7 +55,7 @@ SentenceViewModel.prototype.parseStructure = function(struct) {
 
 function init() {
 
-    var sentence = '竹はま私風までたわむ 。';
+    var sentence = '竹はま私風までたわむ。';
     var struct = '竹[たけ] は ま私[わし]風[かぜ]ま で たわむ 。';
     var translation = 'This is the meaning of the text in English.';
 
@@ -69,6 +69,6 @@ function init() {
     };
 
     ko.applyBindings(mainViewModel);
-    console.log(mainViewModel.sentence.sentence);
+    console.log(mainViewModel.sentence.sentenceStruct);
 }
 

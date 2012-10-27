@@ -8,37 +8,92 @@
     font-size: 2em;
 }
 
-#sentences li {
-    list-style: none;
-    line-height: 30px !important;
-}
-
-#sentences > div {
-    margin: 10px;
-}
-
 .date {
-    font-size: 9px;
-    display: inline;
-    float: left;
-    margin: 0px;
-    margin-top: 5px;
-    margin-right: 10px;
+    font-size: 10px;
     text-align: center;
     color: gray;
-}
-
-.date div {
-    margin: 0px;
-    padding: 0px;
-}
-
-.date div:last-child {
-    font-size: 10px;
+    float: left;
+    border-right: solid #CCC 1px;
+    padding-right: 10px;
+    margin-top: 18px;
 }
 
 .bun {
-    border-left: solid #CCC 1px;
-    padding-left: 7px;
+    margin-left: 50px;
+}
+
+
+/* Sentence */
+
+.sentence {
+    /* set to 0 to avoid the spaces inserted
+    between inline-block elements when two tags
+    are printed in different lines by Knockout */
+    font-size: 0;
+}
+
+.literal {
+    font-size: 26px;
+}
+
+.word, .sub-word, .literal {
+    display: inline-block;
+}
+
+.word {
+    transition-property: margin-left, margin-right;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    margin-left: 4px;
+    margin-right: 4px;
+}
+
+.word:first-child {
+    margin-left: 0px;
+}
+
+.word:last-child {
+    margin-right: 0px;
+}
+
+.word.reading-aid {
+    transition-property: margin-left, margin-right;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.literal a {
+    text-decoration: none;
+    color: black;
+}
+
+.kanji a {
+    text-decoration: none;
+    color: #440000;
+}
+
+.furigana {
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    font-size: 12px;
+    margin-bottom: -1px;
+    color: #AAA;
+    text-align: center;
+}
+
+.furigana.reading-aid {
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    opacity: 0;
+}
+
+.furigana::-moz-selection { background: transparent; }
+
+.translation {
+    font-size: 16px;
 }
 

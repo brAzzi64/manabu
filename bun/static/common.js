@@ -45,3 +45,67 @@ function setupCSRFTokenHook() {
     });
 }
 
+function issueAjaxJSONCall(name, params, callback) {
+
+    $.getJSON(name, params, callback).error(function () {
+    
+        //alert("Error: the call to '" + name + "' failed.");
+        console.log("Error: the call to '" + name + "' failed.");
+    });
+}
+
+function isKanji(k) {
+
+    var charCode = k.charCodeAt(0);
+    return charCode >= 0x4E00 && charCode < 0x9FFF;
+}
+
+
+/* Sentence */
+
+var SentenceViewModel = function(text, structure, translation) {
+
+    this.text = text;
+    this.structure = structure;
+    this.translation = translation;
+    this.sentenceStruct = this.parseStructure(structure);
+
+    this.readingAidEnabled = ko.observable(true);
+};
+
+SentenceViewModel.prototype.parseStructure = function(struct) {
+
+    var disassembleWordStructure = function (wordStructure) {
+
+        var struct = [];
+        while (wordStructure != '') {
+                                           // hira-kata* all-but-hira-kata+ [ pronunciation* ] rest*
+            var match = wordStructure.match(/([\u3040-\u309F\u30A0-\u30FF]*)([^\u3040-\u309F\u30A0-\u30FF]+)\[(.*?)\](.*)/);
+            if (match == null) {
+                struct.push([wordStructure]);
+                break;
+            } else {
+                if ( match[1] != '' )
+                    struct.push([match[1]]);       // pre-word
+                struct.push([match[2], match[3]]); // kanji + pronunciation
+                wordStructure = match[4];          // rest of the string
+            }
+        }
+        return struct;
+    };
+
+    var sentence = [];
+    var strWords = struct.split(" ");
+    for (i in strWords) {
+        var word = [];
+        var wordStructure = disassembleWordStructure(strWords[i]);
+        for (j in wordStructure) {
+            var subWordStructure = wordStructure[j];
+            word.push({ chars: subWordStructure[0], pron: subWordStructure[1] });
+        }
+        sentence.push(word);
+    }
+
+    return sentence;
+};
+

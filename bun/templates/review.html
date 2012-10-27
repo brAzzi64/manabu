@@ -5,16 +5,30 @@
 <div style='margin-top: 2em;' class='container'>
     <p>These are the sentences learned up to the moment:</p>
 </div>
-<div id="sentences" class="container">
-    {% for s in sentences %}
+<div id="sentences" class="container" data-bind="foreach: sentences">
     <div>
-        <div class="date">
-            <div>{{ s.learned_date|date:"d M" }}</div>
-            <div>{{ s.learned_date|date:"Y" }}</div>
+        <div class="date" data-bind="with: date">
+            <div data-bind="text: dayAndMonth"></div>
+            <div data-bind="text: year"></div>
         </div>
-        <span class="bun">{{ s.text }}</span>
+        <div class="bun" data-bind="with: sentence">
+            <div class="sentence" class="container-fluid" data-bind="foreach: sentenceStruct, event: { mouseover: $data.toggleReadingAid, mouseout: $data.toggleReadingAid }">
+                <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }" >
+                    <div class="sub-word">
+                        <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
+                        <!-- ko foreach: chars -->
+                            <div class="literal" data-bind="css: { kanji: isKanji($data) }">
+                                <a data-bind="text: $data"></a>
+                            </div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </div>
+        </div>
     </div>
-    {% endfor %} 
 </div>
+<script>
+    init();
+</script>
 {% endblock %}
 

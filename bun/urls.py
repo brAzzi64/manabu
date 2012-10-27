@@ -22,6 +22,7 @@ urlpatterns += patterns('bun.views.known_kanji',
 urlpatterns += patterns('bun.views.review',
 
     url(r'^review$', 'review'),
+    url(r'^review/api/get_sentences$', 'get_sentences'),
 )
 
 urlpatterns += patterns('bun.views.authentication',
