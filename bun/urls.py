@@ -16,6 +16,7 @@ urlpatterns = patterns('bun.views.train',
 urlpatterns += patterns('bun.views.known_kanji',
 
     url(r'^known_kanji$', 'known_kanji'),
+    url(r'^known_kanji/api/get_kanji$', 'get_kanji'),
     url(r'^known_kanji/api/update_known_kanji$', 'update_known_kanji'),
 )
 

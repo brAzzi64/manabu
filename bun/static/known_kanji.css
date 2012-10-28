@@ -2,26 +2,59 @@
     max-width: 700px;
 }
 
+#controls {
+    margin-top: 30px;
+}
+
+#navigator {
+    margin-top: 25px;
+    font-size: 18px;
+}
+
+#navigator a {
+    vertical-align: middle;
+    color: #888;
+}
+
+#navigator a.active, #navigator a.disabled {
+    color: black;
+    text-decoration: none;
+    pointer-events: none;
+    cursor: default;
+}
+
+#prev {
+    margin-right: 20px;
+    font-size: 0.8em;
+}
+
+#next {
+    margin-left: 20px;
+    font-size: 0.8em;
+}
+
 #kanji-list {
     margin-top: 1em;
 }
 
-a.kanji {
-    display: inline;
-    font-size: 3em;
-    text-decoration: none;
-    color: #AAA;
-    margin: 0px;
-    padding: 0px 5px;
-    border: 1px solid black;
+.kanji {
+    display: inline-block;
+    margin: 2px 0px;
 }
 
-a.known {
+.kanji a {
+    color: #AAA;
+    text-decoration: none;
+    font-size: 3em;
+    padding: 1px 6px 0px 6px;
+}
+
+.kanji a.known {
     color: #000;
 }
 
-a.updated {
-    background-color: #CCC;
+.kanji a.updated {
+    background-color: #DDD;
     border-radius: 5px;
 }
 

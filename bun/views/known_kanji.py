@@ -16,6 +16,19 @@ from bun.kanjidic import Kanji, KanjiDic
 @csrf_ensure_cookie
 @require_GET
 def known_kanji(request):
+    return render_to_response('known_kanji.html', { 'section_name': 'Known Kanji' }, context_instance = RequestContext(request))
+
+
+# URL: known_kanji/api/get_kanji?page=X
+@require_GET
+def get_kanji(request):
+    try:
+        page = int( request.GET.get('page', '') )
+        if page < 0: raise ValueError
+    except ValueError:
+        # page 0 if parameter is invalid or missing
+        page = 0
+
     kd = KanjiDic()
     d = []
     # assuming there's an authenticated user
@@ -31,7 +44,12 @@ def known_kanji(request):
     # return them ordered by unisort index
     d = sorted(d, key = lambda x: kd[ x['literal'] ].idx_kolivas)
 
-    return render_to_response('known_kanji.html', { 'section_name': 'Known Kanji', 'kanjis': d }, context_instance = RequestContext(request))
+    kanji_per_page = 96
+    start = page * kanji_per_page
+    end = start + kanji_per_page
+    response = d[start:end]
+
+    return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
 
 
 # URL: known_kanji/api/update_known_kanji
@@ -46,8 +64,8 @@ def update_known_kanji(request):
     up = request.user.get_profile()
     kd = KanjiDic()
     d = simplejson.loads(updates)
-    learned = string.join((k for k in d if d[k]), u"")
-    unlearned = string.join((k for k in d if not d[k]), u"")
+    learned = string.join((k[u"literal"] for k in d if k[u"known"]), u"")
+    unlearned = string.join((k[u"literal"] for k in d if not k[u"known"]), u"")
     # we put the random symbol 'k' to avoid changes
     # in the logic when we have no unlearned kanji
     up.known_kanji = re.sub(u'[k%s]' % unlearned, '', up.known_kanji) + learned

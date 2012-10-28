@@ -12,19 +12,29 @@
 {% block content %}
 <h1>Known Kanji</h1>
 <div style='margin-top: 2em;' class='container'>
-    <p>These are all of the Jouyou Kanji:</p>
+    <p>These are the all of the Jouyou Kanji ordered by the Kolivas index. Go through the different pages to see them all. Click each kanji to mark it as known/unknown and click the Update button to save the changes.</p>
+</div>
+
+<div id="kanji-list" class="container" data-bind="foreach: kanjis">
+    <span class="kanji"> 
+        <a href="#" data-bind="text: literal, css: { known: known, updated: hasChanged }, click: toggleKnown"></a>
+    </span>
+</div>
+
+<div id="navigator" data-bind="with: navigator">
+    <a id="prev" href="#" data-bind="click: previousClicked, css: {disabled: $root.currentPage() == 1}">&lt;&lt; prev</a>
+    <!-- ko foreach: pages -->
+    <a href="#" data-bind="text: number, css: { active: active }, click: clicked"></a>
+    <span data-bind="if: number < 12">|</span>
+    <!-- /ko -->
+    <a id="next" href="#" data-bind="click: nextClicked, css: {disabled: $root.currentPage() == 12}">next &gt;&gt;</a>
 </div>
 
 <div id="controls" class="container">
     <div class="btn-group">
-        <a id="btn-update" class='btn btn-primary' href='#'>Update</a>
+        <a id="btn-update" class='btn btn-primary' href='#' data-bind="click: updateClicked">Update</a>
     </div>
 </div>
 
-<div id="kanji-list" class="container">
-    {% for k in kanjis %}
-    <a class="kanji{{ k.known|yesno:' known,' }}" href="#">{{ k.literal }}</a>
-    {% endfor %} 
-</div>
 {% endblock %}
         

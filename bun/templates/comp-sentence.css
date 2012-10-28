@@ -17,6 +17,9 @@
     transition-property: margin-left, margin-right;
     transition-duration: 0.2s;
     transition-timing-function: ease;
+    -webkit-transition-property: margin-left, margin-right;
+    -webkit-transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease;
     margin-left: 4px;
     margin-right: 4px;
 }
