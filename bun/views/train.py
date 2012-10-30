@@ -16,19 +16,11 @@ from bun.kanjidic import Kanji, KanjiDic
 from bun.sentenceprovider import FileSentenceProvider
 
 
-# URL: train?kanji=X
+# URL: train
 @csrf_ensure_cookie
 @require_GET
 def train(request):
-    kanji = request.GET.get('kanji', False)
-    # if no parameters, return search page
-    if not kanji:
-        return render_to_response('search.html', { 'section_name': 'Search' }, context_instance = RequestContext(request))
-
-    if len(kanji) != 1 or not Restructurer.is_kanji(kanji):
-        return HttpResponseBadRequest("Paramater 'kanji' is invalid")
-
-    return render_to_response('train.html', { 'section_name': 'Train', 'kanji': kanji }, context_instance = RequestContext(request))
+    return render_to_response('train.html', { 'section_name': 'Train' }, context_instance = RequestContext(request))
 
 
 # URL: train/api/get_sentences?kanji=X&page=Y

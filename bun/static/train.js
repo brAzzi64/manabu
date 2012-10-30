@@ -325,3 +325,101 @@ function clearSelection() {
 }
 
 
+var searchViewModel = {
+
+    searchQuery : ko.observable(""),
+    
+    init : function(parent) {
+
+        this.parentViewModel = parent;
+    },
+
+    doSearch : function() {
+
+        var kanji = this.searchQuery().trim();
+        if (kanji == null || kanji == '') {
+            bootbox.alert("You must enter a Kanji to search sentences.");
+        } else {
+            this.parentViewModel.doSearch(kanji);        
+        }
+    }
+
+}
+
+
+var trainViewModel = {
+
+    kanji : ko.observable(""),
+
+    sentence : ko.observable(),
+
+    doSearch : function(kanji) {
+
+        this.page = 0;
+        this.kanji(kanji);
+        this.getNextSentence();
+    },
+
+    getNextSentence : function() {
+    
+        var that = this;
+        issueAjaxJSONCall('train/api/get_sentences', { 'kanji': this.kanji(), 'page': this.page++ },
+            function(data) { that.handleGetNextSentenceCompleted(data); });
+    },
+
+    handleGetNextSentenceCompleted : function(data) {
+
+        console.log(data);
+        this.sentence( new Sentence(data) ); 
+    },
+}
+
+
+var parentViewModel = {
+
+    searchViewModel : searchViewModel,
+
+    trainViewModel : trainViewModel,
+
+    current : ko.observable(searchViewModel),
+
+    init : function() {
+
+        this.searchViewModel.init(this);
+
+        // apply Knockout bindings
+        ko.applyBindings(this);
+    },
+
+    doSearch : function(kanji) {
+
+        this.current(trainViewModel);
+        this.trainViewModel.doSearch(kanji);
+    },
+    
+    changeToSearchView : function() {
+
+        this.current('search');
+    },
+    
+    changeToTrainView : function() {
+
+        this.currentView('train');
+    }
+
+}
+
+parentViewModel.searchViewVisible = ko.computed(function() {
+        return this.current() == this.searchViewModel;
+}, parentViewModel),
+
+parentViewModel.trainViewVisible = ko.computed(function() {
+        return this.current() == this.trainViewModel;
+}, parentViewModel),
+
+
+$(document).ready(function() {
+        
+    parentViewModel.init();
+});
+

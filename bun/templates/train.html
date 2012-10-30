@@ -1,24 +1,50 @@
 {% extends "base.html" %}
 
-{% block content %}
-<h1>Training Kanji: {{ kanji }}</h1>
-<div style='margin-top: 2em;' class='container'>
-    <p>Click the <em>Next Sentence</em> button to get the next sentence availible for the Kanji.<br/>
-    Select separeted words and click <em>Join selected as word</em> to join them as one word.<br/>
-    Double click on a <em>furigana</em> reading to edit it, and press the Enter key when done.</p>
-</div>
-<div id="sentence" class='container-fluid'></div>
-<div id="translation">Loading sentence...</div>
-<div id="controls">
-    <div class="btn-group">
-        <a id="btn-next" class='btn btn-primary' href='#'>Next Sentence</a>
-        <a id="btn-join" class='btn' href='#'>Join selected as word</a>
-        <a id="btn-reset" class='btn' href='#'>Reset</a>
-        <a id="btn-learn" class='btn btn-success' href='#'>Learn</a>
-    </div>
-</div>
-<script type="text/javascript">
-    init( '{{ kanji }}' );
+{% block head-end %}
+<style type="text/css">
+    {% include "comp-sentence.css" %}
+</style>
+<script type="text/html" id="comp-sentence">
+    {% include "comp-sentence.html" %}
 </script>
+{% endblock %}
+
+{% block content %}
+<div id="search-view" data-bind="if: searchViewVisible">
+    <!-- ko with: searchViewModel -->
+    <h1>Search</h1>
+    <div style='margin-top: 2em;' class='container'>
+        Search for a Kanji to train:
+    </div>
+    <div id='center' class='container'>
+        <form class="form-search">
+            <div class="input-append">
+                <input id='kanji-input' type="text" class="span2 search-query" data-bind="value: searchQuery">
+                <a id='btn-search' href="#" class="btn" data-bind="click: doSearch">Search</a>
+            </div>
+        </form>
+    </div>
+    <!-- /ko -->
+</div>
+<div id="train-view" data-bind="if: trainViewVisible">
+    <!-- ko with: trainViewModel -->
+    <h1>Training Kanji: <span data-bind="text: kanji"</span></h1>
+    <div style='margin-top: 2em;' class='container'>
+        <p>Click the <em>Next Sentence</em> button to get the next sentence availible for the Kanji.<br/>
+        Select separeted words and click <em>Join selected as word</em> to join them as one word.<br/>
+        Double click on a <em>furigana</em> reading to edit it, and press the Enter key when done.</p>
+    </div>
+    <div class="sentence" class='container-fluid' data-bind="template: { name: 'comp-sentence', data: sentence }"></div>
+    <div id="translation">Loading sentence...</div>
+    <div id="controls">
+        <div class="btn-group">
+            <a id="btn-next" class='btn btn-primary' href='#' data-bind='click: getNextSentence'>Next Sentence</a>
+            <a id="btn-join" class='btn' href='#'>Join selected as word</a>
+            <a id="btn-reset" class='btn' href='#'>Reset</a>
+            <a id="btn-learn" class='btn btn-success' href='#'>Learn</a>
+        </div>
+    </div>
+    <!-- /ko -->
+</div>
 {% endblock %}
 
