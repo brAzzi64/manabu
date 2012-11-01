@@ -1,5 +1,5 @@
-<div class="sentence" class="container-fluid" data-bind="foreach: sentenceStruct, event: { mouseover: $data.toggleReadingAid, mouseout: $data.toggleReadingAid }">
-    <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }" >
+<div class="sentence" class="container-fluid" data-bind="foreach: parsedStructure, event: { mouseover: $data.toggleReadingAid, mouseout: $data.toggleReadingAid }">
+    <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }">
         <div class="sub-word">
             <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
             <!-- ko foreach: chars -->
@@ -9,5 +9,7 @@
             <!-- /ko -->
         </div>
     </div>
+</div>
+<div class="translation" data-bind="text: translation">
 </div>
 

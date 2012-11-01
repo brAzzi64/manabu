@@ -369,8 +369,9 @@ var trainViewModel = {
 
     handleGetNextSentenceCompleted : function(data) {
 
-        console.log(data);
-        this.sentence( new Sentence(data) ); 
+        var vm = new SentenceViewModel(data[0].sentence, data[0].structure, data[0].translations[0]);
+        vm.readingAidEnabled(true);
+        this.sentence(vm); 
     },
 }
 

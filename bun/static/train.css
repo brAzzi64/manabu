@@ -1,38 +1,9 @@
-#sentence {
-    font-size: 5em;
-    margin-top: 0.4em;
+.sentence {
+    font-size: 4em;
+    margin-top: 0.6em;
     margin-bottom: 0.4em;
-    margin-left: 1.2em;
+    margin-left: 0.4em;
 }
-
-#translation {
-    font-size: 1.2em;
-    color: #222;
-    margin-bottom: 7em;
-}
-
-#translation p:first-child {
-    font-size: 2em;
-    color: black;
-}
-
-.word {
-    display: inline-block;
-    margin-left: 0.15em;
-    margin-right: 0.15em;
-}
-
-.word .sub-word {
-    display: inline-block;
-}
-
-.furigana {
-    font-size: 0.4em;
-    margin-bottom: -0.1em;
-    color: #AAA;
-}
-
-.furigana::-moz-selection { background: transparent; }
 
 .furigana-edit {
     display: block !important;
@@ -40,19 +11,6 @@
     text-align: center;
     width: 90% !important;
     font-size: 18px !important;
-}
-
-.kanji {
-    color: red;
-}
-
-.literal {
-    display: inline-block;
-}
-
-.kanji a {
-    text-decoration: none;
-    color: #440000;
 }
 
 .popover {

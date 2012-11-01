@@ -33,8 +33,8 @@ SentenceViewModel.prototype.toggleReadingAid = function() {
 }
 
 
-function init() {
-   
+$(document).ready(function() {
+        
     reviewViewModel.init();
-}
+});
 

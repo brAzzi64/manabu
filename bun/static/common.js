@@ -94,9 +94,9 @@ var SentenceViewModel = function(text, structure, translation) {
     this.text = text;
     this.structure = structure;
     this.translation = translation;
-    this.sentenceStruct = this.parseStructure(structure);
+    this.parsedStructure = this.parseStructure(structure);
 
-    this.readingAidEnabled = ko.observable(true);
+    this.readingAidEnabled = ko.observable(false);
 };
 
 SentenceViewModel.prototype.parseStructure = function(struct) {

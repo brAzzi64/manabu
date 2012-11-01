@@ -2,11 +2,11 @@
     /* set to 0 to avoid the spaces inserted
     between inline-block elements when two tags
     are printed in different lines by Knockout */
-    font-size: 0;
+    word-spacing: -0.26em;
 }
 
 .literal {
-    font-size: 26px;
+    font-size: 1em;
 }
 
 .word, .sub-word, .literal {
@@ -20,21 +20,21 @@
     -webkit-transition-property: margin-left, margin-right;
     -webkit-transition-duration: 0.2s;
     -webkit-transition-timing-function: ease;
-    margin-left: 4px;
-    margin-right: 4px;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .word:first-child {
-    margin-left: 0px;
+    margin-left: 0;
 }
 
 .word:last-child {
-    margin-right: 0px;
+    margin-right: 0;
 }
 
 .word.reading-aid {
-    margin-left: 0;
-    margin-right: 0;
+    margin-left: 0.15em;
+    margin-right: 0.15em;
 }
 
 .literal a {
@@ -51,19 +51,20 @@
     transition-property: opacity;
     transition-duration: 0.2s;
     transition-timing-function: ease;
-    font-size: 12px;
-    margin-bottom: -1px;
+    font-size: 0.40em;
+    margin-bottom: -0.12em;
     color: #AAA;
     text-align: center;
+    opacity: 0;
 }
 
 .furigana.reading-aid {
-    opacity: 0;
+    opacity: 1;
 }
 
 .furigana::-moz-selection { background: transparent; }
 
 .translation {
-    font-size: 16px;
+    font-size: 1.6em;
 }
 
