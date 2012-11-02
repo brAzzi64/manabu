@@ -373,8 +373,27 @@ var trainViewModel = {
 
     handleGetNextSentenceCompleted : function(data) {
 
-        var vm = new SentenceViewModel(data[0].sentence, data[0].structure, data[0].translations[0]);
+        data = data[0]; // not paginated for now
+        var vm = new SentenceViewModel(data.sentence, data.structure, data.translations[0]);
         vm.readingAidEnabled(true);
+
+        // TODO: pre-create a viewmodel structure for this
+        vm.pronunciations = {};
+        for (kanji in data.pronunciations) {
+            var ps = data.pronunciations[kanji];
+            // onyomis
+            var onProns = [];
+            for (i in ps.ON)
+                onProns.push({ pronunciation: ps.ON[i], selected: ko.observable(false) });
+            // kunyomis
+            var knProns = [];
+            for (i in ps.KN)
+                knProns.push({ pronunciation: ps.KN[i], selected: ko.observable(false) });
+            // set them
+            var obj = { ON: onProns, KN: knProns };
+            vm.pronunciations[kanji] = obj;
+        }
+
         this.sentence(vm); 
     },
 }
@@ -421,6 +440,34 @@ parentViewModel.searchViewVisible = ko.computed(function() {
 parentViewModel.trainViewVisible = ko.computed(function() {
         return this.current() == this.trainViewModel;
 }, parentViewModel),
+
+
+ko.bindingHandlers.bootstrapPopover = {
+
+    update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var options = valueAccessor();
+        var show = options.if != undefined ? options.if : true;
+        if (show) {
+            var template = $("script[type*=html][id=" + options.template + "]").clone().html();
+            $(element).popover({ content: template, html: true, trigger: 'manual', placement: 'bottom' });
+            $(element).click(function() {
+
+                var that = this;
+                // close all other popovers first
+                $(".kanji").children("a").each(function() {
+                    if (this != that)
+                        $(this).popover('hide');
+                });
+                // toggle this one
+                $(this).popover('toggle');
+                // bind it to the ViewModel
+                var thePopover = $('.popover-content').last()[0]; // take the most recent one
+                var childBindingContext = bindingContext.createChildContext(viewModel);
+                ko.applyBindings(childBindingContext, thePopover);
+            });
+        }
+    }
+};
 
 
 $(document).ready(function() {

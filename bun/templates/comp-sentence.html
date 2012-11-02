@@ -12,5 +12,14 @@
 </div>
 <div class="translation" data-bind="text: translation"></div>
 <script id="popup-template" type="text/html">
-    <div class="popover-content" data-bind="text: $data">default content</div>
+    <div class="popover-content" data-bind="with: $parents[3].pronunciations[$data]">
+        <div>onyomis</div>
+        <ul data-bind="foreach: ON">
+            <li data-bind="text: pronunciation"></li>
+        </ul>
+        <div>kunyomis</div>
+        <ul data-bind="foreach: KN">
+            <li data-bind="text: pronunciation"></li>
+        </ul>
+    </div>
 </script>
