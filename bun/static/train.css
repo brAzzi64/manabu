@@ -13,6 +13,7 @@
     font-size: 18px !important;
 }
 
+/*
 .popover {
     width: auto;
     padding: 0px;
@@ -21,6 +22,7 @@
 .popover-content {
     padding: 0px;
 }
+*/
 
 .pronunciation-title {
     font-size: 13px;
@@ -35,9 +37,11 @@
     border-top: none;
 }
 
+/*
 .popover-content > p {
     margin-top: 0px;
 }
+*/
 
 .pro-option {
     text-decoration: none;

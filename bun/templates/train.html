@@ -37,10 +37,10 @@
     <div id="sentence" class='container-fluid' data-bind="template: { name: 'comp-sentence', data: sentence, if: sentence }"></div>
     <div id="controls">
         <div class="btn-group">
-            <a id="btn-next" class='btn btn-primary' href='#' data-bind='click: getNextSentence'>Next Sentence</a>
+            <a id="btn-next" class='btn btn-primary' href='#' data-bind='click: onNextSentence'>Next Sentence</a>
             <a id="btn-join" class='btn' href='#'>Join selected as word</a>
             <a id="btn-reset" class='btn' href='#'>Reset</a>
-            <a id="btn-learn" class='btn btn-success' href='#'>Learn</a>
+            <a id="btn-learn" class='btn btn-success' href='#' data-bind='click: onLearnSentence'>Learn</a>
         </div>
     </div>
     <!-- /ko -->

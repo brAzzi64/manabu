@@ -357,14 +357,18 @@ var trainViewModel = {
 
         this.page = 0;
         this.kanji(kanji);
-        this.getNextSentence();
+        this.onNextSentence();
     },
 
-    getNextSentence : function() {
+    onNextSentence : function() {
     
         var that = this;
         issueAjaxJSONCall('train/api/get_sentences', { 'kanji': this.kanji(), 'page': this.page++ },
             function(data) { that.handleGetNextSentenceCompleted(data); });
+    },
+
+    onLearnSentence : function() {
+
     },
 
     handleGetNextSentenceCompleted : function(data) {

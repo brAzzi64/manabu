@@ -4,12 +4,13 @@
             <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
             <!-- ko foreach: chars -->
                 <div class="literal" data-bind="css: { kanji: isKanji($data) }">
-                    <a data-bind="text: $data"></a>
+                    <a data-bind="text: $data, bootstrapPopover : { if: isKanji($data), template: 'popup-template' }"></a>
                 </div>
             <!-- /ko -->
         </div>
     </div>
 </div>
-<div class="translation" data-bind="text: translation">
-</div>
-
+<div class="translation" data-bind="text: translation"></div>
+<script id="popup-template" type="text/html">
+    <div class="popover-content" data-bind="text: $data">default content</div>
+</script>

@@ -135,3 +135,30 @@ SentenceViewModel.prototype.parseStructure = function(struct) {
     return sentence;
 };
 
+
+ko.bindingHandlers.bootstrapPopover = {
+
+    update: function(element, valueAccessor, allBindingsAccessor, viewModel, bindingContext) {
+        var options = valueAccessor();
+        var show = options.if != undefined ? options.if : true;
+        if (show) {
+            var template = $("script[type*=html][id=" + options.template + "]").clone().html();
+            $(element).popover({ content: template, html: true, trigger: 'manual', placement: 'bottom' });
+            $(element).click(function() {
+
+                var that = this;
+                $(".kanji").children("a").each(function() {
+                    if (this != that)
+                        $(this).popover('hide');
+                });
+                $(this).popover('toggle');
+
+                var thePopover = $('.popover-content:first-child').last()[0]; // take the most recent one
+                var childBindingContext = bindingContext.createChildContext(viewModel);
+                ko.applyBindings(childBindingContext, thePopover);
+            });
+        }
+    }
+};
+
+
