@@ -13,53 +13,6 @@
     font-size: 18px !important;
 }
 
-/*
-.popover {
-    width: auto;
-    padding: 0px;
-}
-
-.popover-content {
-    padding: 0px;
-}
-*/
-
-.pronunciation-title {
-    font-size: 13px;
-    padding: 4px 10px;
-    background-color: #F6F6F6;
-    border-bottom: 1px solid #DDD;
-    border-top: 1px solid #DDD;
-}
-
-.pronunciation-title:first-child {
-    border-radius: 4px 4px 0 0;
-    border-top: none;
-}
-
-/*
-.popover-content > p {
-    margin-top: 0px;
-}
-*/
-
-.pro-option {
-    text-decoration: none;
-    display: block;
-    margin: 5px;
-    padding: 0px 4px;
-    color: black;
-    height: 18px;
-}
-
-.pro-option:hover {
-    text-decoration: underline;
-}
-
-.pro-option.selected {
-    font-weight: bold;
-}
-
 #controls {
     position: absolute;
     width: 100%;

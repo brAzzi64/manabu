@@ -325,6 +325,40 @@ function clearSelection() {
 }
 
 
+var PronunciationOption = function(kanji, text, sentenceVM) {
+
+        var that = this;
+
+        this.pronunciation = text,
+        this.selected = ko.observable(false)
+        
+        this.toggleSelected = function() {
+
+            var isSelected = that.selected();
+            sentenceVM.clearPronunciationSelection(kanji);
+            that.selected(!isSelected);
+        };
+}
+
+// TODO: move to a subclass
+SentenceViewModel.prototype.clearPronunciationSelection = function(kanji) {
+
+    var that = this;
+    var clearForKanji = function(kanji) {
+        var prs = that.pronunciations[kanji];
+        for (i in prs.ON) prs.ON[i].selected(false);
+        for (i in prs.KN) prs.KN[i].selected(false);
+    }
+
+    if (kanji) {
+        clearForKanji(kanji);
+    } else {
+        for (k in this.pronunciations) {
+            clearForKanji(k);
+        }
+    }
+}
+
 var searchViewModel = {
 
     searchQuery : ko.observable(""),
@@ -353,6 +387,8 @@ var trainViewModel = {
 
     sentence : ko.observable(),
 
+    nextSentenceDisabled : ko.observable(false),
+
     doSearch : function(kanji) {
 
         this.page = 0;
@@ -364,37 +400,48 @@ var trainViewModel = {
     
         var that = this;
         issueAjaxJSONCall('train/api/get_sentences', { 'kanji': this.kanji(), 'page': this.page++ },
-            function(data) { that.handleGetNextSentenceCompleted(data); });
+            function(data) { that.handleGetNextSentenceCompleted(data); },
+            function() { that.handleGetNextSentenceFailed(); });
     },
 
     onLearnSentence : function() {
 
     },
+    
+    onReset : function() {
+
+        this.sentence().clearPronunciationSelection();
+    },
 
     handleGetNextSentenceCompleted : function(data) {
 
         data = data[0]; // not paginated for now
-        var vm = new SentenceViewModel(data.sentence, data.structure, data.translations[0]);
-        vm.readingAidEnabled(true);
+        var vm = new SentenceViewModel(data.sentence, data.structure, data.translations[0], true);
 
-        // TODO: pre-create a viewmodel structure for this
+        // TODO: extend the SentenceViewModel class adding a
+        // method that creates the PronunciationOption view models.
         vm.pronunciations = {};
         for (kanji in data.pronunciations) {
             var ps = data.pronunciations[kanji];
             // onyomis
             var onProns = [];
             for (i in ps.ON)
-                onProns.push({ pronunciation: ps.ON[i], selected: ko.observable(false) });
+                onProns.push(new PronunciationOption(kanji, ps.ON[i], vm));
             // kunyomis
             var knProns = [];
             for (i in ps.KN)
-                knProns.push({ pronunciation: ps.KN[i], selected: ko.observable(false) });
-            // set them
+                knProns.push(new PronunciationOption(kanji, ps.KN[i], vm));
+
             var obj = { ON: onProns, KN: knProns };
             vm.pronunciations[kanji] = obj;
         }
 
         this.sentence(vm); 
+    },
+
+    handleGetNextSentenceFailed : function() {
+
+        this.nextSentenceDisabled(true);
     },
 }
 
@@ -449,21 +496,40 @@ ko.bindingHandlers.bootstrapPopover = {
         var show = options.if != undefined ? options.if : true;
         if (show) {
             var template = $("script[type*=html][id=" + options.template + "]").clone().html();
-            $(element).popover({ content: template, html: true, trigger: 'manual', placement: 'bottom' });
-            $(element).click(function() {
+            $(element).popover({ content: template, html: true, title: 'Pronunciations', trigger: 'manual', placement: 'bottom' });
+            element.showing = false; // initialize a tracking value
+            $(element).click(function(e) {
 
                 var that = this;
                 // close all other popovers first
                 $(".kanji").children("a").each(function() {
-                    if (this != that)
+                    if (this != that) {
                         $(this).popover('hide');
+                        this.showing = false;
+                    }
                 });
+
                 // toggle this one
                 $(this).popover('toggle');
-                // bind it to the ViewModel
-                var thePopover = $('.popover-content').last()[0]; // take the most recent one
-                var childBindingContext = bindingContext.createChildContext(viewModel);
-                ko.applyBindings(childBindingContext, thePopover);
+                element.showing = !element.showing; 
+
+                if (element.showing) {
+                    // bind it to the ViewModel
+                    var thePopover = $('.popover').last()[0]; // take the most recent one
+                    var popoverContent = $(thePopover).find('.popover-content')[0];
+                    var childBindingContext = bindingContext.createChildContext(viewModel);
+                    ko.applyBindings(childBindingContext, popoverContent);
+
+                    $(thePopover).click(function(e) {
+
+                        // don't let it reach the body
+                        // click or it will close
+                        e.stopPropagation();
+                    });
+                }
+
+                // don't let it reach the body click
+                e.stopPropagation();
             });
         }
     }
@@ -473,5 +539,17 @@ ko.bindingHandlers.bootstrapPopover = {
 $(document).ready(function() {
         
     parentViewModel.init();
+
+    // popover hiding when clicking anywhere else
+    $("html").click(function() {
+
+        $(".kanji").children("a").each(function() {
+
+            $(this).popover('hide');
+            this.showing = false;
+        });
+    });
 });
+
+
 

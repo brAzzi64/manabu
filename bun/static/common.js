@@ -45,11 +45,10 @@ function setupCSRFTokenHook() {
     });
 }
 
-function issueAjaxJSONCall(name, params, callback) {
+function issueAjaxJSONCall(name, params, callback, errorCallback) {
 
-    $.getJSON(name, params, callback).error(function () {
+    $.getJSON(name, params, callback).error(errorCallback || function () {
     
-        //alert("Error: the call to '" + name + "' failed.");
         console.log("Error: the call to '" + name + "' failed.");
     });
 }
@@ -89,14 +88,13 @@ var QueryString = function () {
 
 /* Sentence */
 
-var SentenceViewModel = function(text, structure, translation) {
+var SentenceViewModel = function(text, structure, translation, readingAidOn) {
 
     this.text = text;
     this.structure = structure;
     this.translation = translation;
     this.parsedStructure = this.parseStructure(structure);
-
-    this.readingAidEnabled = ko.observable(false);
+    this.readingAidEnabled = ko.observable(readingAidOn || false);
 };
 
 SentenceViewModel.prototype.parseStructure = function(struct) {

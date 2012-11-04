@@ -69,3 +69,57 @@
     font-size: 1.6em;
 }
 
+.popover {
+    max-width: 170px;
+}
+
+.popover-content {
+    padding: 2px 10px 4px 10px; 
+}
+
+.popover-title {
+    text-align: center;
+    text-transform: uppercase;
+    font-size: 0.8em;
+    font-weight: bold;
+    padding: 6px 0 4px 0;
+}
+
+.pron-title {
+    color: gray;
+    font-size: 0.95em;
+    border-bottom: 1px #EEE solid;
+    margin-bottom: 4px;
+    margin-top: 6px;
+}
+
+.pro-option, .pro-separator {
+    display: inline-block;
+}
+
+.pro-option {
+    margin: 3px 5px 3px -4px;
+    padding: 0px 4px;
+    color: #555;
+    line-height: 20px;
+    font-size: 1.3em;
+}
+
+.pro-option:hover {
+    text-decoration: underline;
+}
+
+.pro-option.selected {
+    color: black;
+    font-weight: bold;
+}
+
+.pro-separator {
+    margin-left: -12px;
+    margin-right: 6px;
+}
+
+.pro-separator:last-child {
+    display: none;
+}
+
