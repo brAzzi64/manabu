@@ -335,27 +335,47 @@ var PronunciationOption = function(kanji, text, sentenceVM) {
         this.toggleSelected = function() {
 
             var isSelected = that.selected();
-            sentenceVM.clearPronunciationSelection(kanji);
+            sentenceVM.clearSelections(kanji);
             that.selected(!isSelected);
         };
 }
 
-// TODO: move to a subclass
-SentenceViewModel.prototype.clearPronunciationSelection = function(kanji) {
+var KanjiPronunciationSet = function(onyomis, kunyomis) {
 
-    var that = this;
-    var clearForKanji = function(kanji) {
-        var prs = that.pronunciations[kanji];
-        for (i in prs.ON) prs.ON[i].selected(false);
-        for (i in prs.KN) prs.KN[i].selected(false);
+    // onyomis
+    this.ON = [];
+    for (i in onyomis)
+        this.ON.push(new PronunciationOption(kanji, onyomis[i], vm));
+    // kunyomis
+    this.KN = [];
+    for (i in kunyomis)
+        this.KN.push(new PronunciationOption(kanji, kunyomis[i], vm));
+}
+
+KanjiPronunciationSet.prototype.getSelectedOption = function() {
+
+    for (i in this.ON) {
+        if ( this.ON[i].selected() )
+            return this.ON[i];
     }
+    for (i in this.KN) {
+        if ( this.KN[i].selected() )
+            return this.KN[i];
+    }
+    return undefined;
+}
 
-    if (kanji) {
-        clearForKanji(kanji);
-    } else {
-        for (k in this.pronunciations) {
-            clearForKanji(k);
-        }
+KanjiPronunciationSet.prototype.clearSelection = function() {
+
+    for (i in this.ON) this.ON[i].selected(false);
+    for (i in this.KN) this.KN[i].selected(false);
+}
+
+// TODO: move to a subclass
+SentenceViewModel.prototype.clearSelections = function() {
+
+    for (kanji in this.pronunciations) {
+        this.pronunciations[kanji].clearSelection();
     }
 }
 
@@ -406,11 +426,54 @@ var trainViewModel = {
 
     onLearnSentence : function() {
 
+        var sentence = this.sentence().text;
+        var struct = this.sentence().structure;
+        var pronunciations = {};
+
+        for (kanji in sentence().pronunciations) {
+            var set = sentence().pronunciations[kanji];
+            var selected = set.getSelectedOption();
+            if ( !selected ) {
+                bootbox.dialog('No pronunciation selected for: ' + kanji, { "label" : "OK", "class" : "btn-danger" });
+                return;
+            }
+            pronunciations[kanji] = selected.pronunciation;
+        }
+
+        bootbox.confirm(
+            'Are you sure you want to save the sentence?',
+            "Not really...", "Yes!",
+            function(result) {
+
+                if (result) {
+                    // issue the call
+                    $.ajax({
+                        url: 'train/api/learn_sentence',
+                        type: 'POST',
+                        dataType: 'json',
+                        contentType: 'application/json',
+                        data: { text: sentence, structure: struct, pronunciations: JSON.stringify(pronunciations) },
+                        complete: function(jqXHR, textStatus) {
+                           
+                            if (textStatus == 'success') {
+                                bootbox.dialog("The sentence as been saved successfully.", {
+                                    "label" : "Cool!",
+                                    "class" : "btn-success"
+                                });
+                            } else {
+                                bootbox.dialog("There was a problem saving the sentence (" + textStatus + ").", {
+                                    "label" : "Too bad",
+                                    "class" : "btn-danger"
+                                });
+                            }
+                        }});
+                }
+            });
     },
     
     onReset : function() {
 
-        this.sentence().clearPronunciationSelection();
+        this.sentence().clearSelections();
     },
 
     handleGetNextSentenceCompleted : function(data) {
@@ -422,18 +485,7 @@ var trainViewModel = {
         // method that creates the PronunciationOption view models.
         vm.pronunciations = {};
         for (kanji in data.pronunciations) {
-            var ps = data.pronunciations[kanji];
-            // onyomis
-            var onProns = [];
-            for (i in ps.ON)
-                onProns.push(new PronunciationOption(kanji, ps.ON[i], vm));
-            // kunyomis
-            var knProns = [];
-            for (i in ps.KN)
-                knProns.push(new PronunciationOption(kanji, ps.KN[i], vm));
-
-            var obj = { ON: onProns, KN: knProns };
-            vm.pronunciations[kanji] = obj;
+            vm.pronunciations[kanji] = new KanjiPronunciationSet(ps.ON, ps.KN);
         }
 
         this.sentence(vm); 
