@@ -90,11 +90,14 @@ var QueryString = function () {
 
 var SentenceViewModel = function(text, structure, translation, readingAidOn) {
 
-    this.text = text;
-    this.structure = structure;
+    this.text = text; // TODO: update with structure
+    this.structure = ko.observable(structure);
     this.translation = translation;
-    this.parsedStructure = this.parseStructure(structure);
+    this.parsedStructure = ko.computed(function() {
+        return this.parseStructure(this.structure());
+    }, this);
     this.readingAidEnabled = ko.observable(readingAidOn || false);
+    this.editing = ko.observable(false);
 };
 
 SentenceViewModel.prototype.parseStructure = function(struct) {
