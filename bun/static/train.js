@@ -325,7 +325,7 @@ function clearSelection() {
 }
 
 
-var PronunciationOption = function(kanji, text, sentenceVM) {
+var PronunciationOption = function(kanji, text, pronunciationSetVM) {
 
         var that = this;
 
@@ -335,7 +335,7 @@ var PronunciationOption = function(kanji, text, sentenceVM) {
         this.toggleSelected = function() {
 
             var isSelected = that.selected();
-            sentenceVM.clearSelections(kanji);
+            pronunciationSetVM.clearSelection();
             that.selected(!isSelected);
         };
 }
@@ -345,11 +345,11 @@ var KanjiPronunciationSet = function(onyomis, kunyomis) {
     // onyomis
     this.ON = [];
     for (i in onyomis)
-        this.ON.push(new PronunciationOption(kanji, onyomis[i], vm));
+        this.ON.push(new PronunciationOption(kanji, onyomis[i], this));
     // kunyomis
     this.KN = [];
     for (i in kunyomis)
-        this.KN.push(new PronunciationOption(kanji, kunyomis[i], vm));
+        this.KN.push(new PronunciationOption(kanji, kunyomis[i], this));
 }
 
 KanjiPronunciationSet.prototype.getSelectedOption = function() {
@@ -430,8 +430,8 @@ var trainViewModel = {
         var struct = this.sentence().structure;
         var pronunciations = {};
 
-        for (kanji in sentence().pronunciations) {
-            var set = sentence().pronunciations[kanji];
+        for (kanji in this.sentence().pronunciations) {
+            var set = this.sentence().pronunciations[kanji];
             var selected = set.getSelectedOption();
             if ( !selected ) {
                 bootbox.dialog('No pronunciation selected for: ' + kanji, { "label" : "OK", "class" : "btn-danger" });
@@ -485,7 +485,9 @@ var trainViewModel = {
         // method that creates the PronunciationOption view models.
         vm.pronunciations = {};
         for (kanji in data.pronunciations) {
-            vm.pronunciations[kanji] = new KanjiPronunciationSet(ps.ON, ps.KN);
+            var on = data.pronunciations[kanji].ON;
+            var kn = data.pronunciations[kanji].KN;
+            vm.pronunciations[kanji] = new KanjiPronunciationSet(on, kn);
         }
 
         this.sentence(vm); 
