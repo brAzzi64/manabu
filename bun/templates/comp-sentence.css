@@ -1,8 +1,9 @@
 .sentence {
-    /* set to 0 to avoid the spaces inserted
+    /* set to these values to avoid the spaces inserted
     between inline-block elements when two tags
     are printed in different lines by Knockout */
-    word-spacing: -0.26em;
+    /*word-spacing: -0.1em;
+    letter-spacing: -0.1em;*/
 }
 
 .literal {
@@ -24,6 +25,11 @@
     margin-right: 0;
 }
 
+.word div div a {
+    margin-left: -0.15em;
+    margin-right: -0.15em;
+}
+
 .word:first-child {
     margin-left: 0;
 }
@@ -33,8 +39,8 @@
 }
 
 .word.reading-aid {
-    margin-left: 0.15em;
-    margin-right: 0.15em;
+    margin-left: 0.22em;
+    margin-right: 0.22em;
 }
 
 .literal a {
@@ -54,7 +60,9 @@
     transition-timing-function: ease;
     font-size: 0.40em;
     margin-bottom: -0.12em;
-    color: #AAA;
+    margin-left: -1em; /* prevent it from pushing sidways */
+    margin-right: -1em; /* prevent it from pushing sidways */
+    color: #999;
     text-align: center;
     opacity: 0;
 }
