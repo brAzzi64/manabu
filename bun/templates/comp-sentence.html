@@ -1,20 +1,17 @@
-<div>
-    <div class="container-fluid sentence" data-bind="visible: !$data.editing(), foreach: parsedStructure, event: { mouseover: $data.toggleReadingAid, mouseout: $data.toggleReadingAid }">
-        <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }">
-            <div class="sub-word">
-                <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
-                <!-- ko foreach: chars -->
-                    <div class="literal" data-bind="css: { kanji: isKanji($data) }">
-                        <a data-bind="text: $data, bootstrapPopover : { if: isKanji($data), template: 'popup-template' }"></a>
-                    </div>
-                <!-- /ko -->
-            </div>
+<div class="container-fluid sentence" data-bind="foreach: parsedStructure, event: { mouseover: $data.toggleReadingAid, mouseout: $data.toggleReadingAid }">
+    <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }">
+        <div class="sub-word">
+            <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
+            <!-- ko foreach: chars -->
+                <div class="literal" data-bind="css: { kanji: isKanji($data) }">
+                    <a data-bind="text: $data, bootstrapPopover : { if: isKanji($data), template: 'popup-template' }"></a>
+                </div>
+            <!-- /ko -->
         </div>
-    </div>
-    <div class="container-fluid structure" data-bind="text: structure, visible: editing">
     </div>
 </div>
 <div class="translation" data-bind="text: translation"></div>
+
 <script id="popup-template" type="text/html">
     <div data-bind="with: $parents[3].pronunciations[$data]">
         <div class="pron-title">on'yomi</div>

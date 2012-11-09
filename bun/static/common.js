@@ -97,7 +97,6 @@ var SentenceViewModel = function(text, structure, translation, readingAidOn) {
         return this.parseStructure(this.structure());
     }, this);
     this.readingAidEnabled = ko.observable(readingAidOn || false);
-    this.editing = ko.observable(false);
 };
 
 SentenceViewModel.prototype.parseStructure = function(struct) {

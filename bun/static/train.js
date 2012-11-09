@@ -17,17 +17,17 @@ function assembleWordStructureForCurrentSentence() {
 
 var PronunciationOption = function(kanji, text, pronunciationSetVM) {
 
-        var that = this;
+    var that = this;
 
-        this.pronunciation = text,
-        this.selected = ko.observable(false)
-        
-        this.toggleSelected = function() {
+    this.pronunciation = text,
+    this.selected = ko.observable(false)
+    
+    this.toggleSelected = function() {
 
-            var isSelected = that.selected();
-            pronunciationSetVM.clearSelection();
-            that.selected(!isSelected);
-        };
+        var isSelected = that.selected();
+        pronunciationSetVM.clearSelection();
+        that.selected(!isSelected);
+    };
 }
 
 var KanjiPronunciationSet = function(onyomis, kunyomis) {
@@ -188,9 +188,19 @@ var trainViewModel = {
         this.nextSentenceDisabled(true);
     },
 
-    toggleEditing : function() {
+    onEdit: function() {
        
-        this.sentence().editing(!this.sentence().editing()); 
+        var that = this;
+        bootbox.prompt(
+            'Edit the structure',
+            "Cancel", "Apply",
+            function(result) {
+                
+                if (result) {
+                    that.sentence().structure(result); 
+                }
+            },
+            that.sentence().structure());
     }
 }
 

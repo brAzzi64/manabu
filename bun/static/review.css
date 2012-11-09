@@ -4,21 +4,23 @@
 
 #sentences {
     margin-top: 1em;
+    margin-bottom: 1em;
     text-align: left;
     font-size: 2em;
 }
 
 .date {
     font-size: 10px;
-    text-align: center;
+    text-align: right;
     color: gray;
     float: left;
     border-right: solid #CCC 1px;
     padding-right: 10px;
     margin-top: 18px;
+    min-width: 32px;
 }
 
 .bun {
-    margin-left: 50px;
+    margin-left: 32px;
 }
 

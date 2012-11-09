@@ -1,5 +1,5 @@
 /**
- * bootbox.js v2.3.3
+ * bootbox.js v2.4.2
  *
  * http://bootboxjs.com/license.txt
  */
@@ -8,6 +8,8 @@ var bootbox = window.bootbox || (function($) {
     var _locale        = 'en',
         _defaultLocale = 'en',
         _animate       = true,
+        _backdrop      = 'static',
+        _classes       = '',
         _icons         = {},
         /* last var should always be the public object we'll return */
         that           = {};
@@ -200,11 +202,12 @@ var bootbox = window.bootbox || (function($) {
         }]);
     }
 
-    that.prompt = function(/*str, labelCancel, labelOk, cb*/) {
+    that.prompt = function(/*str, labelCancel, labelOk, cb, defaultVal*/) {
         var str         = "",
             labelCancel = _translate('CANCEL'),
             labelOk     = _translate('CONFIRM'),
-            cb          = null;
+            cb          = null,
+            defaultVal  = "";
 
         switch (arguments.length) {
             case 1:
@@ -233,8 +236,15 @@ var bootbox = window.bootbox || (function($) {
                 labelOk     = arguments[2];
                 cb          = arguments[3];
                 break;
+            case 5:
+                str         = arguments[0];
+                labelCancel = arguments[1];
+                labelOk     = arguments[2];
+                cb          = arguments[3];
+                defaultVal  = arguments[4];
+                break;
             default:
-                throw new Error("Incorrect number of arguments: expected 1-4");
+                throw new Error("Incorrect number of arguments: expected 1-5");
                 break;
         }
 
@@ -242,7 +252,7 @@ var bootbox = window.bootbox || (function($) {
 
         // let's keep a reference to the form object for later
         var form = $("<form></form>");
-        form.append("<input autocomplete=off type=text />");
+        form.append("<input autocomplete=off type=text value='" + defaultVal + "' />");
 
         var div = that.dialog(form, [{
             "label": labelCancel,
@@ -288,7 +298,7 @@ var bootbox = window.bootbox || (function($) {
         var defaultOptions = {
             "onEscape": null,
             "keyboard": true,
-            "backdrop": true
+            "backdrop": _backdrop
         };
 
         switch (arguments.length) {
@@ -427,6 +437,11 @@ var bootbox = window.bootbox || (function($) {
             div.addClass("fade");
         }
 
+        var optionalClasses = (typeof options.classes === 'undefined') ? _classes : options.classes;
+        if( optionalClasses )  {
+          div.addClass( optionalClasses );
+        }
+
         // now we've built up the div properly we can inject the content whether it was a string or a jQuery object
         $(".modal-body", div).html(str);
 
@@ -476,7 +491,7 @@ var bootbox = window.bootbox || (function($) {
         $("body").append(div);
 
         div.modal({
-            "backdrop" : options.backdrop || true,
+            "backdrop" : (typeof options.backdrop  === 'undefined') ? _backdrop : options.backdrop,
             "keyboard" : options.keyboard
         });
 
@@ -489,6 +504,14 @@ var bootbox = window.bootbox || (function($) {
 
     that.animate = function(animate) {
         _animate = animate;
+    }
+
+    that.backdrop = function(backdrop) {
+        _backdrop = backdrop;
+    }
+
+    that.classes = function(classes) {
+        _classes = classes;
     }
 
     return that;

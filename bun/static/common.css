@@ -25,3 +25,6 @@ a:focus {
     text-align: center;
 }
 
+.modal-body form input {
+    width: 97.2%;
+}

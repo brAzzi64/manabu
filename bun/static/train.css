@@ -1,16 +1,12 @@
+#sentence-content {
+    min-height: 320px;
+}
+
 .sentence {
     font-size: 4em;
     margin-top: 0.6em;
     margin-bottom: 0.4em;
     margin-left: 0.4em;
-}
-
-.furigana-edit {
-    display: block !important;
-    margin: 3px auto 0 auto !important;
-    text-align: center;
-    width: 90% !important;
-    font-size: 18px !important;
 }
 
 #controls {
