@@ -166,6 +166,20 @@ var trainViewModel = {
         this.sentence().clearSelections();
     },
 
+    onListen : function() {
+
+        var audioTagSupport = !!(document.createElement('audio').canPlayType);
+        if (!audioTagSupport) return false;
+        //var text = $.trim($('#say-text').val());
+        //if (text == '') return false;
+        var audio = document.createElement('audio');
+        //audio.setAttribute('src', 'http://translate.google.com/translate_tts?tl=en&q=' + encodeURIComponent(text));
+        audio.setAttribute('src', 'http://translate.google.com/translate_tts?tl=en&q=' + encodeURIComponent('私は僕です。'));
+        audio.load();
+        audio.play();
+        return false;
+    },
+
     handleGetNextSentenceCompleted : function(data) {
 
         data = data[0]; // not paginated for now
@@ -255,13 +269,13 @@ ko.bindingHandlers.bootstrapPopover = {
         var show = options.if != undefined ? options.if : true;
         if (show) {
             var template = $("script[type*=html][id=" + options.template + "]").clone().html();
-            $(element).popover({ content: template, html: true, title: 'Pronunciations', trigger: 'manual', placement: 'bottom' });
+            $(element).popover({ content: template, html: true, title: options.title, trigger: 'manual', placement: options.placement || 'bottom' });
             element.showing = false; // initialize a tracking value
             $(element).click(function(e) {
 
                 var that = this;
                 // close all other popovers first
-                $(".kanji").children("a").each(function() {
+                $("a[data-bind*=bootstrapPopover]").each(function() {
                     if (this != that) {
                         $(this).popover('hide');
                         this.showing = false;
