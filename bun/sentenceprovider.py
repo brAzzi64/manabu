@@ -24,7 +24,7 @@ class FileSentenceProvider(ISentenceProvider):
         """ Loads the file with the sentences """
         self.sentences = {}
         datadir = datadir[:-1] if datadir[-1] == "/" else datadir
-        with gzip.open(datadir + '/top_1000_kanji_sentences.txt.gz', 'r') as f:
+        with gzip.open(datadir + '/jouyou_sentences_1-3.txt.gz', 'r') as f:
             for id, line in enumerate(f):
                 parts = line.decode('utf-8').split(';')
                 parts[2] = parts[2].split('|') # split translations into a list
