@@ -9,12 +9,17 @@ var KnownKanji = function(literal, known) {
     this.hasChanged = ko.observable(false);
 };
 
-KnownKanji.prototype.toggleKnown = function() {
+KnownKanji.prototype = {
+    
+    constructor: KnownKanji,
+    
+    toggleKnown: function() {
 
-    this.known( !this.known() );
-    if (!this.hasChanged())
-        this.hasChanged(true);
-};
+        this.known( !this.known() );
+        if (!this.hasChanged())
+            this.hasChanged(true);
+    }
+}
 
 
 /*
@@ -22,18 +27,23 @@ KnownKanji.prototype.toggleKnown = function() {
 */
 var Page = function(number, knownKanjiVM) {
 
-    this.number = number;
-    
     var that = this;
+
+    this.number = number;
     this.active = ko.computed(function() {
             return knownKanjiVM.currentPage() == that.number;
     }, this);
-    this.clicked = function(e) {
+}
+
+Page.prototype = {
+
+    constructor: Page,
+
+    clicked: function(e) {
         // navigate to new page
         knownKanjiVM.getKanjiPage(that.number);
-    };
-};
-
+    }
+}
 
 /*
     kanjiNavigator - ViewModel object for the page navigator component
