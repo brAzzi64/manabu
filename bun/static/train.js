@@ -169,15 +169,12 @@ var trainViewModel = {
     onListen : function() {
 
         var audioTagSupport = !!(document.createElement('audio').canPlayType);
-        if (!audioTagSupport) return false;
-        //var text = $.trim($('#say-text').val());
-        //if (text == '') return false;
+        if (!audioTagSupport) return;
+
         var audio = document.createElement('audio');
-        //audio.setAttribute('src', 'http://translate.google.com/translate_tts?tl=en&q=' + encodeURIComponent(text));
-        audio.setAttribute('src', 'http://translate.google.com/translate_tts?tl=en&q=' + encodeURIComponent('私は僕です。'));
+        audio.setAttribute('src', 'train/api/get_audio?text=' + encodeURIComponent( this.sentence().text ));
         audio.load();
         audio.play();
-        return false;
     },
 
     handleGetNextSentenceCompleted : function(data) {

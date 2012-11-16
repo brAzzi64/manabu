@@ -89,3 +89,24 @@ def learn_sentence(request):
     return HttpResponse()
 
 
+import urllib
+
+class UserAgentOpener(urllib.FancyURLopener):
+    version = "Mozilla/4.0 (MSIE 6.0; Windows NT 5.0)2011-03-10 15:38:34"
+
+# URL: train/api/get_audio?text=X
+@require_GET
+def get_audio(request):
+    text = request.GET.get('text', False)
+    if not text:
+        return HttpResponseBadRequest("Parameter 'text' not found or invalid")
+
+    urlencoded_text = urllib.quote( text.encode('utf-8') )
+    languageCode = 'ja'
+
+    url = "http://translate.google.com/translate_tts?tl=%s&q=%s" % (languageCode, urllib.quote(urlencoded_text))
+    opener = UserAgentOpener()
+    data = opener.open(url, 'rb').read()
+
+    return HttpResponse(data, mimetype="audio/mpeg")
+
