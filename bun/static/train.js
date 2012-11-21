@@ -123,11 +123,14 @@ var trainViewModel = {
         for (kanji in this.sentence().pronunciations) {
             var set = this.sentence().pronunciations[kanji];
             var selected = set.getSelectedOption();
-            if ( !selected ) {
-                bootbox.dialog('No pronunciation selected for: ' + kanji, { "label" : "OK", "class" : "btn-danger" });
-                return;
+            // TMP: temporarily commented out until we have a NONE marker
+            //if ( !selected ) {
+            //    bootbox.dialog('No pronunciation selected for: ' + kanji, { "label" : "OK", "class" : "btn-danger" });
+            //    return;
+            //}
+            if (selected) {
+                pronunciations[kanji] = selected.pronunciation;
             }
-            pronunciations[kanji] = selected.pronunciation;
         }
 
         bootbox.confirm(
