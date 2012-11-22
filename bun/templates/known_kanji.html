@@ -5,6 +5,7 @@
 <link href="static/known_kanji.css" rel='stylesheet'/>
 {% endblock %}
 {% block js_includes %}
+<script src="static/js/bootstrap-contextmenu.js"></script>
 <script src="static/known_kanji.js"></script>
 {% endblock %}
 {# ENDTMP :D #}
@@ -17,23 +18,33 @@
 
 <div id="kanji-list" class="container" data-bind="foreach: kanjis">
     <span class="kanji"> 
-        <a href="#" data-bind="text: literal, css: { known: known, updated: hasChanged }, click: toggleKnown"></a>
+        <a href="#" data-toggle="context" data-target="#context-menu" style="position: relative"
+           data-bind="text: literal, css: { known: known, updated: hasChanged }, click: toggleKnown,
+                      event: { contextmenu: function() { $root.contextMenuClick($root, $data); } }"></a>
     </span>
 </div>
 
 <div id="navigator" data-bind="with: navigator">
-    <a id="prev" href="#" data-bind="click: previousClicked, css: {disabled: $root.currentPage() == 1}">&lt;&lt; prev</a>
+    <a id="prev" href="#" data-bind="click: previousClicked, css: { disabled: $root.currentPage() == 1 }">&lt;&lt; prev</a>
     <!-- ko foreach: pages -->
     <a href="#" data-bind="text: number, css: { active: active }, click: clicked"></a>
     <span data-bind="if: number < 12">|</span>
     <!-- /ko -->
-    <a id="next" href="#" data-bind="click: nextClicked, css: {disabled: $root.currentPage() == 12}">next &gt;&gt;</a>
+    <a id="next" href="#" data-bind="click: nextClicked, css: { disabled: $root.currentPage() == 12 }">next &gt;&gt;</a>
 </div>
 
 <div id="controls" class="container">
     <div class="btn-group">
         <a id="btn-update" class='btn btn-primary' href='#' data-bind="click: updateClicked">Update</a>
     </div>
+</div>
+
+<div id="context-menu">
+    <ul class="dropdown-menu" role="menu" data-bind="foreach: $root.contextMenu">
+        <li><a tabindex="-1" href="#" data-bind="text: actionName, click: $data.action,
+                                                 attr: { href: $data.actionLink || '',
+                                                         target: $data.actionTarget || '' }"></a></li>
+    </ul>
 </div>
 
 {% endblock %}

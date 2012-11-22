@@ -93,6 +93,13 @@ var knownKanjiViewModel = {
 
     navigator : kanjiNavigator,
 
+    lastClickedKanji : null,
+
+    contextMenu : [
+        { actionName: 'Train' },
+        { actionName: 'Lookup in Jisho.org', action: function() { window.open('http://jisho.org/kanji/details/' + knownKanjiViewModel.lastClickedKanji); } }
+    ],
+
     init : function() {
 
         this.navigator.init(this);
@@ -168,6 +175,13 @@ var knownKanjiViewModel = {
                 "class" : "btn-danger"
             });
         }
+    },
+
+    contextMenuClick : function(viewModel, data) {
+
+        // register the kanji to use it in the 
+        // 'Lookup in Jisho.org' callback of the context menu
+        viewModel.lastClickedKanji = data.literal();
     },
 };
 
