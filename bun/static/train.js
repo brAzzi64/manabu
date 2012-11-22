@@ -172,7 +172,7 @@ var trainViewModel = {
         if (!audioTagSupport) return;
 
         var audio = document.createElement('audio');
-        audio.setAttribute('src', 'train/api/get_audio?text=' + encodeURIComponent( this.sentence().text ));
+        audio.setAttribute('src', 'train/api/get_audio?text=' + this.sentence().text );
         audio.load();
         audio.play();
     },

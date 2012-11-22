@@ -104,7 +104,7 @@ def get_audio(request):
     urlencoded_text = urllib.quote( text.encode('utf-8') )
     languageCode = 'ja'
 
-    url = "http://translate.google.com/translate_tts?tl=%s&q=%s" % (languageCode, urllib.quote(urlencoded_text))
+    url = "http://translate.google.com/translate_tts?tl=%s&q=%s" % (languageCode, urlencoded_text)
     opener = UserAgentOpener()
     data = opener.open(url, 'rb').read()
 
