@@ -96,7 +96,7 @@ var knownKanjiViewModel = {
     lastClickedKanji : null,
 
     contextMenu : [
-        { actionName: 'Train' },
+        { actionName: 'Train', action: function() { location = 'train#kanji/' + knownKanjiViewModel.lastClickedKanji; } },
         { actionName: 'Lookup in Jisho.org', action: function() { window.open('http://jisho.org/kanji/details/' + knownKanjiViewModel.lastClickedKanji); } }
     ],
 

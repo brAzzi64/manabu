@@ -84,7 +84,7 @@ var searchViewModel = {
         if (kanji == null || kanji == '') {
             bootbox.alert("You must enter a Kanji to search sentences.");
         } else {
-            this.parentViewModel.doSearch(kanji);        
+            location.hash = "kanji/" + kanji;
         }
     }
 
@@ -221,46 +221,35 @@ var trainViewModel = {
 
 var parentViewModel = {
 
-    searchViewModel : searchViewModel,
+    searchViewModel : ko.observable(null),
 
-    trainViewModel : trainViewModel,
-
-    current : ko.observable(searchViewModel),
+    trainViewModel : ko.observable(null),
 
     init : function() {
 
-        this.searchViewModel.init(this);
+        var that = this;
+        Sammy(function() {
+
+            this.get('#kanji/:literal', function() {
+                that.searchViewModel(null);
+                that.trainViewModel(trainViewModel);
+                that.trainViewModel().doSearch(this.params.literal);
+            });
+
+            this.get('#search', function() {
+                that.trainViewModel(null);
+                that.searchViewModel(searchViewModel);
+                that.searchViewModel().init(this);
+            });
+
+            this.get('train', function() { this.app.runRoute('get', '#search'); });
+
+        }).run();
 
         // apply Knockout bindings
         ko.applyBindings(this);
     },
-
-    doSearch : function(kanji) {
-
-        this.current(trainViewModel);
-        this.trainViewModel.doSearch(kanji);
-    },
-    
-    changeToSearchView : function() {
-
-        this.current('search');
-    },
-    
-    changeToTrainView : function() {
-
-        this.currentView('train');
-    }
-
 }
-
-parentViewModel.searchViewVisible = ko.computed(function() {
-        return this.current() == this.searchViewModel;
-}, parentViewModel),
-
-parentViewModel.trainViewVisible = ko.computed(function() {
-        return this.current() == this.trainViewModel;
-}, parentViewModel),
-
 
 ko.bindingHandlers.bootstrapPopover = {
 

@@ -1,5 +1,10 @@
 {% extends "base.html" %}
 
+{% block js_includes %}
+<script src="static/train.js"></script>
+<script src="static/js/sammy.js"></script>
+{% endblock %}
+
 {% block head-end %}
 <style type="text/css">
     {% include "comp-sentence.css" %}
@@ -10,8 +15,7 @@
 {% endblock %}
 
 {% block content %}
-<div id="search-view" data-bind="if: searchViewVisible">
-    <!-- ko with: searchViewModel -->
+<div id="search-view" data-bind="with: searchViewModel">
     <h1>Search</h1>
     <div style='margin-top: 2em;' class='container'>
         Search for a Kanji to train:
@@ -24,10 +28,8 @@
             </div>
         </form>
     </div>
-    <!-- /ko -->
 </div>
-<div id="train-view" data-bind="if: trainViewVisible">
-    <!-- ko with: trainViewModel -->
+<div id="train-view" data-bind="with: trainViewModel">
     <h1>Training Kanji: <span data-bind="text: kanji"</span></h1>
     <div style='margin-top: 2em;' class='container'>
         <p>Click the <em>Next Sentence</em> button to get the next sentence availible for the Kanji.<br/>
@@ -44,7 +46,6 @@
             <a id="btn-learn" class='btn btn-success' href='#' data-bind='click: onLearnSentence'>Learn</a>
         </div>
     </div>
-    <!-- /ko -->
 </div>
 {% endblock %}
 
