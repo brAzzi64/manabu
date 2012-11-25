@@ -7,10 +7,12 @@ from django.http import HttpResponse, HttpResponseBadRequest, HttpResponseRedire
 from django.views.decorators.http import require_GET, require_POST
 import django.contrib.auth as django_auth
 from django.shortcuts import redirect
+from bun.views.common import csrf_ensure_cookie
 
 
 # URL: login?user=X&pass=Y
 @require_GET
+@csrf_ensure_cookie
 def login(request):
     usr = request.GET.get('user', False)
     if not usr or len(usr) == 0:

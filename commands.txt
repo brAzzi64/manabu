@@ -10,3 +10,16 @@ PGPASSWORD=DWB3_hV93r8gwS_sd4Ophswq_8 pg_restore --verbose --clean --no-acl --no
 # connect to the DB and get a console
 heroku pg:psql
 
+
+# export user data:
+curl --cookie-jar jar.txt "localhost:8000/bun/login?user=brAzzi64&pass=Passw0rd"
+curl --cookie jar.txt "localhost:8000/bun/maintenance/exportdata" > user-brAzzi64.data
+rm -f jar.txt
+
+# import user data:
+curl --cookie-jar jar.txt "localhost:8000/bun/login?user=brAzzi64&pass=Passw0rd"
+CSRFTOKEN=`grep csrftoken jar.txt | awk '{ print $7 }'` # must send both cookie and header
+curl --cookie jar.txt -H "X-CSRFToken: $CSRFTOKEN" -F "FileUpload=@user-brAzzi64.data" -X POST \
+     "localhost:8000/bun/maintenance/importdata"
+rm -f jar.txt
+

@@ -33,6 +33,12 @@ urlpatterns += patterns('bun.views.authentication',
     url(r'^$', 'start'), # /bun
 )
 
+urlpatterns += patterns('bun.views.maintenance',
+
+    url(r'^maintenance/exportdata$', 'exportdata'),
+    url(r'^maintenance/importdata$', 'importdata'),
+)
+
 urlpatterns += patterns('',
 
     (r'^static/(?P<path>.*)$', 'django.views.static.serve', {'document_root': os.path.join(APP_ROOT, 'static')}),
