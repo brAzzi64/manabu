@@ -54,7 +54,7 @@ def importdata(request):
         i = 4
 
         # erase existing sentences
-        Sentence.objects.all().delete()
+        Sentence.objects.filter(user__username = request.user.username).delete()
 
         # read sentences
         try:

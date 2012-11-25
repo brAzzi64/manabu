@@ -25,7 +25,7 @@ def get_sentences(request):
         return HttpResponseBadRequest("Paramater 'page' is invalid")
 
     # ignoring the 'page' parameter for now
-    sentences = Sentence.objects.order_by('-learned_date')
+    sentences = Sentence.objects.filter(user__username = request.user.username).order_by('-learned_date')
     response = []
     for s in sentences:
         elem = { 'date': {
