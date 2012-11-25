@@ -30,7 +30,7 @@ urlpatterns += patterns('bun.views.authentication',
 
     url(r'^login$', 'login'),
     url(r'^logout$', 'logout'),
-    url(r'^$', 'start'),
+    url(r'^$', 'start'), # /bun
 )
 
 urlpatterns += patterns('',
