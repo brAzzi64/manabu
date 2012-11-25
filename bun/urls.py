@@ -7,7 +7,6 @@ APP_ROOT = os.path.dirname(os.path.realpath(__file__))
 
 urlpatterns = patterns('bun.views.train',
 
-    url(r'^$', 'train'),
     url(r'^train$', 'train'),
     url(r'^train/api/get_sentences$', 'get_sentences'),
     url(r'^train/api/learn_sentence$', 'learn_sentence'),
@@ -31,6 +30,7 @@ urlpatterns += patterns('bun.views.authentication',
 
     url(r'^login$', 'login'),
     url(r'^logout$', 'logout'),
+    url(r'^$', 'start'),
 )
 
 urlpatterns += patterns('',
