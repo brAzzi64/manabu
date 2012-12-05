@@ -11,6 +11,10 @@ PGPASSWORD=DWB3_hV93r8gwS_sd4Ophswq_8 pg_restore --verbose --clean --no-acl --no
 heroku pg:psql
 
 
+# connect to local database
+sudo -u postgres psql manabu-data
+
+
 # export user data:
 curl --cookie-jar jar.txt "localhost:8000/bun/login?user=brAzzi64&pass=Passw0rd"
 curl --cookie jar.txt "localhost:8000/bun/maintenance/exportdata" > user-brAzzi64.data

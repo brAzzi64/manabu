@@ -83,6 +83,9 @@ def learn_sentence(request):
     prs_dict = simplejson.loads(pronunciations)
     prs_string = string.join((u"%s:%s" % (k,v) for (k,v) in prs_dict.items()), ",")
 
+    # if the sentence is already there, we delete it so we can add it again updated
+    Sentence.objects.filter(text = text).delete()
+
     s = Sentence(user = request.user, text = text, structure = structure, learned_date = datetime.datetime.now(), kanji_pronunciations = prs_string)
     s.save()
 
