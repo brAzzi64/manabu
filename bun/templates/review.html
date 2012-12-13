@@ -1,14 +1,5 @@
 {% extends "base.html" %}
 
-{% block head-end %}
-<style type="text/css">
-    {% include "comp-sentence.css" %}
-</style>
-<script type="text/html" id="comp-sentence">
-    {% include "comp-sentence.html" %}
-</script>
-{% endblock %}
-
 {% block content %}
 <h1>Learned sentences</h1>
 <div style='margin-top: 2em;' class='container'>
@@ -20,7 +11,23 @@
             <div data-bind="text: dayAndMonth"></div>
             <div data-bind="text: year"></div>
         </div>
-        <div class="bun" data-bind="template: { name: 'comp-sentence', data: sentence }"></div>
+        <!-- ko with: sentence -->
+        <div class="bun" data-bind="event: { mouseenter: onMouseEnter, mouseleave: onMouseLeave }">
+            <div class="sentence" data-bind="foreach: parsedStructure, click: toggleShowTranslation">
+                <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }">
+                    <div class="sub-word">
+                        <div class="furi-wrapper">
+                            <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
+                        </div>
+                        <!-- ko foreach: chars -->
+                            <div class="literal" data-bind="text: $data, css: { kanji: isKanji($data) }"></div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </div>
+            <div class="translation" data-bind="text: translation, css: { shown: showTranslation }"></div>
+        </div>
+        <!-- /ko -->
     </div>
 </div>
 {% endblock %}

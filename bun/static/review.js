@@ -20,16 +20,27 @@ var reviewViewModel = {
     onGetSentences : function(data) {
         
         for (i in data) {
-            data[i].sentence = new SentenceViewModel(undefined, data[i].sentence.structure, undefined);
+            data[i].sentence = new SentenceViewModel(undefined, data[i].sentence.structure, data[i].sentence.translation);
         }
         this.sentences(data);
     },
 }
 
 // extend the SentenceViewModel prototype
-SentenceViewModel.prototype.toggleReadingAid = function() {
+SentenceViewModel.prototype.onMouseEnter = function() {
 
-    this.readingAidEnabled( !this.readingAidEnabled() );
+    this.readingAidEnabled(true);
+}
+
+SentenceViewModel.prototype.onMouseLeave = function() {
+
+    this.readingAidEnabled(false);
+    this.showTranslation(false);
+}
+
+SentenceViewModel.prototype.toggleShowTranslation = function() {
+
+    this.showTranslation( !this.showTranslation() );
 }
 
 

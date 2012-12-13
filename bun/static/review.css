@@ -16,11 +16,109 @@
     float: left;
     border-right: solid #CCC 1px;
     padding-right: 10px;
-    margin-top: 18px;
+    margin-top: 16px;
     min-width: 32px;
 }
 
 .bun {
-    margin-left: 32px;
+    margin-left: 56px;
+    margin-bottom: 10px;
 }
+
+
+/* sentence structure */
+
+.sentence {
+    cursor: pointer;
+}
+
+.literal {
+    font-size: 1em;
+    margin-top: 12px;
+}
+
+.word, .sub-word, .literal {
+    display: inline-block;
+}
+
+.word {
+    transition-property: margin-left, margin-right;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    -webkit-transition-property: margin-left, margin-right;
+    -webkit-transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease;
+    margin-left: 0;
+    margin-right: 0;
+}
+
+.literal {
+    margin-left: -0.15em;
+    margin-right: -0.15em;
+}
+
+.word.reading-aid {
+    margin-left: 0.22em;
+    margin-right: 0.22em;
+}
+
+/* the first word doesn't change it's left margin, ever */
+.word:first-child {
+    margin-left: 0.08em;
+}
+
+.kanji {
+    color: #440000;
+}
+
+.furi-wrapper {
+    width: 0;
+    height: 0;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+.furigana {
+    transition-property: opacity;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    -webkit-transition-property: opacity;
+    -webkit-transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease;
+    opacity: 0;
+    font-size: 0.40em;
+    color: #999;
+    text-align: center;
+    position: relative;
+    width: 200px;
+    left: -100px;
+    margin-bottom: -0.12em;
+}
+
+.furigana.reading-aid {
+    opacity: 1;
+}
+
+.furigana::-moz-selection { background: transparent; }
+
+.translation {
+    transition-property: opacity, height, margin-top, margin-bottom;
+    transition-duration: 0.2s;
+    transition-timing-function: ease;
+    -webkit-transition-property: opacity, height, margin-top, margin-bottom;
+    -webkit-transition-duration: 0.2s;
+    -webkit-transition-timing-function: ease;
+    font-size: 18px !important;
+    margin: -2px 0 0 0;
+    opacity: 0;
+    height: 0px;
+}
+
+.translation.shown {
+    opacity: 1;
+    height: 30px;
+    margin-top: 6px;
+    margin-bottom: 10px;
+}
+
 

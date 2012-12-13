@@ -4,6 +4,7 @@ from django.template import RequestContext
 from django.views.decorators.http import require_GET, require_POST
 from django.shortcuts import render_to_response, redirect
 from django.utils import simplejson
+from bun.sentenceprovider import FileSentenceProvider # TMP
 import dateutil.parser
 
 from bun.models import Sentence
@@ -31,6 +32,7 @@ def exportdata(request):
         output += s.text.strip() + u"\n"
         output += s.structure.strip() + u"\n"
         output += s.kanji_pronunciations.strip() + u"\n"
+        output += s.translation.strip() + u"\n"
 
     response = HttpResponse(output, mimetype = "text/plain; charset=utf-8")
     response['Content-Disposition'] = 'attachment; filename="user-%s.data"' % request.user.username
@@ -53,22 +55,24 @@ def importdata(request):
         up.save()
         i = 4
 
-        # erase existing sentences
+        # erase all existing sentences for the user
         Sentence.objects.filter(user__username = request.user.username).delete()
 
         # read sentences
         try:
             while True:
                 date = dateutil.parser.parse( lines[i].decode('utf-8') )
-                text = lines[i+1].decode('utf-8')
-                structure = lines[i+2].decode('utf-8')
-                pronunciations = lines[i+3].decode('utf-8')
+                text = lines[i+1].decode('utf-8').strip()
+                structure = lines[i+2].decode('utf-8').strip()
+                pronunciations = lines[i+3].decode('utf-8').strip()
+                translation = lines[i+4].decode('utf-8').strip()
 
                 s = Sentence(user = request.user, text = text, structure = structure,
-                             learned_date = date, kanji_pronunciations = pronunciations)
+                             translation = translation, kanji_pronunciations = pronunciations,
+                             learned_date = date)
                 s.save()
 
-                i += 4
+                i += 5
         except IndexError:
             # finished processing the file
             pass

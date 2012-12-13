@@ -11,6 +11,17 @@ PGPASSWORD=DWB3_hV93r8gwS_sd4Ophswq_8 pg_restore --verbose --clean --no-acl --no
 heroku pg:psql
 
 
+# LOCAL PC
+
+# configure postgres after a fresh installation: set user password
+sudo -u postgres psql
+alter user postgres with password 'postgres';
+
+# create db and sync tables
+sudo -u postgres createdb manabu-data
+python manage.py syncdb
+#sudo -u postgres psql manabu-data < DUMP_FILE
+
 # connect to local database
 sudo -u postgres psql manabu-data
 

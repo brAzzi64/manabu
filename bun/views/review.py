@@ -32,7 +32,7 @@ def get_sentences(request):
                     'dayAndMonth': "%d %s" % ( s.learned_date.day, s.learned_date.strftime("%B")[:3] ),
                     'year': str(s.learned_date.year)
                  },
-                 'sentence' : { 'structure': s.structure }
+                 'sentence' : { 'structure': s.structure, 'translation': s.translation }
                }
         response.append(elem)
 

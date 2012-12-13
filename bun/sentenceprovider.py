@@ -21,13 +21,15 @@ class FileSentenceProvider(ISentenceProvider):
     __metaclass__ = Singleton
 
     def __init__(self, datadir = 'other'):
-        """ Loads the file with the sentences """
+        """ Loads the file with the sentences. Each entry in self.sentences
+            is a tuple: (text, structure, [trans1, trans2, trans3, ...]) """
         self.sentences = {}
         datadir = datadir[:-1] if datadir[-1] == "/" else datadir
         with gzip.open(datadir + '/jouyou_sentences_1-3.txt.gz', 'r') as f:
             for id, line in enumerate(f):
                 parts = line.decode('utf-8').split(';')
-                parts[2] = parts[2].split('|') # split translations into a list
+                # split translations into a list and remove end-line characters
+                parts[2] = [ t.strip() for t in parts[2].split('|') ]
                 self.sentences[id] = tuple(parts)
         self.cache = {}
 

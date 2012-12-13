@@ -39,6 +39,9 @@ class Sentence(models.Model):
     # a field in the form: K1:p1,K2:p2,K3:P3...
     kanji_pronunciations = models.CharField(max_length = 1024)
 
+    # the meaning of the sentence
+    translation = models.CharField(max_length = 1024)
+
     learned_date = models.DateTimeField()
 
     def __unicode__(self):
