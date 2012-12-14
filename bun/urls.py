@@ -20,10 +20,10 @@ urlpatterns += patterns('bun.views.known_kanji',
     url(r'^known_kanji/api/update_known_kanji$', 'update_known_kanji'),
 )
 
-urlpatterns += patterns('bun.views.review',
+urlpatterns += patterns('bun.views.history',
 
-    url(r'^review$', 'review'),
-    url(r'^review/api/get_sentences$', 'get_sentences'),
+    url(r'^history$', 'history'),
+    url(r'^history/api/get_sentences$', 'get_sentences'),
 )
 
 urlpatterns += patterns('bun.views.authentication',

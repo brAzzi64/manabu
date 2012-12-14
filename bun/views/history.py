@@ -9,13 +9,13 @@ from bun.models import Sentence
 from bun.views.common import csrf_ensure_cookie
 
 
-# URL: review
+# URL: history
 @csrf_ensure_cookie
 @require_GET
-def review(request):
-    return render_to_response('review.html', { 'section_name': 'Review' }, context_instance = RequestContext(request))
+def history(request):
+    return render_to_response('history.html', { 'section_name': 'History' }, context_instance = RequestContext(request))
 
-# URL: review/api/get_sentences?page=Y
+# URL: history/api/get_sentences?page=Y
 @require_GET
 def get_sentences(request):
     try:

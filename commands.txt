@@ -20,7 +20,12 @@ alter user postgres with password 'postgres';
 # create db and sync tables
 sudo -u postgres createdb manabu-data
 python manage.py syncdb
-#sudo -u postgres psql manabu-data < DUMP_FILE
+
+# run shell and create needed users
+python manage.py shell
+from django.contrib.auth.models import User
+u = User.objects.create_user('brAzzi64', 'brazzinnari@gmail.com', 'Passw0rd')
+u = User.objects.create_user('testuser', 'testuser@testmail.com', 'testpassword')
 
 # connect to local database
 sudo -u postgres psql manabu-data

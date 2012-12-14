@@ -1,5 +1,5 @@
 
-var reviewViewModel = {
+var historyViewModel = {
 
     sentences : ko.observableArray(),
 
@@ -14,7 +14,7 @@ var reviewViewModel = {
 
         var that = this;
         issueAjaxJSONCall(
-            'review/api/get_sentences', { 'page': 1 },
+            'history/api/get_sentences', { 'page': 1 },
             function(data) { that.onGetSentences(data); });
     },
     onGetSentences : function(data) {
@@ -46,6 +46,6 @@ SentenceViewModel.prototype.toggleShowTranslation = function() {
 
 $(document).ready(function() {
         
-    reviewViewModel.init();
+    historyViewModel.init();
 });
 
