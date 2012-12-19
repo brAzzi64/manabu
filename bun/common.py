@@ -16,3 +16,10 @@ class Singleton(type):
         return cls.instance
 
 
+from restructurer import Restructurer
+
+def KanjiIterator(string):
+    for s in string:
+        if Restructurer.is_kanji(s):
+            yield s
+

@@ -10,6 +10,7 @@ from django.views.decorators.http import require_GET, require_POST
 
 from bun.views.common import csrf_ensure_cookie
 from bun.kanjidic import Kanji, KanjiDic
+from bun.sentenceprovider import FileSentenceProvider
 
 
 # URL: known_kanji
@@ -70,6 +71,10 @@ def update_known_kanji(request):
     # in the logic when we have no unlearned kanji
     up.known_kanji = re.sub(u'[k%s]' % unlearned, '', up.known_kanji) + learned
     up.save()
+
+    # clear the cache for the learned kanjis
+    sp = FileSentenceProvider()
+    sp.clear_cache()
 
     return HttpResponse()
 

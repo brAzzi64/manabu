@@ -14,6 +14,7 @@ from bun.views.common import csrf_ensure_cookie
 from bun.restructurer import Restructurer
 from bun.kanjidic import Kanji, KanjiDic
 from bun.sentenceprovider import FileSentenceProvider
+from bun.common import KanjiIterator
 
 
 # URL: train
@@ -54,7 +55,7 @@ def get_sentences(request):
 def get_pronunciations(sentence):
     kc = KanjiDic()
     mappings = {}
-    kanjis = set(l for l in sentence if Restructurer.is_kanji(l))
+    kanjis = set(l for l in KanjiIterator(sentence))
     for literal in kanjis:
         onyomis = []
         kunyomis = []

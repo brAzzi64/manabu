@@ -65,6 +65,10 @@ class FileSentenceProvider(ISentenceProvider):
     def all_allowed(self, sentence, allowed):
         return all((c in allowed for c in sentence if Restructurer.is_kanji(c)))
 
+    def clear_cache(self):
+        """ Clears the cached sentences. Must be called when the set of allowed kanji changes. """
+        self.cache.clear()
+
 
 if __name__ == '__main__':
     sp = FileSentenceProvider('../other')
