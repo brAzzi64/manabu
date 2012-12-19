@@ -1,0 +1,18 @@
+@import url("sentence.css");
+
+#btn-hint {
+    min-width: 8.2em;
+}
+
+.bun {
+    font-size: 3.5em;
+    margin-top: 1em;
+    margin-bottom: 1em;
+    min-height: 3em;
+}
+
+.sentence {
+    margin-left: 0.8em;
+}
+
+
