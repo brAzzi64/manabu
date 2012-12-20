@@ -117,7 +117,8 @@ var trainViewModel = {
     onLearnSentence : function() {
 
         var sentence = this.sentence().text;
-        var struct = this.sentence().structure;
+        var struct = this.sentence().structure();
+        var translation = this.sentence().translation();
         var pronunciations = {};
 
         for (kanji in this.sentence().pronunciations) {
@@ -145,7 +146,7 @@ var trainViewModel = {
                         type: 'POST',
                         dataType: 'json',
                         contentType: 'application/json',
-                        data: { text: sentence, structure: struct, pronunciations: JSON.stringify(pronunciations) },
+                        data: { text: sentence, structure: struct, translation: translation, pronunciations: JSON.stringify(pronunciations) },
                         complete: function(jqXHR, textStatus) {
                            
                             if (textStatus == 'success') {
@@ -183,7 +184,7 @@ var trainViewModel = {
     handleGetNextSentenceCompleted : function(data) {
 
         data = data[0]; // not paginated for now
-        var vm = new SentenceViewModel(data.sentence, data.structure, data.translations[0], true);
+        var vm = new SentenceViewModel(data.sentence, data.structure, data.translations[0], true, true);
 
         // TODO: extend the SentenceViewModel class adding a
         // method that creates the PronunciationOption view models.

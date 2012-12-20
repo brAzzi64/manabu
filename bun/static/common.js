@@ -88,7 +88,7 @@ var QueryString = function () {
 
 /* Sentence */
 
-var SentenceViewModel = function(text, structure, translation, readingAidOn) {
+var SentenceViewModel = function(text, structure, translation, readingAidOn, showTranslation) {
 
     this.text = text; // TODO: update with structure
     this.structure = ko.observable(structure);
@@ -97,7 +97,7 @@ var SentenceViewModel = function(text, structure, translation, readingAidOn) {
         return this.parseStructure(this.structure());
     }, this);
     this.readingAidEnabled = ko.observable(readingAidOn || false);
-    this.showTranslation = ko.observable(false);
+    this.showTranslation = ko.observable(showTranslation || false);
 };
 
 SentenceViewModel.prototype.parseStructure = function(struct) {

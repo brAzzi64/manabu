@@ -5,15 +5,6 @@
 <script src="static/js/sammy.js"></script>
 {% endblock %}
 
-{% block head-end %}
-<style type="text/css">
-    {% include "comp-sentence.css" %}
-</style>
-<script type="text/html" id="comp-sentence">
-    {% include "comp-sentence.html" %}
-</script>
-{% endblock %}
-
 {% block content %}
 <div id="search-view" data-bind="with: searchViewModel">
     <h1>Search</h1>
@@ -33,10 +24,28 @@
     <h1>Training Kanji: <span data-bind="text: kanji"</span></h1>
     <div style='margin-top: 2em;' class='container'>
         <p>Click the <em>Next Sentence</em> button to get the next sentence availible for the Kanji.<br/>
-        Select separeted words and click <em>Join selected as word</em> to join them as one word.<br/>
-        Double click on a <em>furigana</em> reading to edit it, and press the Enter key when done.</p>
+        Click the <em>Edit</em> button modify the sentence and its furigana, and <em>Reset</em> to restore it.<br/>
+        Click <em>Learn</em> to save it, after clicking the Kanjis to select the pronunciation, and <em>Listen</em> to hear it.</p>
     </div>
-    <div id="sentence-content" class='container-fluid' data-bind="template: { name: 'comp-sentence', data: sentence, if: sentence }"></div>
+    <div id="sentence-content" class='container-fluid' data-bind="with: sentence">
+        <div class="bun">
+            <div class="sentence" data-bind="foreach: parsedStructure">
+                <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }">
+                    <div class="sub-word">
+                        <div class="furi-wrapper">
+                            <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
+                        </div>
+                        <!-- ko foreach: chars -->
+                            <div class="literal" data-bind="css: { kanji: isKanji($data) }">
+                                <a data-bind="text: $data, bootstrapPopover : { if: isKanji($data), template: 'popup-template', title: 'Pronunciations' }"></a>
+                            </div>
+                        <!-- /ko -->
+                    </div>
+                </div>
+            </div>
+            <div class="translation" data-bind="text: translation, css: { shown: showTranslation }"></div>
+        </div>
+    </div>
     <div id="controls">
         <div class="btn-group">
             <a id="btn-next" class='btn btn-primary' href='#' data-bind='click: onNextSentence, css: { disabled: nextSentenceDisabled }'>Next Sentence</a>
@@ -47,5 +56,20 @@
         </div>
     </div>
 </div>
+
+<script id="popup-template" type="text/html">
+    <div data-bind="with: $parents[3].pronunciations[$data]">
+        <div class="pron-title">on'yomi</div>
+        <div data-bind="foreach: ON">
+            <a class="pro-option" data-bind="text: pronunciation, click: toggleSelected, css: { selected: selected }" href="#"></a>
+            <div class="pro-separator">, </div>
+        </div>
+        <div class="pron-title">kun'yomi</div>
+        <div data-bind="foreach: KN">
+            <a class="pro-option" data-bind="text: pronunciation, click: toggleSelected, css: { selected: selected }" href="#"></a>
+            <div class="pro-separator">, </div>
+        </div>
+    </div>
+</script>
 {% endblock %}
 

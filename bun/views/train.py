@@ -76,6 +76,7 @@ def get_pronunciations(sentence):
 def learn_sentence(request):
     text = request.POST.get('text', False)
     structure = request.POST.get('structure', False)
+    translation = request.POST.get('translation', False)
     pronunciations = request.POST.get('pronunciations', False)
     if not (text and structure and pronunciations):
         return HttpResponseBadRequest("Parameters 'text', 'structure' and 'pronunciations' not found or invalid")
@@ -87,7 +88,8 @@ def learn_sentence(request):
     # if the sentence is already there, we delete it so we can add it again updated
     Sentence.objects.filter(text = text).delete()
 
-    s = Sentence(user = request.user, text = text, structure = structure, learned_date = datetime.datetime.now(), kanji_pronunciations = prs_string)
+    s = Sentence(user = request.user, text = text, structure = structure, translation = translation,
+                 learned_date = datetime.datetime.now(), kanji_pronunciations = prs_string)
     s.save()
 
     return HttpResponse()
