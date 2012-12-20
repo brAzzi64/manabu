@@ -5,29 +5,26 @@
 <div style='margin-top: 2em;' class='container'>
     <p>These are the sentences learned up to the moment:</p>
 </div>
-<div id="sentences" class="container" data-bind="foreach: sentences">
+<div id="sentences" class="container" data-bind="foreach: dates">
     <div>
-        <div class="date" data-bind="with: date">
-            <div data-bind="text: dayAndMonth"></div>
-            <div data-bind="text: year"></div>
-        </div>
-        <!-- ko with: sentence -->
-        <div class="bun" data-bind="event: { mouseenter: onMouseEnter, mouseleave: onMouseLeave }">
-            <div class="sentence" data-bind="foreach: parsedStructure, click: toggleShowTranslation">
-                <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }">
-                    <div class="sub-word">
-                        <div class="furi-wrapper">
-                            <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
+        <div class="date" data-bind="text: date"></div>
+        <div data-bind="foreach: sentences">
+            <div class="bun" data-bind="event: { mouseenter: onMouseEnter, mouseleave: onMouseLeave }">
+                <div class="sentence" data-bind="foreach: parsedStructure, click: toggleShowTranslation">
+                    <div class="word" data-bind="foreach: $data, css: { 'reading-aid': $parent.readingAidEnabled() }">
+                        <div class="sub-word">
+                            <div class="furi-wrapper">
+                                <div class="furigana" data-bind="text: pron, css: { 'reading-aid': $parents[1].readingAidEnabled() }"></div>
+                            </div>
+                            <!-- ko foreach: chars -->
+                                <div class="literal" data-bind="text: $data, css: { kanji: isKanji($data) }"></div>
+                            <!-- /ko -->
                         </div>
-                        <!-- ko foreach: chars -->
-                            <div class="literal" data-bind="text: $data, css: { kanji: isKanji($data) }"></div>
-                        <!-- /ko -->
                     </div>
                 </div>
+                <div class="translation" data-bind="text: translation, css: { shown: showTranslation }"></div>
             </div>
-            <div class="translation" data-bind="text: translation, css: { shown: showTranslation }"></div>
         </div>
-        <!-- /ko -->
     </div>
 </div>
 {% endblock %}

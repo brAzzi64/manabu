@@ -12,19 +12,32 @@
 }
 
 .date {
-    font-size: 10px;
-    text-align: right;
-    color: gray;
-    float: left;
-    border-right: solid #CCC 1px;
-    padding-right: 10px;
-    margin-top: 16px;
-    min-width: 32px;
+    font-size: 12px;
+    font-weight: bold;
+    text-transform: uppercase;
+    color: #666;
+    border-bottom: solid #CCC 1px;
+    margin-bottom: 0em;
+    margin-top: 2em;
 }
 
 .bun {
-    margin-left: 56px;
-    margin-bottom: 10px;
+    padding-left: 0.4em;
+    padding-bottom: 0.5em;
+    padding-top: 0.1em;
+    border-bottom: solid #DDD 1px;
+}
+
+.bun:nth-child(even) {
+    background: #EEEEEE;
+}
+
+.bun:nth-child(odd) {
+    background: #E6E6E6;
+}
+
+.translation.shown {
+    margin-bottom: 0em;
 }
 
 .sentence {

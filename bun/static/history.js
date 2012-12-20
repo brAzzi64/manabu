@@ -1,7 +1,7 @@
 
 var historyViewModel = {
 
-    sentences : ko.observableArray(),
+    dates : ko.observableArray(),
 
     init : function() {
 
@@ -19,10 +19,16 @@ var historyViewModel = {
     },
     onGetSentences : function(data) {
         
-        for (i in data) {
-            data[i].sentence = new SentenceViewModel(undefined, data[i].sentence.structure, data[i].sentence.translation);
+        var dates = [];
+        for (date in data) {
+            var dateVM = { date: date, sentences: [] }
+            var sentences = data[date];
+            for (i in sentences) {
+                dateVM.sentences.push(new SentenceViewModel(undefined, sentences[i].structure, sentences[i].translation));
+            }
+            dates.push(dateVM);
         }
-        this.sentences(data);
+        this.dates(dates);
     },
 }
 
