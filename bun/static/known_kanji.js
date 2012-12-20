@@ -29,6 +29,7 @@ var Page = function(number, knownKanjiVM) {
 
     var that = this;
 
+    this.knownKanjiVM = knownKanjiVM;
     this.number = number;
     this.active = ko.computed(function() {
             return knownKanjiVM.currentPage() == that.number;
@@ -41,7 +42,7 @@ Page.prototype = {
 
     clicked: function(e) {
         // navigate to new page
-        knownKanjiVM.getKanjiPage(that.number);
+        this.knownKanjiVM.getKanjiPage(this.number);
     }
 }
 
