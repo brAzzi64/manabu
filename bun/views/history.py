@@ -26,15 +26,17 @@ def get_sentences(request):
 
     # ignoring the 'page' parameter for now
     sentences = Sentence.objects.filter(user__username = request.user.username).order_by('-learned_date')
-    response = {}
+
+    response = []
+    current_list = []
+    last_date = None
     for s in sentences:
         date = "%s %d, %d" % ( s.learned_date.strftime("%B"), s.learned_date.day, s.learned_date.year )
-        try:
-            lst = response[date]
-        except KeyError:
-            lst = []
-            response[date] = lst
-        lst.append({ 'structure': s.structure, 'translation': s.translation })
+        if last_date != date:
+            last_date = date
+            current_list = []
+            response.append((date, current_list))
+        current_list.append({ 'structure': s.structure, 'translation': s.translation })
 
     return HttpResponse(simplejson.dumps(response), mimetype = "application/json")
 

@@ -20,9 +20,10 @@ var historyViewModel = {
     onGetSentences : function(data) {
         
         var dates = [];
-        for (date in data) {
+        for (i in data) {
+            var date = data[i][0];
+            var sentences = data[i][1];
             var dateVM = { date: date, sentences: [] }
-            var sentences = data[date];
             for (i in sentences) {
                 dateVM.sentences.push(new SentenceViewModel(undefined, sentences[i].structure, sentences[i].translation));
             }

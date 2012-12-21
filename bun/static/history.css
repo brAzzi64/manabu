@@ -12,18 +12,18 @@
 }
 
 .date {
-    font-size: 12px;
+    font-size: 14px;
     font-weight: bold;
     text-transform: uppercase;
     color: #666;
     border-bottom: solid #CCC 1px;
     margin-bottom: 0em;
     margin-top: 2em;
+    padding-bottom: 0.2em;
 }
 
 .bun {
-    padding-left: 0.4em;
-    padding-bottom: 0.5em;
+    padding-left: 0.2em;
     padding-top: 0.1em;
     border-bottom: solid #DDD 1px;
 }
@@ -33,7 +33,11 @@
 }
 
 .bun:nth-child(odd) {
-    background: #E6E6E6;
+    background: #EBEBEB;
+}
+
+.translation {
+    font-size: 0.8em;
 }
 
 .translation.shown {
