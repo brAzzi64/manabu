@@ -1,5 +1,9 @@
 @import url("sentence.css");
 
+#sentence-content {
+    min-height: 17.5em;
+}
+
 #btn-hint {
     min-width: 8.2em;
 }

@@ -2,7 +2,7 @@
 var reviewViewModel = {
 
     sentence : ko.observable(),
-    hintButtonText : ko.observable(),
+    hintButtonText : ko.observable("Loading..."),
 
     init : function() {
 
