@@ -1,6 +1,6 @@
 
 body {
-    background-color: #f0f0f0;
+    background-color: #c0c0c0;
 }
 
 a:focus {
@@ -9,13 +9,70 @@ a:focus {
 
 .brand {
     margin-left: 0px !important;
-    padding-top: 7px !important;
+    padding-top: 3px !important;
     padding-bottom: 0px !important;
+    font-size: 2em !important;
+    color: white !important;
+    text-shadow: 0 1px 1px rgba(0,0,0,.5) !important;
 }
 
-.navbar-inner {
-    padding-left: 20% !important;
-    padding-right: 20% !important;
+#navbar-content {
+    height: 40px;
+    background-image: url('img/navbar_sprite_bgs.png');
+    background-repeat: repeat-x;
+    border-width: 0;
+    -moz-box-shadow: 0 2px 3px rgba(0,0,0,.25);
+    -webkit-box-shadow: 0 2px 3px rgba(0,0,0,.25);
+    box-shadow: 0 2px 3px rgba(0,0,0,.25);
+}
+
+#navbar-content div {
+    width: 838px;
+    margin: 0 auto;
+}
+
+#navbar-content ul li.active a {
+    background-color: #222 !important;
+    -moz-box-shadow: inset 0 5px 10px rgba(0,0,0,.5);
+    box-shadow: inset 0 5px 10px rgba(0,0,0,.5);
+    color: white;
+}
+
+#navbar-content ul li a {
+    color: #CCC;
+    font-weight: bold;
+    text-shadow: 0 1px 1px rgba(0,0,0,.5) !important;
+}
+
+#navbar-content ul li a:hover {
+    color: white;
+}
+
+#main-content {
+    width: 838px; 
+    padding-top: 50px;
+    margin-top: 0;
+    margin-left: auto;
+    margin-right: auto;
+    background-color: #f0f0f0;
+    border: 0 1px 0 1px solid #ddd;
+    box-shadow: 5px 0 5px 0 rgba(0,0,0,.5);
+}
+
+#username {
+    display: inline;
+    text-align: right;
+}
+
+#username div:first-child {
+    font-size: 9px;
+    font-weight: bold;
+    margin-top: 8px;
+    margin-bottom: -3px;
+}
+
+#username div:last-child {
+    font-size: 13px; color: white;
 }
 
 .container-fluid.main {
