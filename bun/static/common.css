@@ -99,8 +99,11 @@ a:focus {
 
 #main-content {
     min-height: 100%;
-    width: 838px; 
+    width: 800px; 
     padding-top: 60px;
+    padding-left: 20px;
+    padding-right: 20px;
+    padding-bottom: 60px;
     margin-top: 0;
     margin-left: auto;
     margin-right: auto;
@@ -114,6 +117,22 @@ a:focus {
     padding-right: 0;
     margin-top: 50px;
     text-align: center;
+}
+
+.controls {
+    position: fixed;
+    right: 0;
+    left: 0;
+    bottom: 0;
+    height: 40px;
+    background-image: url('img/navbar_sprite_bgs.png');
+    background-repeat: repeat-x;
+    border-width: 0;
+    border-top: solid #333 1px;
+}
+
+.controls div {
+    padding-top: 4px;
 }
 
 .modal-body form input {

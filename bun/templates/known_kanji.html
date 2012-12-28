@@ -12,11 +12,11 @@
  
 {% block content %}
 <h1>Known Kanji</h1>
-<div style='margin-top: 2em;' class='container'>
+<div style='margin-top: 2em;'>
     <p>These are the all of the Jouyou Kanji ordered by the Kolivas index. Go through the different pages to see them all. Click each kanji to mark it as known/unknown and click the Update button to save the changes. Right click on a Kanji to see additional options.</p>
 </div>
 
-<div id="kanji-list" class="container" data-bind="foreach: kanjis">
+<div id="kanji-list" data-bind="foreach: kanjis">
     <span class="kanji"> 
         <a href="#" data-toggle="context" data-target="#context-menu" style="position: relative"
            data-bind="text: literal, css: { known: known, updated: hasChanged }, click: toggleKnown,
@@ -33,7 +33,7 @@
     <a id="next" href="#" data-bind="click: nextClicked, css: { disabled: $root.currentPage() == 12 }">next &gt;&gt;</a>
 </div>
 
-<div id="controls" class="container">
+<div class="controls">
     <div class="btn-group">
         <a id="btn-update" class='btn btn-primary' href='#' data-bind="click: updateClicked">
             <i class="icon-ok icon-white"></i>&nbsp;&nbsp;Update
