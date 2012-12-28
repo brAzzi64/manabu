@@ -8,10 +8,10 @@
 {% block content %}
 <div id="search-view" data-bind="with: searchViewModel">
     <h1>Search</h1>
-    <div style='margin-top: 2em;' class='container'>
+    <div style='margin-top: 2em;'>
         Search for a Kanji to train:
     </div>
-    <div id='center' class='container'>
+    <div id='center'>
         <form class="form-search">
             <div class="input-append">
                 <input id='kanji-input' type="text" class="span2 search-query" data-bind="value: searchQuery">
@@ -24,7 +24,7 @@
 </div>
 <div id="train-view" data-bind="with: trainViewModel">
     <h1>Training Kanji: <span data-bind="text: kanji"</span></h1>
-    <div style='margin-top: 2em;' class='container'>
+    <div style='margin-top: 2em;'>
         <p>Click the <em>Next Sentence</em> button to get the next sentence availible for the Kanji.<br/>
         Click the <em>Edit</em> button modify the sentence and its furigana, and <em>Reset</em> to restore it.<br/>
         Click <em>Learn</em> to save it, after clicking the Kanjis to select the pronunciation, and <em>Listen</em> to hear it.</p>

@@ -19,22 +19,18 @@
         {% block head-end %}{% endblock %}
     </head>
     <body>
-        <div class='container'>
-            <div class='navbar navbar-fixed-top'>
-                <div id="navbar-content" class="navbar-inner">
-                    <div>
-                        <a class="brand" href="#">文</a>
-                        <ul class="nav">
-                            <li class="{% if section_name == 'Train' or section_name == 'Search' %}active{% endif %}"><a href="train">Train</a></li>
-                            <li class="{% if section_name == 'Known Kanji' %}active{% endif %}"><a href="known_kanji">Known Kanji</a></li>
-                            <li class="{% if section_name == 'History' %}active{% endif %}"><a href="history">History</a></li>
-                            <li class="{% if section_name == 'Review' %}active{% endif %}"><a href="review">Review</a></li>
-                        </ul>
-                        <div id="username">
-                            <div>USER</div>
-                            <div>{{ username }}</div>
-                        </div>
-                    </div>
+        <div id='mb-navbar'>
+            <div id="mb-navbar-content">
+                <div id="mb-logo">文</div>
+                <ul>
+                    <li class="{% if section_name == 'Train' or section_name == 'Search' %}active{% endif %}"><a href="train">Train</a></li>
+                    <li class="{% if section_name == 'Known Kanji' %}active{% endif %}"><a href="known_kanji">Known Kanji</a></li>
+                    <li class="{% if section_name == 'History' %}active{% endif %}"><a href="history">History</a></li>
+                    <li class="{% if section_name == 'Review' %}active{% endif %}"><a href="review">Review</a></li>
+                </ul>
+                <div id="mb-username">
+                    <div>USER</div>
+                    <div>{{ username }}</div>
                 </div>
             </div>
         </div>
